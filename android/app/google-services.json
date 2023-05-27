@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "814250721914",
+    "project_id": "feelings-overflow",
+    "storage_bucket": "feelings-overflow.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814250721914:android:46634dad8502399e7931c3",
+        "android_client_info": {
+          "package_name": "com.stackUnderflow.feelings_overflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBI00H_7-q5Vy0q5NjVIh9sJHPyTEipVWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
