@@ -1,7 +1,10 @@
 // main.dart file
+import 'package:feelings_overflow/screens/login_screen.dart';
+import 'package:feelings_overflow/screens/register_screen.dart';
+import 'package:feelings_overflow/screens/Home.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'WelcomeScreen.dart';
+import 'screens/WelcomeScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,9 +33,17 @@ class _FeelingsOverflow extends State<FeelingsOverflow> {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
+      // Initial start screen
+      initialRoute: WelcomeScreen.id,
+      routes: {
+        'welcome_screen': (context) => WelcomeScreen(),
+        'home_screen': (context) => Home(),
+        'login_screen' : (context) => LoginScreen(),
+        'registration_screen': (context) => RegistrationScreen(),
 
+      },
       // home property contain SignInScreen widget
-      home: WelcomeScreen(),
+      home: LoginScreen(),
     );
   }
 }
