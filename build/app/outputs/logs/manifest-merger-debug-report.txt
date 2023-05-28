@@ -51,7 +51,7 @@ MERGED from [:firebase_core] C:\Users\gunda\StudioProjects\Feelings_Overflow\bui
 MERGED from [:modal_progress_hud_nsn] C:\Users\gunda\StudioProjects\Feelings_Overflow\build\modal_progress_hud_nsn\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:path_provider_android] C:\Users\gunda\StudioProjects\Feelings_Overflow\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:google_sign_in_android] C:\Users\gunda\StudioProjects\Feelings_Overflow\build\google_sign_in_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-11:12
-MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\gunda\.gradle\caches\transforms-3\21513f382a2cb911afbfd9752dabba47\transformed\multidex-2.0.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.multidex:multidex:2.0.1] C:\Users\gunda\.gradle\caches\transforms-3\e0461fe8a1e79b084c69a9c5ee495e02\transformed\multidex-2.0.1\AndroidManifest.xml:17:1-22:12
 MERGED from [com.google.firebase:firebase-auth:22.0.0] C:\Users\gunda\.gradle\caches\transforms-3\f2585cf44996ac27f88306250cf33811\transformed\jetified-firebase-auth-22.0.0\AndroidManifest.xml:17:1-75:12
 MERGED from [com.google.android.recaptcha:recaptcha:18.1.2] C:\Users\gunda\.gradle\caches\transforms-3\9c645efb41dcacbd160e32d5a3e1894c\transformed\jetified-recaptcha-18.1.2\AndroidManifest.xml:2:1-10:12
 MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\gunda\.gradle\caches\transforms-3\3c0e35d493ccd3f2bb8b07f96b013b9c\transformed\jetified-window-java-1.0.0-beta04\AndroidManifest.xml:17:1-23:12
@@ -123,8 +123,8 @@ MERGED from [:path_provider_android] C:\Users\gunda\StudioProjects\Feelings_Over
 MERGED from [:path_provider_android] C:\Users\gunda\StudioProjects\Feelings_Overflow\build\path_provider_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:google_sign_in_android] C:\Users\gunda\StudioProjects\Feelings_Overflow\build\google_sign_in_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:google_sign_in_android] C:\Users\gunda\StudioProjects\Feelings_Overflow\build\google_sign_in_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
-MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\gunda\.gradle\caches\transforms-3\21513f382a2cb911afbfd9752dabba47\transformed\multidex-2.0.0\AndroidManifest.xml:20:5-43
-MERGED from [androidx.multidex:multidex:2.0.0] C:\Users\gunda\.gradle\caches\transforms-3\21513f382a2cb911afbfd9752dabba47\transformed\multidex-2.0.0\AndroidManifest.xml:20:5-43
+MERGED from [androidx.multidex:multidex:2.0.1] C:\Users\gunda\.gradle\caches\transforms-3\e0461fe8a1e79b084c69a9c5ee495e02\transformed\multidex-2.0.1\AndroidManifest.xml:20:5-43
+MERGED from [androidx.multidex:multidex:2.0.1] C:\Users\gunda\.gradle\caches\transforms-3\e0461fe8a1e79b084c69a9c5ee495e02\transformed\multidex-2.0.1\AndroidManifest.xml:20:5-43
 MERGED from [com.google.firebase:firebase-auth:22.0.0] C:\Users\gunda\.gradle\caches\transforms-3\f2585cf44996ac27f88306250cf33811\transformed\jetified-firebase-auth-22.0.0\AndroidManifest.xml:21:5-23:64
 MERGED from [com.google.firebase:firebase-auth:22.0.0] C:\Users\gunda\.gradle\caches\transforms-3\f2585cf44996ac27f88306250cf33811\transformed\jetified-firebase-auth-22.0.0\AndroidManifest.xml:21:5-23:64
 MERGED from [com.google.android.recaptcha:recaptcha:18.1.2] C:\Users\gunda\.gradle\caches\transforms-3\9c645efb41dcacbd160e32d5a3e1894c\transformed\jetified-recaptcha-18.1.2\AndroidManifest.xml:5:5-44

@@ -1,0 +1,4 @@
+#Mon May 29 00:49:01 SGT 2023
+base.0=C\:\\Users\\gunda\\StudioProjects\\Feelings_Overflow\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

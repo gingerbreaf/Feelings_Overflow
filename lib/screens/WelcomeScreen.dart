@@ -18,56 +18,60 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Hero(
-              tag: 'logo',
-              child: Container(
-                child: Image.asset('assets/images/AppIcon.png'),
-                height: 200.0,
+      body: SafeArea(
+        child: Container(
+          color: Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Flexible(
+                child: Hero(
+                  tag: 'logo',
+                  child: Container(
+                    child: Image.asset('assets/images/AppIcon.png'),
+                    height: MediaQuery.of(context).size.height / 3,
+                  ),
+                ),
               ),
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            Text(
-              'Welcome',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 35,
+              SizedBox(
+                height: 30,
               ),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Text(
-              'Create an account and start jotting it down',
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey[500],
-                fontWeight: FontWeight.w700,
+              Text(
+                'Welcome',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 35,
+                ),
               ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            WelcomeScnButton(
-              txt: 'Log In',
-              onPress: () => Navigator.pushNamed(context, LoginScreen.id)
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            WelcomeScnButton(
-              txt: 'Sign Up',
-              onPress: () => Navigator.pushNamed(context, RegistrationScreen.id),
-            ),
-          ],
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                'Create an account and start jotting it down',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Colors.grey[500],
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              WelcomeScnButton(
+                txt: 'Log In',
+                onPress: () => Navigator.pushNamed(context, LoginScreen.id)
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              WelcomeScnButton(
+                txt: 'Sign Up',
+                onPress: () => Navigator.pushNamed(context, RegistrationScreen.id),
+              ),
+            ],
+          ),
         ),
       ),
     );

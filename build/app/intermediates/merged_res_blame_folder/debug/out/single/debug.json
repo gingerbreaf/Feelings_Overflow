@@ -12,10 +12,6 @@
         "source": "com.example.feelings_overflow.app-main-10:/mipmap-hdpi/ic_launcher.png"
     },
     {
-        "merged": "com.example.feelings_overflow.app-merged_res-17:/drawable_launch_background.xml.flat",
-        "source": "com.example.feelings_overflow.app-main-10:/drawable/launch_background.xml"
-    },
-    {
         "merged": "com.example.feelings_overflow.app-merged_res-17:/mipmap-xxhdpi_ic_launcher.png.flat",
         "source": "com.example.feelings_overflow.app-main-10:/mipmap-xxhdpi/ic_launcher.png"
     },
