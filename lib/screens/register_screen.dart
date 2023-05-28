@@ -142,19 +142,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     color: Colors.lightBlueAccent,
                     onPress: () => Navigator.pushNamed(context, LoginScreen.id),
                   ),
-                  TextButton(
-                      onPressed: () => Navigator.pushNamed(context, LoginScreen.id),
-                      child: Text(
-                        'Log In Instead',
-                        style: TextStyle(
-                          color: Colors.lightBlueAccent,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.blue[400],
-                          decorationThickness: 4,
-                        ),
-
-                      ),
-                  ),
                 ],
               ),
             ),
