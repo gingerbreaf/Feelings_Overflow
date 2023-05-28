@@ -21,16 +21,3 @@ const kTextFieldDecoration = InputDecoration(
 );
 
 
-//
-// Expanded(
-// child: TextLiquidFill(
-// text: 'Registeration',
-// waveColor: Colors.lightBlueAccent,
-// boxBackgroundColor: Colors.white,
-// textStyle: GoogleFonts.pacifico(
-// fontSize: 60.0,
-// fontWeight: FontWeight.bold,
-// ),
-// boxHeight: 200.0,
-// ),
-// ),
