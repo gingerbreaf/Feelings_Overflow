@@ -1,7 +1,7 @@
 // main.dart file
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'SignInScreen.dart';
+import 'WelcomeScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,15 +10,15 @@ void main() async {
   await Firebase.initializeApp();
 
 // calling of runApp
-  runApp(GoogleSignIn());
+  runApp(FeelingsOverflow());
 }
 
-class GoogleSignIn extends StatefulWidget {
+class FeelingsOverflow extends StatefulWidget {
   @override
-  _GoogleSignInState createState() => _GoogleSignInState();
+  _FeelingsOverflow createState() => _FeelingsOverflow();
 }
 
-class _GoogleSignInState extends State<GoogleSignIn> {
+class _FeelingsOverflow extends State<FeelingsOverflow> {
   @override
   Widget build(BuildContext context) {
     // we return the MaterialApp here ,
@@ -32,7 +32,7 @@ class _GoogleSignInState extends State<GoogleSignIn> {
       ),
 
       // home property contain SignInScreen widget
-      home: SignInScreen(),
+      home: WelcomeScreen(),
     );
   }
 }
