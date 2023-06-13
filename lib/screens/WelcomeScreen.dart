@@ -5,7 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../main.dart';
 import 'package:feelings_overflow/design/WelcomeScnButton.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'Home.dart';
+import 'DashBoard.dart';
 import 'package:feelings_overflow/screens/login_screen.dart';
 
 class WelcomeScreen extends StatefulWidget {

@@ -6,7 +6,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:feelings_overflow/design/round_buttons.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:feelings_overflow/constants.dart';
-import 'package:feelings_overflow/screens/Home.dart';
+import 'package:feelings_overflow/screens/DashBoard.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -170,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         "Continue",
                                         style: TextStyle(color: Colors.white, fontSize: 20),
                                       ),
-                                      onPressed: () => Navigator.pushNamed(context, Home.id),
+                                      onPressed: () => Navigator.pushNamed(context, DashBoard.id),
                                     ),
                                   ],
                                 ).show();

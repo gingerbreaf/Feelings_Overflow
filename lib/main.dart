@@ -1,10 +1,12 @@
 // main.dart file
+import 'package:feelings_overflow/screens/tabs/MyDiariesTab.dart';
 import 'package:feelings_overflow/screens/login_screen.dart';
 import 'package:feelings_overflow/screens/register_screen.dart';
-import 'package:feelings_overflow/screens/Home.dart';
+import 'package:feelings_overflow/screens/DashBoard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'screens/WelcomeScreen.dart';
+import 'screens/tabs/MyDiariesTab.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,15 +33,16 @@ class _FeelingsOverflow extends State<FeelingsOverflow> {
       title: 'Feelings Overflow',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.blue,
       ),
       // Initial start screen
       initialRoute: WelcomeScreen.id,
       routes: {
         'welcome_screen': (context) => WelcomeScreen(),
-        'home_screen': (context) => Home(),
+        'dashboard_screen': (context) => DashBoard(),
         'login_screen' : (context) => LoginScreen(),
         'registration_screen': (context) => RegistrationScreen(),
+        'mydiaries_screen': (context) => MyDiariesTab(),
 
       },
       // home property contain SignInScreen widget
