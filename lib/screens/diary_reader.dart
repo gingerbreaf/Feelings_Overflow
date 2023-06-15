@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 
 class DiaryReaderScreen extends StatefulWidget {
-  const DiaryReaderScreen(this.doc, {Key? key}) : super(key: key);
+  DiaryReaderScreen(this.doc, {Key? key}) : super(key: key);
   final QueryDocumentSnapshot doc;
 
   @override
@@ -53,9 +53,27 @@ class _DiaryReaderScreenState extends State<DiaryReaderScreen> {
     floatingActionButton: FloatingActionButton(
       backgroundColor: Colors.blue,
       child: const Icon(Icons.delete),
-      onPressed: () async {
-
-        },
+      onPressed: () =>
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Are you sure you want to delete this diary?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text('No!! Please Don\'t'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, 'OK');
+                  Navigator.pop(context);
+                  deleteData(widget.doc.id);
+                },
+                child: const Text('Yes Please'),
+              ),
+            ],
+          ),
+        ),
     ),
     );
   }
@@ -65,7 +83,7 @@ class _DiaryReaderScreenState extends State<DiaryReaderScreen> {
       await FirebaseFirestore.instance
           .collection("users")
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection("collection_name")
+          .collection("personal_diaries")
           .doc(id)
           .delete();
     } catch (e) {

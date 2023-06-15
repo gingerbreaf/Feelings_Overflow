@@ -159,21 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   email: email,
                                   password: password);
                               if (user != null ) {
-                                Alert(
-                                  context: context,
-                                  type: AlertType.success,
-                                  title: "Successful Login",
-                                  desc: "Enjoy",
-                                  buttons: [
-                                    DialogButton(
-                                      child: const Text(
-                                        "Continue",
-                                        style: TextStyle(color: Colors.white, fontSize: 20),
-                                      ),
-                                      onPressed: () => Navigator.pushNamed(context, DashBoard.id),
-                                    ),
-                                  ],
-                                ).show();
+                                Navigator.pushNamed(context, DashBoard.id);
                               }
                             } catch (e) {
                               print(e);

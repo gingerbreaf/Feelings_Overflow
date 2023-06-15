@@ -3,7 +3,7 @@ import 'package:feelings_overflow/screens/diary_reader.dart';
 import 'package:feelings_overflow/screens/diary_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MyDiariesTab extends StatefulWidget {
   const MyDiariesTab({Key? key}) : super(key: key);
@@ -37,7 +37,9 @@ class _MyDiariesTabState extends State<MyDiariesTab> {
               ),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: _firestore.collection('Diaries').snapshots(),
+                  stream: _firestore.collection("users")
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .collection("personal_diaries").snapshots(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator(),

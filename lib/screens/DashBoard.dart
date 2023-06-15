@@ -1,4 +1,5 @@
 import 'package:feelings_overflow/screens/tabs/HomeTab.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'tabs/MyDiariesTab.dart';
@@ -13,6 +14,8 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
+  final _auth = FirebaseAuth.instance;
+  User? loggedInUser;
   int _currentIndex = 0;
 
   final tabs = [
@@ -20,11 +23,26 @@ class _DashBoardState extends State<DashBoard> {
     MyDiariesTab(),
     Center(
       child: Text(
-            'Profile Page',
-        ),
+        'Profile Page',
       ),
+    ),
     //put profile page here
   ];
+
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser;
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void initState() {
+    getCurrentUser();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +77,6 @@ class _DashBoardState extends State<DashBoard> {
           });
         },
       ),
-
     );
   }
 }

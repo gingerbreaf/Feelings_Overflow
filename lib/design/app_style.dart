@@ -8,7 +8,7 @@ class AppStyle {
   static Color accentColor = Color(0xFF0065FF);
 
   static List<Color> cardsColor = [
-    Colors.white,
+    Colors.purple.shade100,
     Colors.red.shade100,
     Colors.pink.shade100,
     Colors.orange.shade100,

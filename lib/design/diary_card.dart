@@ -34,6 +34,7 @@ class DiaryCard extends StatelessWidget {
               doc["diary_content"],
               style: AppStyle.mainContent,
               overflow: TextOverflow.ellipsis,
+              maxLines: 3,
             )
           ],
         ),

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:feelings_overflow/design/app_style.dart';
 import 'dart:math';
@@ -12,6 +13,8 @@ class DiaryEditorScreen extends StatefulWidget {
 }
 
 class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
+  final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
   int color_id = Random().nextInt(AppStyle.cardsColor.length); //choose random color
   String date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now());
   final TextEditingController _titleController = TextEditingController();
@@ -64,7 +67,9 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () async {
-          FirebaseFirestore.instance.collection("Diaries").add({
+          _firestore.collection("users")
+              .doc(_auth.currentUser!.uid)
+              .collection("personal_diaries").add({
             "diary_title": _titleController.text,
             "creation_date": date,
             "diary_content": _mainContentController.text,
