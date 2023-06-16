@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feelings_overflow/design/round_buttons.dart';
 import 'package:feelings_overflow/screens/login_screen.dart';
+import 'DashBoard.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -7,6 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:feelings_overflow/constants.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:status_alert/status_alert.dart';
+import 'package:feelings_overflow/design/login_register_text_fields.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
@@ -17,157 +21,277 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
-  late String email;
-  late String password;
+  late String email = '';
+  late String password = '';
+  late String confirmPassword = '';
+  late String username = '';
   bool showSpinner = false;
+
+  bool passwordConfirmed() {
+    return password == confirmPassword;
+  }
+
+  bool notAllFieldsFilled() {
+    return (password == '') || (username == '' || email == '');
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: BackButton(
-            onPressed: () => Navigator.pop(context),
-            color: Colors.black,
-          ),
-        ),
-      backgroundColor: Colors.white,
-      body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/download.jpg"),
-                    fit: BoxFit.cover,
-                  )
-              )
-            ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey[300],
+        body: ModalProgressHUD(
+          inAsyncCall: showSpinner,
+          child: Stack(children: [
             SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 0),
                 child: Column(
+                  //mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Container(
-                      child: Text(
-                        'Registration',
-                        style: GoogleFonts.pacifico(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 40.0,
-                          color: Colors.black,
-                          shadows: [
-                            Shadow(
-                              blurRadius: 6.0,
-                              color: Colors.white,
-                            )
-                          ],
+                    const SizedBox(
+                      height: 70,
+                    ),
+                    Hero(
+                      tag: 'logo',
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 5,
+                        //height: 200,
+                        child: const FittedBox(
+                          child: Image(
+                            image: AssetImage('assets/images/AppIcon.png'),
+                          ),
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
-                    SizedBox(
-                      height: 48.0,
+                    const SizedBox(
+                      height: 25,
                     ),
-                    TextField(
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.emailAddress,
-                      textAlign: TextAlign.center,
+                    Center(
+                      child: Text(
+                        'Hello There',
+                        style: GoogleFonts.bebasNeue(
+                          fontSize: 52,
+                        ),
+                      ),
+                    ),
+                    const Center(
+                      child: Text(
+                        'Register below with your details!',
+                        style: TextStyle(fontSize: 16, color: Colors.black45),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    LoginRegisterTextField(
+                      hintText: 'Email',
+                      obscure: false,
                       onChanged: (value) {
+                        //Do something with the user input.
                         email = value;
-                        //Do something with the user input.
+                        print(email);
                       },
-                      decoration: kTextFieldDecoration.copyWith(
-                        hintText: 'Enter your email',
-                        filled: true,
-                        fillColor: Colors.white,
-                      ),
+                      email: true,
                     ),
-                    SizedBox(
-                      height: 8.0,
+                    const SizedBox(
+                      height: 10.0,
                     ),
-                    TextField(
-                      textInputAction: TextInputAction.next,
-                      obscureText: true,
-                      textAlign: TextAlign.center,
+                    LoginRegisterTextField(
+                      hintText: 'Password',
+                      obscure: true,
                       onChanged: (value) {
-                        password = value;
                         //Do something with the user input.
+                        password = value;
+                        print(password);
                       },
-                      decoration: kTextFieldDecoration.copyWith(
-                        hintText: 'Enter your password',
-                        filled: true,
-                        fillColor: Colors.white,
+                      email: false,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    LoginRegisterTextField(
+                      hintText: 'Confirm Password',
+                      obscure: true,
+                      onChanged: (value) {
+                        //Do something with the user input.
+                        confirmPassword = value;
+                        print(confirmPassword);
+                      },
+                      email: false,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    LoginRegisterTextField(
+                      hintText: 'Username',
+                      obscure: false,
+                      onChanged: (value) {
+                        username = value;
+                      },
+                      email: false,
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: GestureDetector(
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Sign Up',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: () async {
+                          if (!passwordConfirmed()) {
+                            StatusAlert.show(
+                              context,
+                              duration: const Duration(seconds: 1),
+                              title: 'Passwords does not match',
+                              configuration:
+                                  const IconConfiguration(icon: Icons.close),
+                              maxWidth: 260,
+                            );
+                            return;
+                          }
+                          if (notAllFieldsFilled()) {
+                            StatusAlert.show(
+                              context,
+                              duration: const Duration(seconds: 1),
+                              title: 'Please fill in your particulars',
+                              configuration:
+                                  const IconConfiguration(icon: Icons.close),
+                              maxWidth: 260,
+                            );
+                            return;
+                          }
+                          setState(() {
+                            showSpinner = true;
+                          });
+                          try {
+                            final newUser =
+                                await _auth.createUserWithEmailAndPassword(
+                                    email: email, password: password);
+                            if (newUser != null) {
+                              FirebaseFirestore.instance.collection("users")
+                                  .doc(_auth.currentUser!.uid).set({
+                                'username' : username
+                              });
+                              StatusAlert.show(
+                                context,
+                                duration: Duration(seconds: 1),
+                                title: 'You are registered!',
+                                configuration:
+                                    IconConfiguration(icon: Icons.done),
+                                maxWidth: 260,
+                              );
+                              late UserCredential user;
+                              user = await _auth.signInWithEmailAndPassword(
+                                  email: email, password: password);
+                              if (user != null) {
+                                Navigator.pushNamed(context, DashBoard.id);
+                              }
+                            }
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'network-request-failed') {
+                              StatusAlert.show(
+                                context,
+                                duration: const Duration(seconds: 1),
+                                title: 'No Internet Connection',
+                                configuration: const IconConfiguration(
+                                    icon: Icons.warning),
+                                maxWidth: 260,
+                              );
+                            } else if (e.code == 'email-already-in-use') {
+                              StatusAlert.show(
+                                context,
+                                duration: const Duration(seconds: 1),
+                                title: 'Email already in use',
+                                configuration:
+                                    const IconConfiguration(icon: Icons.close),
+                                maxWidth: 260,
+                              );
+                            } else if (e.code == 'invalid-email') {
+                              StatusAlert.show(
+                                context,
+                                duration: const Duration(seconds: 1),
+                                title: 'Invalid email',
+                                configuration:
+                                    const IconConfiguration(icon: Icons.close),
+                                maxWidth: 260,
+                              );
+                            } else if (e.code == 'weak-password') {
+                              StatusAlert.show(
+                                context,
+                                duration: const Duration(seconds: 1),
+                                title:
+                                    'Password needs to be at least 6 characters',
+                                configuration:
+                                    const IconConfiguration(icon: Icons.close),
+                                maxWidth: 300,
+                              );
+                            } else {
+                              StatusAlert.show(
+                                context,
+                                duration: const Duration(seconds: 1),
+                                title: 'Unknown Error',
+                                configuration:
+                                    const IconConfiguration(icon: Icons.close),
+                                maxWidth: 300,
+                              );
+                            }
+                            // Catching exceptions causes by using the firebase method
+                            print(e);
+                          }
+                          setState(() {
+                            showSpinner = false;
+                          });
+                        },
                       ),
                     ),
-                    SizedBox(
-                      height: 24.0,
-                    ),
-                    RoundedButton(
-                      title: 'Register',
-                      color: Colors.blueAccent,
-                      onPress: () async {
-                        setState(() {
-                          showSpinner = true;
-                        });
-                        try {
-                          final newUser =
-                          await _auth.createUserWithEmailAndPassword(
-                              email: email, password: password);
-                          if (newUser != null) {
-                            Alert(
-                              context: context,
-                              type: AlertType.success,
-                              title: "Successful Registration",
-                              desc: "Please proceed to the sign in page",
-                              buttons: [
-                                DialogButton(
-                                  child: const Text(
-                                    "To Login Page",
-                                    style: TextStyle(color: Colors.white, fontSize: 20),
-                                  ),
-                                  onPressed: () => Navigator.pushNamed(context, LoginScreen.id),
-                                ),
-                              ],
-                            ).show();
-                          }
-                        } catch (e) {
-                          // Catching exceptions causes by using the firebase method
-                          Alert(
-                            context: context,
-                            type: AlertType.error,
-                            title: "Unsuccessful Registration",
-                            desc: "Invalid Email format or Invalid password, password needs to be at-least 6 characters",
-                            buttons: [
-                              DialogButton(
-                                child: const Text(
-                                  "Try again",
-                                  style: TextStyle(color: Colors.white, fontSize: 20),
-                                ),
-                                onPressed: () => Navigator.pop(context),
-                              ),
-                            ],
-                          ).show();
-                          print(e);
-                        }
-                        setState(() {
-                          showSpinner = false;
-                        });
-                      },
-                    ),
-                    RoundedButton(
-                      title: 'Log In Instead',
-                      color: Colors.lightBlueAccent,
-                      onPress: () => Navigator.pushNamed(context, LoginScreen.id),
-                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Already a member?',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextButton(
+                          child: const Text(
+                            'Login here',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, LoginScreen.id);
+                          },
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),
             ),
-          ]
+          ]),
         ),
       ),
     );

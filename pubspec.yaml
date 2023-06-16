@@ -39,6 +39,7 @@ dependencies:
   firebase_auth: ^4.6.1
   cloud_firestore: ^4.7.1
   google_sign_in: ^6.1.2
+  status_alert: ^1.0.1
   animated_text_kit: ^4.2.2
   font_awesome_flutter: ^9.0.0
   google_fonts: ^4.0.4

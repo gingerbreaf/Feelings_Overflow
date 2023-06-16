@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:feelings_overflow/design/login_register_text_fields.dart';
 import 'package:feelings_overflow/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:feelings_overflow/constants.dart';
 import 'package:feelings_overflow/screens/DashBoard.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:status_alert/status_alert.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
@@ -17,189 +19,221 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _auth = FirebaseAuth.instance;
-  late String email;
-  late String password;
+  late String email = '';
+  late String password = '';
   late UserCredential user;
   bool showSpinner = false;
   String errorText = '';
 
-  late AnimationController controller;
-
-
+  bool notAllFieldsFilled() {
+    return (password == '') ||
+        (email == '');
+  }
 
   @override
   Widget build(BuildContext context) {
-    return  SafeArea(
+    return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: BackButton(
-            onPressed: () => Navigator.pop(context),
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[300],
         body: ModalProgressHUD(
           inAsyncCall: showSpinner,
-          child: Stack(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/images/loginpage.jpg"),
-                        fit: BoxFit.cover,
-                      )
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 0),
-                    child: Column(
-                      //mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        Row(
-                          //mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Hero(
-                                tag: 'logo',
-                                child: Container(
-                                  height: MediaQuery.of(context).size.height / 5,
-                                  //height: 200,
-                                  child: const FittedBox(
-                                    child: Image(
-                                      image: AssetImage('assets/images/AppIcon.png'),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              child: FittedBox(
-                                child: AnimatedTextKit(
-                                  animatedTexts: [
-                                    TypewriterAnimatedText(
-                                      'First Step to the Diary',
-                                      textStyle: GoogleFonts.pacifico(
-                                        fontSize: 40.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    TypewriterAnimatedText(
-                                      'Login Page',
-                                      textStyle: GoogleFonts.pacifico(
-                                        fontSize: 40.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 30,
-                          child: Text(
-                            errorText,
+          child: Stack(children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 0),
+                child: Column(
+                  //mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 70,
+                    ),
+                    Hero(
+                      tag: 'logo',
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 5,
+                        //height: 200,
+                        child: const FittedBox(
+                          child: Image(
+                            image: AssetImage('assets/images/AppIcon.png'),
                           ),
                         ),
-                        TextField(
-                          textInputAction: TextInputAction.next,
-                          textAlign: TextAlign.center,
-                          keyboardType: TextInputType.emailAddress,
-                          onChanged: (value) {
-                            //Do something with the user input.
-                            email = value;
-                            print(email);
-                          },
-                          decoration: kTextFieldDecoration.copyWith(
-                            hintText: 'Enter your email',
-                            fillColor: Colors.white,
-                            filled: true,
-                          ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Center(
+                      child: Text(
+                        'Welcome Back',
+                        style: GoogleFonts.bebasNeue(
+                          fontSize: 52,
                         ),
-                        const SizedBox(
-                          height: 10.0,
-                        ),
-                        TextField(
-                            textInputAction: TextInputAction.next,
-                            textAlign: TextAlign.center,
-                            obscureText: true,
-                            onChanged: (value) {
-                              password = value;
-                              print(password);
-                              //Do something with the user input.
-                            },
-                            decoration: kTextFieldDecoration.copyWith(
-                              hintText: 'Enter your password',
-                              filled: true,
-                              fillColor: Colors.white,
-                            )
-
-                        ),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        RoundedButton(
-                          title: 'Log In',
-                          color: Colors.lightBlueAccent,
-                          onPress: () async {
-                            setState(() {
-                              showSpinner = true;
-                            });
-                            try {
-                              user = await _auth.signInWithEmailAndPassword(
-                                  email: email,
-                                  password: password);
-                              if (user != null ) {
-                                Navigator.pushNamed(context, DashBoard.id);
-                              }
-                            } catch (e) {
-                              print(e);
-                              Alert(
-                                context: context,
-                                type: AlertType.error,
-                                title: "Unsuccessful sign-in",
-                                desc: "Invalid email or password",
-                                buttons: [
-                                  DialogButton(
-                                    child: const Text(
-                                      "Try again",
-                                      style: TextStyle(color: Colors.white, fontSize: 20),
-                                    ),
-                                    onPressed: () => Navigator.pop(context),
-                                  ),
-                                ],
-                              ).show();
+                      ),
+                    ),
+                    const Center(
+                      child: Text(
+                        'Continue jotting it down!',
+                        style: TextStyle(fontSize: 16, color: Colors.black45),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                      child: Text(
+                        errorText,
+                      ),
+                    ),
+                    LoginRegisterTextField(
+                      hintText: 'Email',
+                      obscure: false,
+                      onChanged: (value) {
+                        //Do something with the user input.
+                        email = value;
+                        print(email);
+                      },
+                      email: true,
+                    ),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    LoginRegisterTextField(
+                      hintText: 'Password',
+                      obscure: true,
+                      onChanged: (value) {
+                        //Do something with the user input.
+                        password = value;
+                        print(password);
+                      },
+                      email: false,
+                    ),
+                    const SizedBox(
+                      height: 20.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: GestureDetector(
+                        onTap: () async {
+                          if (notAllFieldsFilled()) {
+                            StatusAlert.show(
+                              context,
+                              duration: const Duration(seconds: 1),
+                              title: 'Please fill in your particulars',
+                              configuration:
+                                  const IconConfiguration(icon: Icons.close),
+                              maxWidth: 260,
+                            );
+                            return;
+                          }
+                          setState(() {
+                            showSpinner = true;
+                          });
+                          try {
+                            user = await _auth.signInWithEmailAndPassword(
+                                email: email, password: password);
+                            if (user != null) {
+                              Navigator.pushNamed(context, DashBoard.id);
                             }
-                            setState(() {
-                              showSpinner = false;
-                            });
-                          },
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'network-request-failed') {
+                              StatusAlert.show(
+                                context,
+                                duration: const Duration(seconds: 1),
+                                title: 'No Internet Connection',
+                                configuration: const IconConfiguration(
+                                    icon: Icons.warning),
+                                maxWidth: 260,
+                              );
+                            } else if (e.code == 'invalid-email') {
+                              StatusAlert.show(
+                                context,
+                                duration: const Duration(seconds: 1),
+                                title: 'Invalid email',
+                                configuration:
+                                    const IconConfiguration(icon: Icons.close),
+                                maxWidth: 260,
+                              );
+                            } else if (e.code == 'wrong-password') {
+                              StatusAlert.show(
+                                context,
+                                duration: const Duration(seconds: 1),
+                                title: 'Password Incorrect',
+                                configuration:
+                                    const IconConfiguration(icon: Icons.close),
+                                maxWidth: 260,
+                              );
+                            } else if (e.code == 'user-not-found') {
+                              StatusAlert.show(
+                                context,
+                                duration: const Duration(seconds: 1),
+                                title: 'Sign up first',
+                                configuration:
+                                    const IconConfiguration(icon: Icons.close),
+                                maxWidth: 260,
+                              );
+                            } else {
+                              StatusAlert.show(
+                                context,
+                                duration: const Duration(seconds: 1),
+                                title: 'Unknown Error, Please try again later',
+                                configuration:
+                                    const IconConfiguration(icon: Icons.close),
+                                maxWidth: 300,
+                              );
+                            }
+                          }
+                          setState(() {
+                            showSpinner = false;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              'Log In',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
                         ),
-
-                        RoundedButton(
-                          title: 'Register',
-                          color: Colors.lightBlueAccent,
-                          onPress: () async {
-                            setState(() {
-                              Navigator.pushNamed(context, RegistrationScreen.id);
-                            });
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Not a member?',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextButton(
+                          child: const Text(
+                            'Register now',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, RegistrationScreen.id);
                           },
                         ),
                       ],
-                    ),
-                  ),
+                    )
+                  ],
                 ),
-              ]
-          ),
+              ),
+            ),
+          ]),
         ),
       ),
     );

@@ -5,8 +5,6 @@ import 'package:feelings_overflow/screens/register_screen.dart';
 import 'package:feelings_overflow/screens/DashBoard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'screens/WelcomeScreen.dart';
-import 'screens/tabs/MyDiariesTab.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,17 +34,15 @@ class _FeelingsOverflow extends State<FeelingsOverflow> {
         primarySwatch: Colors.blue,
       ),
       // Initial start screen
-      initialRoute: WelcomeScreen.id,
+      initialRoute: LoginScreen.id,
       routes: {
-        'welcome_screen': (context) => WelcomeScreen(),
         'dashboard_screen': (context) => DashBoard(),
         'login_screen' : (context) => LoginScreen(),
         'registration_screen': (context) => RegistrationScreen(),
         'mydiaries_screen': (context) => MyDiariesTab(),
-
       },
       // home property contain SignInScreen widget
-      home: LoginScreen(),
+
     );
   }
 }
