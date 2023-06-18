@@ -1,0 +1,31 @@
+{
+  "name": "modal_progress_hud_nsn",
+  "version": "0.4.0",
+  "summary": "A modal progress indicator widget with Sound Null Safety",
+  "description": "A new Flutter plugin project.",
+  "homepage": "https://github.com/kphanipavan/modal_progress_hud_nsn",
+  "license": {
+    "file": "../LICENSE"
+  },
+  "authors": {
+    "My Company": "kphanipavan@gmail.com"
+  },
+  "source": {
+    "path": "."
+  },
+  "source_files": "Classes/**/*",
+  "dependencies": {
+    "Flutter": [
+
+    ]
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "pod_target_xcconfig": {
+    "DEFINES_MODULE": "YES",
+    "EXCLUDED_ARCHS[sdk=iphonesimulator*]": "i386"
+  },
+  "swift_versions": "5.0",
+  "swift_version": "5.0"
+}

@@ -1,0 +1,6 @@
+framework module modal_progress_hud_nsn {
+  umbrella header "modal_progress_hud_nsn-umbrella.h"
+
+  export *
+  module * { export * }
+}
