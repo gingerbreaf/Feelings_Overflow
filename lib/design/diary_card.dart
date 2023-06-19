@@ -19,24 +19,26 @@ class DiaryCard extends StatelessWidget {
           color: AppStyle.cardsColor[doc['color_id']],
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              doc["diary_title"],
-              style: AppStyle.mainTitle,
-            ),
-            Text(
-              doc["creation_date"],
-              style: AppStyle.dateTitle,
-            ),
-            Text(
-              doc["diary_content"],
-              style: AppStyle.mainContent,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 3,
-            )
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                doc["diary_title"],
+                style: AppStyle.mainTitle,
+              ),
+              Text(
+                doc["creation_date"],
+                style: AppStyle.dateTitle,
+              ),
+              Text(
+                doc["diary_content"],
+                style: AppStyle.mainContent,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -34,34 +34,36 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
         ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleController,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Title',
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              TextField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Title',
+                ),
+                style: AppStyle.mainTitle,
               ),
-              style: AppStyle.mainTitle,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(date, style: AppStyle.dateTitle,),
-            const SizedBox(
-              height: 30,
-            ),
-            TextField(
-              controller: _mainContentController,
-              keyboardType: TextInputType.multiline,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Your Diary here',
+              const SizedBox(
+                height: 8,
               ),
-              style: AppStyle.mainContent,
-              maxLines: null,
-            ),
-          ],
+              Text(date, style: AppStyle.dateTitle,),
+              const SizedBox(
+                height: 30,
+              ),
+              TextField(
+                controller: _mainContentController,
+                keyboardType: TextInputType.multiline,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Your Diary here',
+                ),
+                style: AppStyle.mainContent,
+                maxLines: null,
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

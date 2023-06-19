@@ -46,6 +46,7 @@ dependencies:
   modal_progress_hud_nsn: ^0.4.0
   rflutter_alert: ^2.0.7
   intl: 0.18.1
+  image_picker: ^0.8.9
 
 
 dev_dependencies:
@@ -73,7 +74,6 @@ flutter:
 
   assets:
     - assets/images/
-  #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

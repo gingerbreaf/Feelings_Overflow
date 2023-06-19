@@ -190,7 +190,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             FirebaseFirestore.instance
                                 .collection("users")
                                 .doc(_auth.currentUser!.uid)
-                                .set({'username': username});
+                                .set({
+                              'username': username,
+                              'uid' : _auth.currentUser!.uid,
+                              'email' : email,
+                              'bio' : '',
+                              'followers': [],
+                              'following' : [],
+                              'profilepic': 'https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.personality-insights.com%2Fwp-content%2Fuploads%2F2017%2F12%2Fdefault-profile-pic-e1513291410505.jpg&tbnid=tb7N7_uys1AxsM&vet=12ahUKEwjjuYDDus7_AhXgMLcAHcX0DV8QMygBegUIARDrAQ..i&imgrefurl=https%3A%2F%2Fwww.personality-insights.com%2Fdefault-profile-pic%2F&docid=noScQk1sIgxspM&w=250&h=250&q=default%20profile%20picture&client=firefox-b-d&ved=2ahUKEwjjuYDDus7_AhXgMLcAHcX0DV8QMygBegUIARDrAQ'
+                                });
                             StatusAlert.show(
                               context,
                               duration: Duration(seconds: 1),

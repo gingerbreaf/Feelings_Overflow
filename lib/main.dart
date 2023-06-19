@@ -1,4 +1,7 @@
 // main.dart file
+import 'package:feelings_overflow/screens/diary_posting_screen.dart';
+import 'package:feelings_overflow/screens/following_screen.dart';
+import 'package:feelings_overflow/screens/new_post_screen.dart';
 import 'package:feelings_overflow/screens/tabs/MyDiariesTab.dart';
 import 'package:feelings_overflow/screens/login_screen.dart';
 import 'package:feelings_overflow/screens/register_screen.dart';
@@ -32,6 +35,7 @@ class _FeelingsOverflow extends State<FeelingsOverflow> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        useMaterial3: true,
       ),
       // Initial start screen
       initialRoute: LoginScreen.id,
@@ -40,6 +44,8 @@ class _FeelingsOverflow extends State<FeelingsOverflow> {
         'login_screen' : (context) => LoginScreen(),
         'registration_screen': (context) => RegistrationScreen(),
         'mydiaries_screen': (context) => MyDiariesTab(),
+        'following_screen': (context) => FollowingScreen(),
+        'new_post_screen': (context) => NewPostScreen(),
       },
       // home property contain SignInScreen widget
 

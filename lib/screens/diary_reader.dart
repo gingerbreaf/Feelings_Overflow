@@ -25,29 +25,31 @@ class _DiaryReaderScreenState extends State<DiaryReaderScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.doc["diary_title"],
-              style: AppStyle.mainTitle.copyWith(
-                fontSize: 28,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.doc["diary_title"],
+                style: AppStyle.mainTitle.copyWith(
+                  fontSize: 28,
+                ),
               ),
-            ),
-            Text(
-              widget.doc["creation_date"],
-              style: AppStyle.dateTitle.copyWith(
-                fontSize: 15
+              Text(
+                widget.doc["creation_date"],
+                style: AppStyle.dateTitle.copyWith(
+                  fontSize: 15
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              widget.doc["diary_content"],
-              style: AppStyle.mainContent,
-            )
-          ],
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                widget.doc["diary_content"],
+                style: AppStyle.mainContent,
+              )
+            ],
+          ),
         ),
       ),
     floatingActionButton: FloatingActionButton(

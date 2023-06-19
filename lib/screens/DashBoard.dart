@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'tabs/MyDiariesTab.dart';
 import 'tabs/HomeTab.dart';
+import 'tabs/ProfileTab.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({Key? key}) : super(key: key);
@@ -14,34 +15,17 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
-  final _auth = FirebaseAuth.instance;
-  User? loggedInUser;
   int _currentIndex = 0;
 
   final tabs = [
     HomeTab(),
     MyDiariesTab(),
-    Center(
-      child: Text(
-        'Profile Page',
-      ),
+    ProfileTab(
+      uid: FirebaseAuth.instance.currentUser!.uid,
     ),
-    //put profile page here
   ];
 
-  void getCurrentUser() async {
-    try {
-      final user = await _auth.currentUser;
-      if (user != null) {
-        loggedInUser = user;
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   void initState() {
-    getCurrentUser();
   }
 
   @override
