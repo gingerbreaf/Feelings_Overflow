@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feelings_overflow/screens/tabs/ProfileTab.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:feelings_overflow/functionality/firebase_methods.dart';
@@ -61,7 +62,13 @@ class _FollowingScreenState extends State<FollowingScreen> {
                   ),
                   title: Text((snapshot.data! as dynamic).docs[index]['username'],),
                   onTap: () {
-                    FirebaseMethods.followUser(widget.uid, (snapshot.data! as dynamic).docs[index]['uid']);
+                    // Navigate to the profile page of the respective user
+                    Navigator.push(
+                        context, MaterialPageRoute(
+                          builder: (context) => ProfileTab(
+                              uid: (snapshot.data! as dynamic).docs[index]['uid']
+                          )));
+                    //FirebaseMethods.followUser(widget.uid, (snapshot.data! as dynamic).docs[index]['uid']);
                   },
                 );
           });

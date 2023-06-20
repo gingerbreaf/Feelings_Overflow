@@ -1,12 +1,18 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feelings_overflow/design/diary_card.dart';
+import 'package:feelings_overflow/functionality/firebase_methods.dart';
 import 'package:feelings_overflow/screens/following_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:typed_data';
 import 'package:feelings_overflow/functionality/image_functions.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:status_alert/status_alert.dart';
+
+import '../../design/follow_button.dart';
 
 class ProfileTab extends StatefulWidget {
   final String uid;
@@ -27,6 +33,8 @@ class _ProfileTabState extends State<ProfileTab> {
   var userData = {};
   int followers = 0;
   int following = 0;
+  int postLength = 0;
+  bool isFollowing = false;
 
   @override
   void initState() {
@@ -43,9 +51,17 @@ class _ProfileTabState extends State<ProfileTab> {
           .collection('users')
           .doc(widget.uid)
           .get();
+      // Getting post length
+      var postSnap = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.uid)
+          .collection('personal_diaries').get();
+      postLength = postSnap.docs.length;
+
       userData = userSnap.data()!;
       followers = userData['followers'].length;
       following = userData['following'].length;
+      isFollowing = userData['followers'].contains(FirebaseAuth.instance.currentUser!.uid);
       setState(() {});
     } catch (e) {
       StatusAlert.show(
@@ -60,6 +76,8 @@ class _ProfileTabState extends State<ProfileTab> {
       isLoading = false;
     });
   }
+
+
 
   void selectImage() async {
     Uint8List im = await ImageFunction.pickImage(ImageSource.gallery);
@@ -79,6 +97,7 @@ class _ProfileTabState extends State<ProfileTab> {
             body: SafeArea(
               child: ListView(
                 children: <Widget>[
+                  // TODO: Remove if unnecessary
                   Padding(
                     padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
                     child: Row(
@@ -166,16 +185,14 @@ class _ProfileTabState extends State<ProfileTab> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        const Expanded(child: SizedBox()),
                         InkWell(
                           onTap: () {},
                           child: Column(
                             children: <Widget>[
                               Text(
-                                // TODO: Insert follower count based on actual count
                                 followers.toString(),
                                 style: GoogleFonts.openSans(
-                                  fontSize: 18.0,
+                                  fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -190,7 +207,7 @@ class _ProfileTabState extends State<ProfileTab> {
                           ),
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width / 8,
+                          width: MediaQuery.of(context).size.width / 10,
                         ),
                         InkWell(
                           onTap: () {
@@ -199,10 +216,9 @@ class _ProfileTabState extends State<ProfileTab> {
                           child: Column(
                             children: <Widget>[
                               Text(
-                                // TODO: Insert following count based on actual
                                 following.toString(),
                                 style: GoogleFonts.openSans(
-                                  fontSize: 18.0,
+                                  fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -217,7 +233,7 @@ class _ProfileTabState extends State<ProfileTab> {
                           ),
                         ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width / 8,
+                          width: MediaQuery.of(context).size.width / 10,
                         ),
                         InkWell(
                           onTap: () {},
@@ -225,9 +241,9 @@ class _ProfileTabState extends State<ProfileTab> {
                             children: <Widget>[
                               Text(
                                 // TODO: Insert follower count based on actual count
-                                '5',
+                                postLength.toString(),
                                 style: GoogleFonts.openSans(
-                                  fontSize: 18.0,
+                                  fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -241,7 +257,56 @@ class _ProfileTabState extends State<ProfileTab> {
                             ],
                           ),
                         ),
-                        const Expanded(child: SizedBox()),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        FirebaseAuth.instance.currentUser!.uid == widget.uid
+                        ? Flexible(
+                          child: FollowButton(
+                            text: 'Edit Profile',
+                            backgroundColor: Colors.black,
+                            textColor: Colors.white,
+                            borderColor: Colors.grey,
+                            function: (){}
+                          ),
+                        ) : isFollowing
+                            ? FollowButton(
+                              text: 'Unfollow',
+                              backgroundColor: Colors.redAccent,
+                              textColor: Colors.white,
+                              borderColor: Colors.red,
+                              function: () async {
+                                await FirebaseMethods.followUser(
+                                  FirebaseAuth.instance.currentUser!.uid,
+                                  userData['uid'],
+                                );
+                                setState(() {
+                                  isFollowing = false;
+                                  followers--;
+                                });
+                              },
+                            )
+                            : FollowButton(
+                              text: 'Follow',
+                              backgroundColor: Colors.greenAccent,
+                              textColor: Colors.white,
+                              borderColor: Colors.green,
+                              function: () async {
+                                await FirebaseMethods.followUser(
+                                  FirebaseAuth.instance.currentUser!.uid,
+                                  userData['uid'],
+                                );
+                                setState(() {
+                                  isFollowing = true;
+                                  followers++;
+                                });
+                              },
+                            )
                       ],
                     ),
                   ),
@@ -269,10 +334,44 @@ class _ProfileTabState extends State<ProfileTab> {
                   const SizedBox(
                     height: 5.0,
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 2.0,
+                  const Divider(
                     color: Colors.black,
+                  ),
+
+                  FutureBuilder(
+                    future: FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(widget.uid)
+                        .collection('personal_diaries')
+                        .get(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return GridView.builder(
+                          shrinkWrap: true,
+                          itemCount: (snapshot.data! as dynamic).docs.length,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 1.5,
+                            childAspectRatio: 1,
+                          ),
+                          itemBuilder: (context, index) {
+                            DocumentSnapshot snap = (snapshot.data! as dynamic).docs[index];
+                            // TODO: Change this to the diary Cards instead
+                            return Container(
+                              child: Image(
+                                image:  AssetImage('assets/images/download.jpg'),
+                              ),
+                            );
+
+                          }
+                      );
+                    },
+
                   ),
                   Center(
                     child: TextButton(
