@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feelings_overflow/design/diary_card.dart';
 import 'package:feelings_overflow/functionality/firebase_methods.dart';
+import 'package:feelings_overflow/screens/edit_profile_screen.dart';
 import 'package:feelings_overflow/screens/following_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -272,7 +273,14 @@ class _ProfileTabState extends State<ProfileTab> {
                             backgroundColor: Colors.black,
                             textColor: Colors.white,
                             borderColor: Colors.grey,
-                            function: (){}
+                            function: (){
+                              Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(builder: (context) => EditProfile()))
+                              .then((value) => setState((){
+                                getData();
+                              }));
+                            }
                           ),
                         ) : isFollowing
                             ? FollowButton(
