@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "boi.walle.modal_progress_hud_nsn-merged_res-10:/layout/notification_action.xml",
+        "source": "boi.walle.modal_progress_hud_nsn-core-1.6.0-3:/layout/notification_action.xml"
+    },
+    {
+        "merged": "boi.walle.modal_progress_hud_nsn-merged_res-10:/layout/notification_template_part_time.xml",
+        "source": "boi.walle.modal_progress_hud_nsn-core-1.6.0-3:/layout/notification_template_part_time.xml"
+    },
+    {
+        "merged": "boi.walle.modal_progress_hud_nsn-merged_res-10:/layout/notification_action_tombstone.xml",
+        "source": "boi.walle.modal_progress_hud_nsn-core-1.6.0-3:/layout/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "boi.walle.modal_progress_hud_nsn-merged_res-10:/layout/custom_dialog.xml",
+        "source": "boi.walle.modal_progress_hud_nsn-core-1.6.0-3:/layout/custom_dialog.xml"
+    },
+    {
+        "merged": "boi.walle.modal_progress_hud_nsn-merged_res-10:/layout/notification_template_icon_group.xml",
+        "source": "boi.walle.modal_progress_hud_nsn-core-1.6.0-3:/layout/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "boi.walle.modal_progress_hud_nsn-merged_res-10:/layout/notification_template_part_chronometer.xml",
+        "source": "boi.walle.modal_progress_hud_nsn-core-1.6.0-3:/layout/notification_template_part_chronometer.xml"
+    }
+]

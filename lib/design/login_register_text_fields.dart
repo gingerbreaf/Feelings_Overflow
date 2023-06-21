@@ -12,6 +12,8 @@ class LoginRegisterTextField extends StatelessWidget {
   final bool obscure;
   final Function(String)? onChanged;
   final bool email;
+  // TODO: Add a field onceCompleted that is a function that does the action once
+  // TODO: Box is filled, Add it in the constructor, should not be required
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,9 @@ class LoginRegisterTextField extends StatelessWidget {
             onChanged: onChanged,
             textInputAction: TextInputAction.next,
             obscureText: obscure,
+            // TODO: In order to make enter move to the relevant buttons
+            // TODO: Need to fill up onEditingComplete, call a void function
+            //onEditingComplete: onceCompleted,
           ),
         ),
       ),
