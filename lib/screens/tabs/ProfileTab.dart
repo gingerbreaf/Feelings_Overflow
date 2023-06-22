@@ -1,9 +1,9 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feelings_overflow/design/diary_card.dart';
 import 'package:feelings_overflow/functionality/firebase_methods.dart';
 import 'package:feelings_overflow/screens/edit_profile_screen.dart';
 import 'package:feelings_overflow/screens/following_screen.dart';
+import 'package:feelings_overflow/screens/follower_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -187,7 +187,9 @@ class _ProfileTabState extends State<ProfileTab> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(context, FollowerScreen.id);
+                          },
                           child: Column(
                             children: <Widget>[
                               Text(
@@ -237,11 +239,9 @@ class _ProfileTabState extends State<ProfileTab> {
                           width: MediaQuery.of(context).size.width / 10,
                         ),
                         InkWell(
-                          onTap: () {},
                           child: Column(
                             children: <Widget>[
                               Text(
-                                // TODO: Insert follower count based on actual count
                                 postLength.toString(),
                                 style: GoogleFonts.openSans(
                                   fontSize: 20.0,

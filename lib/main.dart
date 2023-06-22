@@ -1,5 +1,6 @@
 // main.dart file
 import 'package:feelings_overflow/screens/diary_posting_screen.dart';
+import 'package:feelings_overflow/screens/follower_screen.dart';
 import 'package:feelings_overflow/screens/following_screen.dart';
 import 'package:feelings_overflow/screens/new_post_screen.dart';
 import 'package:feelings_overflow/screens/tabs/MyDiariesTab.dart';
@@ -45,6 +46,7 @@ class _FeelingsOverflow extends State<FeelingsOverflow> {
         'registration_screen': (context) => RegistrationScreen(),
         'mydiaries_screen': (context) => MyDiariesTab(),
         'following_screen': (context) => FollowingScreen(),
+        'follower_screen': (context) => FollowerScreen(),
         'new_post_screen': (context) => NewPostScreen(),
       },
       // home property contain SignInScreen widget
