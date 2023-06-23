@@ -363,5 +363,8 @@ void followFeature() {
 
 
 void main() {
+  myDiariesFeature();
+  postingFeature();
   followFeature();
+
 }
