@@ -265,6 +265,7 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                   const SizedBox(
                     height: 30,
                   ),
+                  /* TODO: Diaries posted should only be seen by personal profile
                   FutureBuilder(
                     future: FirebaseFirestore.instance
                         .collection('users')
@@ -298,7 +299,7 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                             );
                           });
                     },
-                  ),
+                  ),*/
                 ],
               ),
             ),

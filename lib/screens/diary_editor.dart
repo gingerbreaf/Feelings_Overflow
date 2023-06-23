@@ -38,6 +38,7 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
           child: Column(
             children: [
               TextField(
+                key: const Key('diaries_title_text'),
                 controller: _titleController,
                 decoration: const InputDecoration(
                   border: InputBorder.none,
@@ -53,6 +54,7 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
                 height: 30,
               ),
               TextField(
+                key: const Key('diaries_content_text'),
                 controller: _mainContentController,
                 keyboardType: TextInputType.multiline,
                 decoration: const InputDecoration(

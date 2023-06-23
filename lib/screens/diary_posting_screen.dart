@@ -55,6 +55,7 @@ class _DiaryPostingScreenState extends State<DiaryPostingScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        key: const Key('diary_post_button'),
         backgroundColor: Colors.blue,
         child: const Icon(Icons.post_add),
         onPressed: () {

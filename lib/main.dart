@@ -7,6 +7,7 @@ import 'package:feelings_overflow/screens/tabs/MyDiariesTab.dart';
 import 'package:feelings_overflow/screens/login_screen.dart';
 import 'package:feelings_overflow/screens/register_screen.dart';
 import 'package:feelings_overflow/screens/DashBoard.dart';
+import 'package:feelings_overflow/screens/tabs/ProfileTab.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 

@@ -38,18 +38,22 @@ class _DashBoardState extends State<DashBoard> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home,
+              key: Key('home_tab'),
             ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               CupertinoIcons.book,
+              key: Key('my_diaries_tab'),
             ),
             label: 'My Diaries',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               CupertinoIcons.profile_circled,
+              key: Key('profile_tab'),
+
             ),
             label: 'Profile',
           ),

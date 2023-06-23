@@ -84,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   LoginRegisterTextField(
+                    key: const Key('login_email'),
                     hintText: 'Email',
                     obscure: false,
                     onChanged: (value) {
@@ -97,6 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 10.0,
                   ),
                   LoginRegisterTextField(
+                    key: const Key('login_password'),
                     hintText: 'Password',
                     obscure: true,
                     onChanged: (value) {
@@ -112,6 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: GestureDetector(
+                      key: const Key('login_gesture_detector'),
                       onTap: () async {
                         if (notAllFieldsFilled()) {
                           StatusAlert.show(
