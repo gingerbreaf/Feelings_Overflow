@@ -31,10 +31,10 @@ class _PostReaderScreenState extends State<PostReaderScreen> {
             children: [
               Row(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 20.0,
                     backgroundImage:
-                    AssetImage('assets/images/defaultprofile.jpg'),
+                    NetworkImage(widget.doc['poster_profile_pic']),
                   ),
                   const SizedBox(
                     width: 10,

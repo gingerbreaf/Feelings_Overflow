@@ -20,12 +20,19 @@ class _FollowingScreenState extends State<FollowingScreen> {
   bool isShowUsers = false;
   List<String> followingUid = [];
   List<String> followingName = [];
+  List<String> followingPicUrl = [];
   bool isLoading = false;
 
   Future<String> getUsername(String uid) async {
     var userSnap = await _firestore.collection('users').doc(uid).get();
     var userData = userSnap.data()!;
     return userData['username'];
+  }
+
+  Future<String> getPicUrl(String uid) async {
+    var userSnap = await _firestore.collection('users').doc(uid).get();
+    var userData = userSnap.data()!;
+    return userData['profilepic'];
   }
 
   void getFollowing() async {
@@ -44,6 +51,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
       for (String uid in followingUid) {
         String name = await getUsername(uid);
         followingName.add(name);
+        String picUrl = await getPicUrl(uid);
+        followingPicUrl.add(picUrl);
       }
     } catch (e) {
       StatusAlert.show(
@@ -109,10 +118,11 @@ class _FollowingScreenState extends State<FollowingScreen> {
                     return ListView.builder(
                         itemCount: (snapshot.data! as dynamic).docs.length,
                         itemBuilder: (context, index) {
+                          NetworkImage image = NetworkImage((snapshot.data! as dynamic).docs[index]
+                          ['profilepic']);
                           return ListTile(
-                            leading: const CircleAvatar(
-                                backgroundImage: AssetImage(
-                                    'assets/images/defaultprofile.jpg')),
+                            leading: CircleAvatar(
+                                backgroundImage: image),
                             title: Text(
                               (snapshot.data! as dynamic).docs[index]
                                   ['username'],
@@ -149,9 +159,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
                           String name =
                               followingName[followingUid.indexOf(uid)];
                           return ListTile(
-                              leading: const CircleAvatar(
-                                  backgroundImage: AssetImage(
-                                      'assets/images/defaultprofile.jpg')),
+                              leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(followingPicUrl[followingUid.indexOf(uid)])),
                               title: Text(name),
                               onTap: () {
                                 Navigator.push(

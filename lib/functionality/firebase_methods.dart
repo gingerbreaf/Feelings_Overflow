@@ -7,12 +7,14 @@ class FirebaseMethods {
   static final _auth = FirebaseAuth.instance;
 
 
+
   static Future<void> followUser(String uid, String followId) async {
     // This is not a streambuilder which is always listening for changes
     // This is a Future
     // Therefore IT IS IMPORTANT to setState in order to update values
     // upon using the function
     try {
+
       DocumentSnapshot snap = await _firestore.collection('users').doc(uid).get();
       List following = (snap.data()! as dynamic)['following'];
 
@@ -43,20 +45,18 @@ class FirebaseMethods {
 
   static void postDiary(QueryDocumentSnapshot diary, String uid) async {
     try {
+
       var userSnap = await FirebaseFirestore.instance
           .collection('users')
           .doc(uid)
           .get();
       var userData = userSnap.data()!;
-      DocumentSnapshot snap = await _firestore.collection('users')
-          .doc(uid)
-          .get();
-      List followers = (snap.data()! as dynamic)['followers'];
-      print(followers.length);
+      List followers = (userData as dynamic)['followers'];
       for (String follower in followers) {
         _firestore.collection("users")
             .doc(follower)
             .collection("homepage_feed").add({
+          "poster_profile_pic": userData['profilepic'],
           "poster_uid": uid,
           "poster_name": userData['username'],
           "diary_title": diary['diary_title'],

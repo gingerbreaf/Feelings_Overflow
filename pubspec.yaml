@@ -47,6 +47,10 @@ dependencies:
   rflutter_alert: ^2.0.7
   intl: 0.18.1
   image_picker: ^0.8.9
+  path: ^1.8.3
+  mime_type: ^1.0.0
+  firebase_storage: ^11.2.3
+
 
 
 dev_dependencies:

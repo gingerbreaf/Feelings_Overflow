@@ -29,7 +29,6 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
 
   final _auth = FirebaseAuth.instance;
   bool isLoading = false;
-  Uint8List? _image;
   var userData = {};
   int followers = 0;
   int following = 0;
@@ -96,17 +95,11 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                     children: <Widget>[
                       Stack(
                         children: [
-                          _image != null
-                              ? CircleAvatar(
-                                  radius: 64,
-                                  backgroundImage: MemoryImage(_image!),
-                                )
-                              : const CircleAvatar(
-                                  radius: 64,
-                                  //Insert default network image for profile
-                                  backgroundImage:
-                                      AssetImage('assets/images/download.jpg'),
-                                ),
+                          CircleAvatar(
+                            radius: 64,
+                            backgroundImage:
+                                NetworkImage(userData['profilepic']),
+                          )
                         ],
                       ),
                     ],
@@ -225,41 +218,41 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                       children: <Widget>[
                         FirebaseAuth.instance.currentUser!.uid == widget.uid
                             ? Container(
-                          height: 0,
-                        ) :
-                        isFollowing
-                            ? FollowButton(
-                                text: 'Unfollow',
-                                backgroundColor: Colors.redAccent,
-                                textColor: Colors.white,
-                                borderColor: Colors.red,
-                                function: () async {
-                                  await FirebaseMethods.followUser(
-                                    FirebaseAuth.instance.currentUser!.uid,
-                                    userData['uid'],
-                                  );
-                                  setState(() {
-                                    isFollowing = false;
-                                    followers--;
-                                  });
-                                },
+                                height: 0,
                               )
-                            : FollowButton(
-                                text: 'Follow',
-                                backgroundColor: Colors.greenAccent,
-                                textColor: Colors.white,
-                                borderColor: Colors.green,
-                                function: () async {
-                                  await FirebaseMethods.followUser(
-                                    FirebaseAuth.instance.currentUser!.uid,
-                                    userData['uid'],
-                                  );
-                                  setState(() {
-                                    isFollowing = true;
-                                    followers++;
-                                  });
-                                },
-                              )
+                            : isFollowing
+                                ? FollowButton(
+                                    text: 'Unfollow',
+                                    backgroundColor: Colors.redAccent,
+                                    textColor: Colors.white,
+                                    borderColor: Colors.red,
+                                    function: () async {
+                                      await FirebaseMethods.followUser(
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                        userData['uid'],
+                                      );
+                                      setState(() {
+                                        isFollowing = false;
+                                        followers--;
+                                      });
+                                    },
+                                  )
+                                : FollowButton(
+                                    text: 'Follow',
+                                    backgroundColor: Colors.greenAccent,
+                                    textColor: Colors.white,
+                                    borderColor: Colors.green,
+                                    function: () async {
+                                      await FirebaseMethods.followUser(
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                        userData['uid'],
+                                      );
+                                      setState(() {
+                                        isFollowing = true;
+                                        followers++;
+                                      });
+                                    },
+                                  )
                       ],
                     ),
                   ),

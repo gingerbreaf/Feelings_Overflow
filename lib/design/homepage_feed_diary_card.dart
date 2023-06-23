@@ -13,7 +13,7 @@ class HomePageDiaryCard extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(15.0),
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           color: AppStyle.cardsColor[doc['color_id']],
@@ -25,10 +25,10 @@ class HomePageDiaryCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 20.0,
                     backgroundImage:
-                        AssetImage('assets/images/defaultprofile.jpg'),
+                        NetworkImage(doc['poster_profile_pic']),
                   ),
                   const SizedBox(
                     width: 10,
@@ -37,7 +37,7 @@ class HomePageDiaryCard extends StatelessWidget {
                     doc['poster_name'],
                     style: const TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],

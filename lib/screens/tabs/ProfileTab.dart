@@ -30,7 +30,7 @@ class _ProfileTabState extends State<ProfileTab> {
 
   final _auth = FirebaseAuth.instance;
   bool isLoading = false;
-  Uint8List? _image;
+  String imageURL = '';
   var userData = {};
   int followers = 0;
   int following = 0;
@@ -56,13 +56,16 @@ class _ProfileTabState extends State<ProfileTab> {
       var postSnap = await FirebaseFirestore.instance
           .collection('users')
           .doc(widget.uid)
-          .collection('personal_diaries').get();
+          .collection('personal_diaries')
+          .get();
       postLength = postSnap.docs.length;
 
       userData = userSnap.data()!;
       followers = userData['followers'].length;
       following = userData['following'].length;
-      isFollowing = userData['followers'].contains(FirebaseAuth.instance.currentUser!.uid);
+      isFollowing = userData['followers']
+          .contains(FirebaseAuth.instance.currentUser!.uid);
+      imageURL = userData['profilepic'];
       setState(() {});
     } catch (e) {
       StatusAlert.show(
@@ -78,12 +81,22 @@ class _ProfileTabState extends State<ProfileTab> {
     });
   }
 
-
-
   void selectImage() async {
     Uint8List im = await ImageFunction.pickImage(ImageSource.gallery);
     setState(() {
-      _image = im;
+      isLoading = true;
+    });
+    ImageFunction.uploadFile(im, widget.uid);
+    String profilePicURL = await ImageFunction.getDownloadURL(widget.uid);
+    FirebaseFirestore.instance.collection("users").doc(widget.uid).update({
+      'profilepic': profilePicURL,
+    });
+    setState(() {
+      imageURL = profilePicURL;
+    });
+    print(profilePicURL);
+    setState(() {
+      isLoading = false;
     });
   }
 
@@ -122,17 +135,10 @@ class _ProfileTabState extends State<ProfileTab> {
                     children: <Widget>[
                       Stack(
                         children: [
-                          _image != null
-                              ? CircleAvatar(
-                                  radius: 64,
-                                  backgroundImage: MemoryImage(_image!),
-                                )
-                              : const CircleAvatar(
-                                  radius: 64,
-                                  //Insert default network image for profile
-                                  backgroundImage:
-                                      AssetImage('assets/images/download.jpg'),
-                                ),
+                          CircleAvatar(
+                            radius: 64,
+                            backgroundImage: NetworkImage(imageURL),
+                          ),
                           Positioned(
                             bottom: -10,
                             left: 90,
@@ -267,54 +273,56 @@ class _ProfileTabState extends State<ProfileTab> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         FirebaseAuth.instance.currentUser!.uid == widget.uid
-                        ? Flexible(
-                          child: FollowButton(
-                            text: 'Edit Profile',
-                            backgroundColor: Colors.black,
-                            textColor: Colors.white,
-                            borderColor: Colors.grey,
-                            function: (){
-                              Navigator.push(
-                                  context, 
-                                  MaterialPageRoute(builder: (context) => EditProfile()))
-                              .then((value) => setState((){
-                                getData();
-                              }));
-                            }
-                          ),
-                        ) : isFollowing
-                            ? FollowButton(
-                              text: 'Unfollow',
-                              backgroundColor: Colors.redAccent,
-                              textColor: Colors.white,
-                              borderColor: Colors.red,
-                              function: () async {
-                                await FirebaseMethods.followUser(
-                                  FirebaseAuth.instance.currentUser!.uid,
-                                  userData['uid'],
-                                );
-                                setState(() {
-                                  isFollowing = false;
-                                  followers--;
-                                });
-                              },
-                            )
-                            : FollowButton(
-                              text: 'Follow',
-                              backgroundColor: Colors.greenAccent,
-                              textColor: Colors.white,
-                              borderColor: Colors.green,
-                              function: () async {
-                                await FirebaseMethods.followUser(
-                                  FirebaseAuth.instance.currentUser!.uid,
-                                  userData['uid'],
-                                );
-                                setState(() {
-                                  isFollowing = true;
-                                  followers++;
-                                });
-                              },
-                            )
+                            ? Flexible(
+                                child: FollowButton(
+                                    text: 'Edit Profile',
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    borderColor: Colors.grey,
+                                    function: () {
+                                      Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditProfile()))
+                                          .then((value) => setState(() {
+                                                getData();
+                                              }));
+                                    }),
+                              )
+                            : isFollowing
+                                ? FollowButton(
+                                    text: 'Unfollow',
+                                    backgroundColor: Colors.redAccent,
+                                    textColor: Colors.white,
+                                    borderColor: Colors.red,
+                                    function: () async {
+                                      await FirebaseMethods.followUser(
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                        userData['uid'],
+                                      );
+                                      setState(() {
+                                        isFollowing = false;
+                                        followers--;
+                                      });
+                                    },
+                                  )
+                                : FollowButton(
+                                    text: 'Follow',
+                                    backgroundColor: Colors.greenAccent,
+                                    textColor: Colors.white,
+                                    borderColor: Colors.green,
+                                    function: () async {
+                                      await FirebaseMethods.followUser(
+                                        FirebaseAuth.instance.currentUser!.uid,
+                                        userData['uid'],
+                                      );
+                                      setState(() {
+                                        isFollowing = true;
+                                        followers++;
+                                      });
+                                    },
+                                  )
                       ],
                     ),
                   ),
@@ -361,31 +369,28 @@ class _ProfileTabState extends State<ProfileTab> {
                       return GridView.builder(
                           shrinkWrap: true,
                           itemCount: (snapshot.data! as dynamic).docs.length,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             crossAxisSpacing: 5,
                             mainAxisSpacing: 1.5,
                             childAspectRatio: 1,
                           ),
                           itemBuilder: (context, index) {
-                            DocumentSnapshot snap = (snapshot.data! as dynamic).docs[index];
+                            DocumentSnapshot snap =
+                                (snapshot.data! as dynamic).docs[index];
                             // TODO: Change this to the diary Cards instead
                             return Container(
                               child: Image(
-                                image:  AssetImage('assets/images/download.jpg'),
+                                image: AssetImage('assets/images/download.jpg'),
                               ),
                             );
-
-                          }
-                      );
+                          });
                     },
-
                   ),
                   Center(
                     child: TextButton(
-                      child: Text(
-                        'Sign Out'
-                      ),
+                      child: Text('Sign Out'),
                       onPressed: () async {
                         await _auth.signOut();
                         StatusAlert.show(
@@ -393,7 +398,7 @@ class _ProfileTabState extends State<ProfileTab> {
                           duration: const Duration(milliseconds: 500),
                           title: 'You are signed out',
                           configuration:
-                          const IconConfiguration(icon: Icons.done),
+                              const IconConfiguration(icon: Icons.done),
                           maxWidth: 260,
                         );
                         Navigator.pop(context);

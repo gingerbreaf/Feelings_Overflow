@@ -17,12 +17,19 @@ class _FollowerScreenState extends State<FollowerScreen> {
   final _firestore = FirebaseFirestore.instance;
   List<String> followerUid = [];
   List<String> followerName = [];
+  List<String> followerPicUrl = [];
   bool isLoading = false;
 
   Future<String> getUsername(String uid) async {
     var userSnap = await _firestore.collection('users').doc(uid).get();
     var userData = userSnap.data()!;
     return userData['username'];
+  }
+
+  Future<String> getPicUrl(String uid) async {
+    var userSnap = await _firestore.collection('users').doc(uid).get();
+    var userData = userSnap.data()!;
+    return userData['profilepic'];
   }
 
   void getFollowers() async {
@@ -41,6 +48,8 @@ class _FollowerScreenState extends State<FollowerScreen> {
       for (String uid in followerUid) {
         String name = await getUsername(uid);
         followerName.add(name);
+        String picUrl = await getPicUrl(uid);
+        followerPicUrl.add(picUrl);
       }
     } catch (e) {
       StatusAlert.show(
@@ -85,9 +94,8 @@ class _FollowerScreenState extends State<FollowerScreen> {
                     children: followerUid.map((uid) {
                       String name = followerName[followerUid.indexOf(uid)];
                       return ListTile(
-                          leading: const CircleAvatar(
-                              backgroundImage: AssetImage(
-                                  'assets/images/defaultprofile.jpg')),
+                          leading: CircleAvatar(
+                              backgroundImage: NetworkImage(followerPicUrl[followerUid.indexOf(uid)])),
                           title: Text(name),
                           onTap: () {
                             Navigator.push(

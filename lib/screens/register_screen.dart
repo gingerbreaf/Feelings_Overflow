@@ -197,7 +197,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               'bio' : '',
                               'followers': [],
                               'following' : [],
-                              'profilepic': 'https://www.google.com/imgres?imgurl=https%3A%2F%2Fwww.personality-insights.com%2Fwp-content%2Fuploads%2F2017%2F12%2Fdefault-profile-pic-e1513291410505.jpg&tbnid=tb7N7_uys1AxsM&vet=12ahUKEwjjuYDDus7_AhXgMLcAHcX0DV8QMygBegUIARDrAQ..i&imgrefurl=https%3A%2F%2Fwww.personality-insights.com%2Fdefault-profile-pic%2F&docid=noScQk1sIgxspM&w=250&h=250&q=default%20profile%20picture&client=firefox-b-d&ved=2ahUKEwjjuYDDus7_AhXgMLcAHcX0DV8QMygBegUIARDrAQ'
+                              'profilepic': 'https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg'
                                 });
                             StatusAlert.show(
                               context,
