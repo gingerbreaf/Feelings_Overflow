@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'app_style.dart';
 
+/// Cards to be used in homepage feed for previews of posts
 class HomePageDiaryCard extends StatelessWidget {
   final Function()? onTap;
+
+  /// Contains information about the diary/ post
   final QueryDocumentSnapshot doc;
 
   const HomePageDiaryCard({super.key, this.onTap, required this.doc});
@@ -27,8 +30,7 @@ class HomePageDiaryCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 20.0,
-                    backgroundImage:
-                        NetworkImage(doc['poster_profile_pic']),
+                    backgroundImage: NetworkImage(doc['poster_profile_pic']),
                   ),
                   const SizedBox(
                     width: 10,

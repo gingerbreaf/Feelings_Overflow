@@ -1,10 +1,9 @@
-import 'package:feelings_overflow/screens/tabs/HomeTab.dart';
+import 'package:feelings_overflow/screens/tabs/HomeTab/HomeTab.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'tabs/MyDiariesTab.dart';
-import 'tabs/HomeTab.dart';
-import 'tabs/ProfileTab.dart';
+import 'tabs/MyDiariesTab/MyDiariesTab.dart';
+import 'tabs/ProfileTab/ProfileTab.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({Key? key}) : super(key: key);
@@ -15,18 +14,17 @@ class DashBoard extends StatefulWidget {
 }
 
 class _DashBoardState extends State<DashBoard> {
+  /// The index for navigation bar
   int _currentIndex = 0;
 
+  /// Array containing the tabs for navigation bar
   final tabs = [
-    HomeTab(),
-    MyDiariesTab(),
+    const HomeTab(),
+    const MyDiariesTab(),
     ProfileTab(
       uid: FirebaseAuth.instance.currentUser!.uid,
     ),
   ];
-
-  void initState() {
-  }
 
   @override
   Widget build(BuildContext context) {

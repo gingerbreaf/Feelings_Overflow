@@ -29,7 +29,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>FirebaseAuthInterop.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>FirebaseCore.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>FirebaseCoreExtension.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -40,6 +50,11 @@
 			<false/>
 		</dict>
 		<key>FirebaseFirestore.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>FirebaseStorage.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -70,11 +85,6 @@
 			<false/>
 		</dict>
 		<key>GoogleUtilities.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Libuv-gRPC.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -114,6 +124,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>firebase_storage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>gRPC-C++-gRPCCertificates-Cpp.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -130,6 +145,11 @@
 			<false/>
 		</dict>
 		<key>google_sign_in_ios.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>image_picker_ios.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

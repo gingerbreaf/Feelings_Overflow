@@ -1,18 +1,16 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:feelings_overflow/design/login_register_text_fields.dart';
 import 'package:feelings_overflow/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:feelings_overflow/design/round_buttons.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:feelings_overflow/constants.dart';
 import 'package:feelings_overflow/screens/DashBoard.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:status_alert/status_alert.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
+
+  const LoginScreen({super.key});
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -22,9 +20,14 @@ class _LoginScreenState extends State<LoginScreen> {
   late String email = '';
   late String password = '';
   late UserCredential user;
+
+  /// Whether to show a loading icon on the screen
   bool showSpinner = false;
+
+  /// Displays user error message
   String errorText = '';
 
+  /// Returns true if any field is still empty
   bool notAllFieldsFilled() {
     return (password == '') || (email == '');
   }
@@ -89,7 +92,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     onChanged: (value) {
                       //Do something with the user input.
                       email = value;
-                      print(email);
                     },
                     email: true,
                   ),
@@ -102,7 +104,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     onChanged: (value) {
                       //Do something with the user input.
                       password = value;
-                      print(password);
                     },
                     email: false,
                   ),
@@ -131,6 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           user = await _auth.signInWithEmailAndPassword(
                               email: email, password: password);
                           if (user != null) {
+                            Navigator.pop(context);
                             Navigator.pushNamed(context, DashBoard.id);
                           }
                         } on FirebaseAuthException catch (e) {
@@ -186,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         });
                       },
                       child: Container(
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(12),

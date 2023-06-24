@@ -8,10 +8,19 @@ class LoginRegisterTextField extends StatelessWidget {
       required this.email,
       Key? key})
       : super(key: key);
+
+  /// Hint text to be displayed when text field is empty
   final String? hintText;
+
+  /// Whether to obscure the user input
   final bool obscure;
+
+  /// Function to be called when text field content changes
   final Function(String)? onChanged;
+
+  /// Whether to request from the OS for a keyboard suitable for typing emails
   final bool email;
+
   // TODO: Add a field onceCompleted that is a function that does the action once
   // TODO: Box is filled, Add it in the constructor, should not be required
 

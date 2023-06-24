@@ -1,22 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:feelings_overflow/design/round_buttons.dart';
 import 'package:feelings_overflow/screens/login_screen.dart';
 import 'DashBoard.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:feelings_overflow/constants.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:status_alert/status_alert.dart';
 import 'package:feelings_overflow/design/login_register_text_fields.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
 
+  const RegistrationScreen({super.key});
+
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
@@ -27,10 +25,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   late String username = '';
   bool showSpinner = false;
 
+  /// Returns true if the two passwords typed matches
   bool passwordConfirmed() {
     return password == confirmPassword;
   }
 
+  /// Returns true if any field is still empty
   bool notAllFieldsFilled() {
     return (password == '') || (username == '' || email == '');
   }
@@ -92,7 +92,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     onChanged: (value) {
                       //Do something with the user input.
                       email = value;
-                      print(email);
                     },
                     email: true,
                   ),
@@ -105,7 +104,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     onChanged: (value) {
                       //Do something with the user input.
                       password = value;
-                      print(password);
                     },
                     email: false,
                   ),
@@ -118,7 +116,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     onChanged: (value) {
                       //Do something with the user input.
                       confirmPassword = value;
-                      print(confirmPassword);
                     },
                     email: false,
                   ),
@@ -192,13 +189,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 .doc(_auth.currentUser!.uid)
                                 .set({
                               'username': username,
-                              'uid' : _auth.currentUser!.uid,
-                              'email' : email,
-                              'bio' : '',
+                              'uid': _auth.currentUser!.uid,
+                              'email': email,
+                              'bio': '',
                               'followers': [],
-                              'following' : [],
-                              'profilepic': 'https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg'
-                                });
+                              'following': [],
+                              'profilepic':
+                                  'https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg'
+                            });
                             StatusAlert.show(
                               context,
                               duration: Duration(seconds: 1),
@@ -211,6 +209,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             user = await _auth.signInWithEmailAndPassword(
                                 email: email, password: password);
                             if (user != null) {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
                               Navigator.pushNamed(context, DashBoard.id);
                             }
                           }
@@ -247,7 +247,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               context,
                               duration: const Duration(seconds: 3),
                               title: 'Weak Password',
-                              subtitle: 'Passwords needs at least 6 characters',
+                              subtitle: 'Needs at least 6 characters',
                               configuration:
                                   const IconConfiguration(icon: Icons.close),
                               maxWidth: 500,
@@ -290,7 +290,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.pushNamed(context, LoginScreen.id);
+                          Navigator.pop(context);
                         },
                       ),
                     ],

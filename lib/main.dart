@@ -1,9 +1,8 @@
 // main.dart file
-import 'package:feelings_overflow/screens/diary_posting_screen.dart';
-import 'package:feelings_overflow/screens/follower_screen.dart';
-import 'package:feelings_overflow/screens/following_screen.dart';
-import 'package:feelings_overflow/screens/new_post_screen.dart';
-import 'package:feelings_overflow/screens/tabs/MyDiariesTab.dart';
+import 'package:feelings_overflow/screens/tabs/ProfileTab/follower_screen.dart';
+import 'package:feelings_overflow/screens/tabs/ProfileTab/following_screen.dart';
+import 'package:feelings_overflow/screens/tabs/HomeTab/new_post_screen.dart';
+import 'package:feelings_overflow/screens/tabs/MyDiariesTab/MyDiariesTab.dart';
 import 'package:feelings_overflow/screens/login_screen.dart';
 import 'package:feelings_overflow/screens/register_screen.dart';
 import 'package:feelings_overflow/screens/DashBoard.dart';
@@ -17,12 +16,14 @@ void main() async {
   await Firebase.initializeApp();
 
 // calling of runApp
-  runApp(FeelingsOverflow());
+  runApp(const FeelingsOverflow());
 }
 
 class FeelingsOverflow extends StatefulWidget {
+  const FeelingsOverflow({super.key});
+
   @override
-  _FeelingsOverflow createState() => _FeelingsOverflow();
+  State<FeelingsOverflow> createState() => _FeelingsOverflow();
 }
 
 class _FeelingsOverflow extends State<FeelingsOverflow> {
@@ -41,16 +42,15 @@ class _FeelingsOverflow extends State<FeelingsOverflow> {
       // Initial start screen
       initialRoute: LoginScreen.id,
       routes: {
-        'dashboard_screen': (context) => DashBoard(),
-        'login_screen' : (context) => LoginScreen(),
-        'registration_screen': (context) => RegistrationScreen(),
-        'mydiaries_screen': (context) => MyDiariesTab(),
+        'dashboard_screen': (context) => const DashBoard(),
+        'login_screen': (context) => const LoginScreen(),
+        'registration_screen': (context) => const RegistrationScreen(),
+        'mydiaries_screen': (context) => const MyDiariesTab(),
         'following_screen': (context) => FollowingScreen(),
-        'follower_screen': (context) => FollowerScreen(),
-        'new_post_screen': (context) => NewPostScreen(),
+        'follower_screen': (context) => const FollowerScreen(),
+        'new_post_screen': (context) => const NewPostScreen(),
       },
       // home property contain SignInScreen widget
-
     );
   }
 }
