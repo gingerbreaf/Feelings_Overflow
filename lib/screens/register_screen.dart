@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feelings_overflow/functionality/firebase_methods.dart';
 import 'package:feelings_overflow/screens/login_screen.dart';
 import 'DashBoard.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   late String confirmPassword = '';
   late String username = '';
   bool showSpinner = false;
+  late UserCredential user;
 
   /// Returns true if the two passwords typed matches
   bool passwordConfirmed() {
@@ -184,19 +186,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               await _auth.createUserWithEmailAndPassword(
                                   email: email, password: password);
                           if (newUser != null) {
-                            FirebaseFirestore.instance
-                                .collection("users")
-                                .doc(_auth.currentUser!.uid)
-                                .set({
-                              'username': username,
-                              'uid': _auth.currentUser!.uid,
-                              'email': email,
-                              'bio': '',
-                              'followers': [],
-                              'following': [],
-                              'profilepic':
-                                  'https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg'
-                            });
+                            FirebaseMethods.settingNewProfile(
+                                _auth.currentUser!.uid,
+                                username,
+                                email);
                             StatusAlert.show(
                               context,
                               duration: Duration(seconds: 1),
@@ -205,7 +198,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   IconConfiguration(icon: Icons.done),
                               maxWidth: 260,
                             );
-                            late UserCredential user;
                             user = await _auth.signInWithEmailAndPassword(
                                 email: email, password: password);
                             if (user != null) {
@@ -215,56 +207,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             }
                           }
                         } on FirebaseAuthException catch (e) {
-                          if (e.code == 'network-request-failed') {
-                            StatusAlert.show(
-                              context,
-                              duration: const Duration(seconds: 1),
-                              title: 'No Internet Connection',
-                              configuration:
-                                  const IconConfiguration(icon: Icons.warning),
-                              maxWidth: 260,
-                            );
-                          } else if (e.code == 'email-already-in-use') {
-                            StatusAlert.show(
-                              context,
-                              duration: const Duration(seconds: 1),
-                              title: 'Email already in use',
-                              configuration:
-                                  const IconConfiguration(icon: Icons.close),
-                              maxWidth: 260,
-                            );
-                          } else if (e.code == 'invalid-email') {
-                            StatusAlert.show(
-                              context,
-                              duration: const Duration(seconds: 1),
-                              title: 'Invalid email',
-                              configuration:
-                                  const IconConfiguration(icon: Icons.close),
-                              maxWidth: 260,
-                            );
-                          } else if (e.code == 'weak-password') {
-                            StatusAlert.show(
-                              context,
-                              duration: const Duration(seconds: 3),
-                              title: 'Weak Password',
-                              subtitle: 'Needs at least 6 characters',
-                              configuration:
-                                  const IconConfiguration(icon: Icons.close),
-                              maxWidth: 500,
-                              dismissOnBackgroundTap: true,
-                            );
-                          } else {
-                            StatusAlert.show(
-                              context,
-                              duration: const Duration(seconds: 1),
-                              title: 'Unknown Error',
-                              configuration:
-                                  const IconConfiguration(icon: Icons.close),
-                              maxWidth: 300,
-                            );
-                          }
-                          // Catching exceptions causes by using the firebase method
-                          print(e);
+                          FirebaseMethods.errorHandlingRegister(e, context);
                         }
                         setState(() {
                           showSpinner = false;

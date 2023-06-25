@@ -6,6 +6,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:feelings_overflow/screens/DashBoard.dart';
 import 'package:status_alert/status_alert.dart';
+import 'package:feelings_overflow/functionality/firebase_methods.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
@@ -136,52 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Navigator.pushNamed(context, DashBoard.id);
                           }
                         } on FirebaseAuthException catch (e) {
-                          if (e.code == 'network-request-failed') {
-                            StatusAlert.show(
-                              context,
-                              duration: const Duration(seconds: 1),
-                              title: 'No Internet Connection',
-                              configuration:
-                                  const IconConfiguration(icon: Icons.warning),
-                              maxWidth: 260,
-                            );
-                          } else if (e.code == 'invalid-email') {
-                            StatusAlert.show(
-                              context,
-                              duration: const Duration(seconds: 1),
-                              title: 'Invalid email',
-                              configuration:
-                                  const IconConfiguration(icon: Icons.close),
-                              maxWidth: 260,
-                            );
-                          } else if (e.code == 'wrong-password') {
-                            StatusAlert.show(
-                              context,
-                              duration: const Duration(seconds: 1),
-                              title: 'Password Incorrect',
-                              configuration:
-                                  const IconConfiguration(icon: Icons.close),
-                              maxWidth: 260,
-                            );
-                          } else if (e.code == 'user-not-found') {
-                            StatusAlert.show(
-                              context,
-                              duration: const Duration(seconds: 1),
-                              title: 'Sign up first',
-                              configuration:
-                                  const IconConfiguration(icon: Icons.close),
-                              maxWidth: 260,
-                            );
-                          } else {
-                            StatusAlert.show(
-                              context,
-                              duration: const Duration(seconds: 1),
-                              title: 'Unknown Error, Please try again later',
-                              configuration:
-                                  const IconConfiguration(icon: Icons.close),
-                              maxWidth: 300,
-                            );
-                          }
+                          FirebaseMethods.errorHandlingLogin(e, context);
                         }
                         setState(() {
                           showSpinner = false;
