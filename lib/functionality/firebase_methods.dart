@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:status_alert/status_alert.dart';
-
+import 'package:rxdart/rxdart.dart';
 
 class FirebaseMethods {
   static final _firestore = FirebaseFirestore.instance;
@@ -11,11 +14,8 @@ class FirebaseMethods {
   /// Creates a default new profile for user registering
   ///
   /// Adds the data for the new user to the firebase backend
-  static void settingNewProfile(String userUID, String username, String email){
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(userUID)
-        .set({
+  static void settingNewProfile(String userUID, String username, String email) {
+    FirebaseFirestore.instance.collection("users").doc(userUID).set({
       'username': username,
       'uid': userUID,
       'email': email,
@@ -23,11 +23,9 @@ class FirebaseMethods {
       'followers': [],
       'following': [],
       'profilepic':
-      'https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg'
+          'https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg'
     });
   }
-
-
 
   /// Deals with the error code generated from registering using firebase
   ///
@@ -39,8 +37,7 @@ class FirebaseMethods {
         context,
         duration: const Duration(seconds: 1),
         title: 'No Internet Connection',
-        configuration:
-        const IconConfiguration(icon: Icons.warning),
+        configuration: const IconConfiguration(icon: Icons.warning),
         maxWidth: 260,
       );
     } else if (e.code == 'email-already-in-use') {
@@ -48,8 +45,7 @@ class FirebaseMethods {
         context,
         duration: const Duration(seconds: 1),
         title: 'Email already in use',
-        configuration:
-        const IconConfiguration(icon: Icons.close),
+        configuration: const IconConfiguration(icon: Icons.close),
         maxWidth: 260,
       );
     } else if (e.code == 'invalid-email') {
@@ -57,8 +53,7 @@ class FirebaseMethods {
         context,
         duration: const Duration(seconds: 1),
         title: 'Invalid email',
-        configuration:
-        const IconConfiguration(icon: Icons.close),
+        configuration: const IconConfiguration(icon: Icons.close),
         maxWidth: 260,
       );
     } else if (e.code == 'weak-password') {
@@ -67,8 +62,7 @@ class FirebaseMethods {
         duration: const Duration(seconds: 3),
         title: 'Weak Password',
         subtitle: 'Needs at least 6 characters',
-        configuration:
-        const IconConfiguration(icon: Icons.close),
+        configuration: const IconConfiguration(icon: Icons.close),
         maxWidth: 500,
         dismissOnBackgroundTap: true,
       );
@@ -77,8 +71,7 @@ class FirebaseMethods {
         context,
         duration: const Duration(seconds: 1),
         title: 'Unknown Error',
-        configuration:
-        const IconConfiguration(icon: Icons.close),
+        configuration: const IconConfiguration(icon: Icons.close),
         maxWidth: 300,
       );
     }
@@ -93,8 +86,7 @@ class FirebaseMethods {
         context,
         duration: const Duration(seconds: 1),
         title: 'No Internet Connection',
-        configuration:
-        const IconConfiguration(icon: Icons.warning),
+        configuration: const IconConfiguration(icon: Icons.warning),
         maxWidth: 260,
       );
     } else if (e.code == 'invalid-email') {
@@ -102,8 +94,7 @@ class FirebaseMethods {
         context,
         duration: const Duration(seconds: 1),
         title: 'Invalid email',
-        configuration:
-        const IconConfiguration(icon: Icons.close),
+        configuration: const IconConfiguration(icon: Icons.close),
         maxWidth: 260,
       );
     } else if (e.code == 'wrong-password') {
@@ -111,8 +102,7 @@ class FirebaseMethods {
         context,
         duration: const Duration(seconds: 1),
         title: 'Password Incorrect',
-        configuration:
-        const IconConfiguration(icon: Icons.close),
+        configuration: const IconConfiguration(icon: Icons.close),
         maxWidth: 260,
       );
     } else if (e.code == 'user-not-found') {
@@ -120,8 +110,7 @@ class FirebaseMethods {
         context,
         duration: const Duration(seconds: 1),
         title: 'Sign up first',
-        configuration:
-        const IconConfiguration(icon: Icons.close),
+        configuration: const IconConfiguration(icon: Icons.close),
         maxWidth: 260,
       );
     } else {
@@ -129,14 +118,11 @@ class FirebaseMethods {
         context,
         duration: const Duration(seconds: 1),
         title: 'Unknown Error, Please try again later',
-        configuration:
-        const IconConfiguration(icon: Icons.close),
+        configuration: const IconConfiguration(icon: Icons.close),
         maxWidth: 300,
       );
     }
   }
-
-
 
   /// Does backend work for user of UID uid to follow or unfollow another user of UID followId
   ///
@@ -181,6 +167,22 @@ class FirebaseMethods {
   /// with information about the poster into their homepage_feed collection
   static void postDiary(QueryDocumentSnapshot diary, String uid) async {
     try {
+      _firestore
+          .collection("users")
+          .doc(_auth.currentUser!.uid)
+          .collection("posts")
+          .add({
+        "diary_title": diary['diary_title'],
+        "creation_date": diary['creation_date'],
+        "diary_content": diary['diary_content'],
+        "color_id": diary['color_id'],
+        "poster_uid": _auth.currentUser!.uid,
+        "post_date": DateFormat('yyyy-MM-dd kk:mm:ss').format(DateTime.now()),
+        "24hr_expiry": true,
+      }).then((value) {
+        print(value.id);
+      }).catchError((error) => print("error"));
+      /*
       var userSnap =
           await FirebaseFirestore.instance.collection('users').doc(uid).get();
       var userData = userSnap.data()!;
@@ -201,9 +203,26 @@ class FirebaseMethods {
         }).then((value) {
           print(value.id);
         }).catchError((error) => print("error"));
-      }
+      } */
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  static Future<
+      CombineLatestStream<QuerySnapshot<Map<String, dynamic>>,
+          List<QuerySnapshot<Map<String, dynamic>>>>> getPosts(
+      String uid) async {
+    var userSnap =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    var userData = userSnap.data()!;
+    List followings = (userData as dynamic)['following'];
+    return CombineLatestStream.list<QuerySnapshot<Map<String, dynamic>>>(
+        followings.map((following) => _firestore
+                .collection("users")
+                .doc(following)
+                .collection("posts")
+                .snapshots()
+            ));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feelings_overflow/design/diary_card.dart';
 import 'package:feelings_overflow/screens/tabs/ProfileTab/edit_profile_screen.dart';
 import 'package:feelings_overflow/screens/tabs/ProfileTab/following_screen.dart';
 import 'package:feelings_overflow/screens/tabs/ProfileTab/follower_screen.dart';
@@ -115,24 +116,8 @@ class _ProfileTabState extends State<ProfileTab> {
             body: SafeArea(
               child: ListView(
                 children: <Widget>[
-                  // TODO: Remove if unnecessary
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 15.0),
-                    child: Row(
-                      children: <Widget>[
-                        const Expanded(
-                          child: SizedBox(
-                            height: 30.0,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.settings),
-                          color: Colors.grey.shade500,
-                          iconSize: 30.0,
-                        ),
-                      ],
-                    ),
+                  const SizedBox(
+                    height: 30,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -189,10 +174,10 @@ class _ProfileTabState extends State<ProfileTab> {
                     ),
                   ),
                   const SizedBox(
-                    height: 5.0,
+                    height: 20.0,
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 0.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -296,9 +281,6 @@ class _ProfileTabState extends State<ProfileTab> {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
                   Center(
                     child: TextButton(
                       child: const Text('Sign Out'),
@@ -320,36 +302,21 @@ class _ProfileTabState extends State<ProfileTab> {
                   const SizedBox(
                     height: 5.0,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Row(
-                      children: <Widget>[
-                        IconButton.filled(
-                          onPressed: () {
-                            setState(() {
-                              outlineSelected = !outlineSelected;
-                              print(outlineSelected);
-                            });
-                          },
-                          isSelected: outlineSelected,
-                          icon: const Icon(Icons.library_books_outlined),
-                          selectedIcon: const Icon(Icons.library_books),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
                   const Divider(
                     color: Colors.black,
                   ),
-
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10.0),
+                    child: Text(
+                      'Post History',
+                      style: TextStyle(fontSize: 30),
+                    ),
+                  ),
                   FutureBuilder(
                     future: FirebaseFirestore.instance
                         .collection('users')
                         .doc(widget.uid)
-                        .collection('personal_diaries')
+                        .collection('posts')
                         .get(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -362,18 +329,16 @@ class _ProfileTabState extends State<ProfileTab> {
                           itemCount: (snapshot.data! as dynamic).docs.length,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 5,
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 0,
                             mainAxisSpacing: 1.5,
                             childAspectRatio: 1,
                           ),
                           itemBuilder: (context, index) {
-                            DocumentSnapshot snap =
+                            QueryDocumentSnapshot snap =
                                 (snapshot.data! as dynamic).docs[index];
                             // TODO: Change this to the diary Cards instead
-                            return Container(
-                              color: Colors.white,
-                            );
+                            return DiaryCard(doc: snap);
                           });
                     },
                   ),

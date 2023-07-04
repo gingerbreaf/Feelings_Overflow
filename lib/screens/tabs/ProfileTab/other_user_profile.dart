@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:status_alert/status_alert.dart';
 import '../../../../design/follow_button.dart';
+import '../../../design/diary_card.dart';
 
 class OtherUserProfile extends StatefulWidget {
   /// UID of user to be displayed
@@ -77,15 +78,15 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : Scaffold(
-            appBar: AppBar(),
-            backgroundColor: Colors.white,
-            body: SafeArea(
-              child: ListView(
+    return Scaffold(
+      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : ListView(
                 children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -258,14 +259,18 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                   const Divider(
                     color: Colors.black,
                   ),
-                  const SizedBox(
-                    height: 30,
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10.0),
+                    child: Text(
+                      'Post History',
+                      style: TextStyle(fontSize: 30),
+                    ),
                   ),
                   FutureBuilder(
                     future: FirebaseFirestore.instance
                         .collection('users')
                         .doc(widget.uid)
-                        .collection('personal_diaries')
+                        .collection('posts')
                         .get(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -278,24 +283,22 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                           itemCount: (snapshot.data! as dynamic).docs.length,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
+                            crossAxisCount: 2,
                             crossAxisSpacing: 5,
                             mainAxisSpacing: 1.5,
                             childAspectRatio: 1,
                           ),
                           itemBuilder: (context, index) {
-                            DocumentSnapshot snap =
-                                (snapshot.data! as dynamic).docs[index];
+                            QueryDocumentSnapshot snap =
+                            (snapshot.data! as dynamic).docs[index];
                             // TODO: Change this to the diary Cards instead
-                            return Container(
-                              color: Colors.white,
-                            );
+                            return DiaryCard(doc: snap);
                           });
                     },
                   ),
                 ],
               ),
-            ),
-          );
+      ),
+    );
   }
 }

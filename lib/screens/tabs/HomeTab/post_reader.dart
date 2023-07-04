@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:feelings_overflow/design/app_style.dart';
+import 'package:intl/intl.dart';
 
 class PostReaderScreen extends StatefulWidget {
   const PostReaderScreen(this.doc, {Key? key}) : super(key: key);
@@ -13,6 +14,32 @@ class PostReaderScreen extends StatefulWidget {
 }
 
 class _PostReaderScreenState extends State<PostReaderScreen> {
+  bool isLoading = false;
+
+  String picUrl = '';
+  String posterName = '';
+
+  @override
+  void initState() {
+    getData();
+  }
+
+  getData() async {
+    setState(() {
+      isLoading = true;
+    });
+    var userSnap = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.doc['poster_uid'])
+        .get();
+    var userData = userSnap.data()!;
+    picUrl = userData['profilepic'];
+    posterName = userData['username'];
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     int colorID = widget.doc['color_id'];
@@ -28,25 +55,26 @@ class _PostReaderScreenState extends State<PostReaderScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 20.0,
-                    backgroundImage:
-                        NetworkImage(widget.doc['poster_profile_pic']),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    widget.doc['poster_name'],
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+              isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 20.0,
+                          backgroundImage: NetworkImage(picUrl),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          posterName,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
               const SizedBox(
                 height: 15,
               ),
@@ -58,6 +86,10 @@ class _PostReaderScreenState extends State<PostReaderScreen> {
               ),
               Text(
                 'Written on ' + widget.doc["creation_date"],
+                style: AppStyle.dateTitle.copyWith(fontSize: 15),
+              ),
+              Text(
+                'Posted on ' + DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(widget.doc['post_date'])),
                 style: AppStyle.dateTitle.copyWith(fontSize: 15),
               ),
               const SizedBox(
