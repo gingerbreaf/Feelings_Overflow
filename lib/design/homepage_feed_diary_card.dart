@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'app_style.dart';
+import 'rich_text_display.dart';
+import 'package:feelings_overflow/functionality/JsonCoding.dart';
 
 /// Cards to be used in homepage feed for previews of posts
 class HomePageDiaryCard extends StatefulWidget {
@@ -91,12 +93,12 @@ class _HomePageDiaryCardState extends State<HomePageDiaryCard> {
                 widget.doc["creation_date"],
                 style: AppStyle.dateTitle,
               ),
-              Text(
-                widget.doc["diary_content"],
-                style: AppStyle.mainContent,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 10,
-              )
+              RichTextDisplay(
+                controller: JsonCoding.getQuillControllerviaJSON(
+                    widget.doc["diary_content"]),
+              ),
+              // OLD TEXT DISPLAY
+              // Text( widget.doc["diary_content"], style: AppStyle.dateTitle,)
             ],
           ),
         ),

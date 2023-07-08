@@ -51,6 +51,7 @@ dependencies:
   mime_type: ^1.0.0
   firebase_storage: ^11.2.3
   rxdart: ^0.27.7
+  flutter_quill: ^7.2.11
 
 
 

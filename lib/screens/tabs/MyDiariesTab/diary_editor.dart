@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feelings_overflow/design/follow_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:feelings_overflow/design/app_style.dart';
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'dart:math';
 import 'package:intl/intl.dart';
+import 'package:feelings_overflow/design/rich_text_toolbar.dart';
 
 class DiaryEditorScreen extends StatefulWidget {
   const DiaryEditorScreen({Key? key}) : super(key: key);
@@ -22,8 +27,13 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
   /// Current data and time which will be part of the diary's information
   String date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now());
 
+
   final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _mainContentController = TextEditingController();
+
+  // Old Diary editing of content
+  //final TextEditingController _mainContentController = TextEditingController();
+
+  final QuillController _controller = QuillController.basic();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +55,7 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              RichTextToolbar(controller: _controller),
               TextField(
                 controller: _titleController,
                 decoration: const InputDecoration(
@@ -63,6 +74,9 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
               const SizedBox(
                 height: 30,
               ),
+              QuillEditor.basic(controller: _controller, readOnly: false,
+              ),
+              /* Old Text Editor for Body
               TextField(
                 controller: _mainContentController,
                 keyboardType: TextInputType.multiline,
@@ -73,6 +87,7 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
                 style: AppStyle.mainContent,
                 maxLines: null,
               ),
+              */
             ],
           ),
         ),
@@ -80,6 +95,7 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         onPressed: () async {
+          var json = jsonEncode(_controller.document.toDelta().toJson());
           _firestore
               .collection("users")
               .doc(_auth.currentUser!.uid)
@@ -87,7 +103,10 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
               .add({
             "diary_title": _titleController.text,
             "creation_date": date,
-            "diary_content": _mainContentController.text,
+            //"diary_content": _controller.document.toPlainText(),
+            "diary_content": json,
+            // Previous approach for TextEditingController
+            //"diary_content": _mainContentController.text,
             "color_id": colorID,
           }).then((value) {
             Navigator.pop(context);

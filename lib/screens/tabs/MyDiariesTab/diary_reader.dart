@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feelings_overflow/design/rich_text_display.dart';
 import 'package:flutter/material.dart';
 import 'package:feelings_overflow/design/app_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:feelings_overflow/functionality/JsonCoding.dart';
 
 class DiaryReaderScreen extends StatefulWidget {
   const DiaryReaderScreen(this.doc, {Key? key}) : super(key: key);
@@ -14,6 +19,8 @@ class DiaryReaderScreen extends StatefulWidget {
 }
 
 class _DiaryReaderScreenState extends State<DiaryReaderScreen> {
+
+
   @override
   Widget build(BuildContext context) {
     int colorID = widget.doc['color_id'];
@@ -42,10 +49,17 @@ class _DiaryReaderScreenState extends State<DiaryReaderScreen> {
               const SizedBox(
                 height: 20,
               ),
+              RichTextDisplay(
+                  controller: JsonCoding.getQuillControllerviaJSON(
+                    widget.doc["diary_content"]),
+              ),
+              // OLD WAY of displaying text
+              /*
               Text(
                 widget.doc["diary_content"],
                 style: AppStyle.mainContent,
               )
+              */
             ],
           ),
         ),

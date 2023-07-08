@@ -4,6 +4,8 @@ import 'package:feelings_overflow/design/app_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:feelings_overflow/functionality/firebase_methods.dart';
 import 'package:status_alert/status_alert.dart';
+import 'package:feelings_overflow/design/rich_text_display.dart';
+import 'package:feelings_overflow/functionality/JsonCoding.dart';
 
 class DiaryPostingScreen extends StatefulWidget {
   const DiaryPostingScreen(this.doc, {Key? key}) : super(key: key);
@@ -44,10 +46,17 @@ class _DiaryPostingScreenState extends State<DiaryPostingScreen> {
               const SizedBox(
                 height: 20,
               ),
+              RichTextDisplay(
+                controller: JsonCoding.getQuillControllerviaJSON(
+                    widget.doc["diary_content"]),
+              ),
+              /* OLD WAY TO DISPLAY TEXT
               Text(
                 widget.doc["diary_content"],
                 style: AppStyle.mainContent,
               )
+
+               */
             ],
           ),
         ),

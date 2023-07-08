@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:feelings_overflow/design/app_style.dart';
 import 'package:intl/intl.dart';
+import 'package:feelings_overflow/design/rich_text_display.dart';
+import 'package:feelings_overflow/functionality/JsonCoding.dart';
 
 class PostReaderScreen extends StatefulWidget {
   const PostReaderScreen(this.doc, {Key? key}) : super(key: key);
@@ -95,10 +97,16 @@ class _PostReaderScreenState extends State<PostReaderScreen> {
               const SizedBox(
                 height: 20,
               ),
+              RichTextDisplay(
+                controller: JsonCoding.getQuillControllerviaJSON(
+                    widget.doc["diary_content"]),
+              ),
+              /* Old way of text display
               Text(
                 widget.doc["diary_content"],
                 style: AppStyle.mainContent,
               )
+             */
             ],
           ),
         ),

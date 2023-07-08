@@ -15,6 +15,9 @@ class _EditProfileState extends State<EditProfile> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
+  // TODO: Test code for editable selection of text widget
+  final TextEditingController _controller =  TextEditingController();
+
   /// Information about the user
   var userData = {};
 
@@ -54,6 +57,25 @@ class _EditProfileState extends State<EditProfile> {
                   bio = value;
                 },
                 email: false),
+            /* Test Code
+            Container(
+              child: TextField(
+                controller: _controller,
+                contextMenuBuilder: (BuildContext context, EditableTextState editableTextState) {
+                  final List<ContextMenuButtonItem> buttonItems = editableTextState.contextMenuButtonItems;
+                  final TextEditingValue value = _controller.value;
+                  buttonItems.insert(
+                    0,
+                    ContextMenuButtonItem(label: 'Snip Text', onPressed: (){}),
+                  );
+                  return AdaptiveTextSelectionToolbar.buttonItems(
+                      buttonItems: buttonItems,
+                      anchors: editableTextState.contextMenuAnchors);
+
+                },
+              ),
+            ),
+            */
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25.0),
               child: GestureDetector(

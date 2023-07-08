@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feelings_overflow/functionality/JsonCoding.dart';
 import 'package:flutter/material.dart';
 import 'app_style.dart';
+import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'rich_text_display.dart';
 
 /// Cards to be used in MyDiariesTab page for showing previews of personal diaries
 class DiaryCard extends StatelessWidget {
@@ -34,12 +37,19 @@ class DiaryCard extends StatelessWidget {
                 doc["creation_date"],
                 style: AppStyle.dateTitle,
               ),
+              RichTextDisplay(
+                controller: JsonCoding.getQuillControllerviaJSON(
+                    doc["diary_content"]
+                ),
+              ),
+              /* Old Text Representation
               Text(
                 doc["diary_content"],
                 style: AppStyle.mainContent,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 3,
               )
+              */
             ],
           ),
         ),
