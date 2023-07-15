@@ -188,12 +188,29 @@ class _ProfileTabState extends State<ProfileTab> {
                           },
                           child: Column(
                             children: <Widget>[
-                              Text(
-                                followers.toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              StreamBuilder(
+                                  stream: FirebaseFirestore.instance.collection("users").doc(widget.uid).snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      var data = snapshot.data!.data();
+                                      followers = data!['followers'].length;
+                                      return Text(
+                                        followers.toString(),
+                                        style: GoogleFonts.openSans(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    } else {
+                                      return Text(
+                                        followers.toString(),
+                                        style: GoogleFonts.openSans(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    }
+                                  }
                               ),
                               Text(
                                 'Followers',
@@ -214,12 +231,29 @@ class _ProfileTabState extends State<ProfileTab> {
                           },
                           child: Column(
                             children: <Widget>[
-                              Text(
-                                following.toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              StreamBuilder(
+                                  stream: FirebaseFirestore.instance.collection("users").doc(widget.uid).snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      var data = snapshot.data!.data();
+                                      following = data!['following'].length;
+                                      return Text(
+                                        following.toString(),
+                                        style: GoogleFonts.openSans(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    } else {
+                                      return Text(
+                                        following.toString(),
+                                        style: GoogleFonts.openSans(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    }
+                                  }
                               ),
                               Text(
                                 'Following',
@@ -237,12 +271,29 @@ class _ProfileTabState extends State<ProfileTab> {
                         InkWell(
                           child: Column(
                             children: <Widget>[
-                              Text(
-                                postLength.toString(),
-                                style: GoogleFonts.openSans(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              StreamBuilder(
+                                  stream: FirebaseFirestore.instance.collection("users").doc(widget.uid).collection('posts').snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      var data = snapshot.data!.docs;
+                                      postLength = data.length;
+                                      return Text(
+                                        postLength.toString(),
+                                        style: GoogleFonts.openSans(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    } else {
+                                      return Text(
+                                        postLength.toString(),
+                                        style: GoogleFonts.openSans(
+                                          fontSize: 20.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      );
+                                    }
+                                  }
                               ),
                               Text(
                                 'Posts',
