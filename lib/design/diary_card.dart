@@ -38,9 +38,11 @@ class DiaryCard extends StatelessWidget {
                 style: AppStyle.dateTitle,
               ),
               RichTextDisplay(
+                interactive: false,
                 controller: JsonCoding.getQuillControllerviaJSON(
                     doc["diary_content"]
                 ),
+
               ),
               /* Old Text Representation
               Text(

@@ -94,6 +94,7 @@ class _HomePageDiaryCardState extends State<HomePageDiaryCard> {
                 style: AppStyle.dateTitle,
               ),
               RichTextDisplay(
+                interactive: false,
                 controller: JsonCoding.getQuillControllerviaJSON(
                     widget.doc["diary_content"]),
               ),

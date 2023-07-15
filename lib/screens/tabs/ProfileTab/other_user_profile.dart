@@ -35,6 +35,9 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
   /// Whether to show follow button or unfollow button
   bool isFollowing = false;
 
+  /// Whether the current user sent a follow request to target user
+  bool requestSent = false;
+
   @override
   void initState() {
     super.initState();
@@ -60,16 +63,18 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
       followers = userData['followers'].length;
       following = userData['following'].length;
       isFollowing = userData['followers'].contains(_auth.currentUser!.uid);
+      requestSent = userData['requests'].contains(_auth.currentUser!.uid);
       setState(() {});
     } catch (e) {
       StatusAlert.show(
         context,
         duration: const Duration(seconds: 2),
-        title: 'Could not fetch information about user',
+        title: 'Could not get user',
         subtitle: 'Try again later',
         configuration: const IconConfiguration(icon: Icons.warning),
         maxWidth: 260,
       );
+      print(e);
     }
     setState(() {
       isLoading = false;
@@ -234,22 +239,37 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                                       });
                                     },
                                   )
-                                : FollowButton(
-                                    text: 'Follow',
-                                    backgroundColor: Colors.greenAccent,
-                                    textColor: Colors.white,
-                                    borderColor: Colors.green,
-                                    function: () async {
-                                      await FirebaseMethods.followUser(
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                        userData['uid'],
-                                      );
-                                      setState(() {
-                                        isFollowing = true;
-                                        followers++;
-                                      });
-                                    },
-                                  )
+                                : requestSent
+                                    ? FollowButton(
+                                        backgroundColor: Colors.white,
+                                        borderColor: Colors.black,
+                                        text: 'Request Sent',
+                                        textColor: Colors.black,
+                                        function: () async {
+                                          FirebaseMethods.requestFollow(
+                                              FirebaseAuth
+                                                  .instance.currentUser!.uid,
+                                              widget.uid);
+                                          setState(() {
+                                            requestSent = false;
+                                          });
+                                        },
+                                      )
+                                    : FollowButton(
+                                        text: 'Follow',
+                                        backgroundColor: Colors.greenAccent,
+                                        textColor: Colors.white,
+                                        borderColor: Colors.green,
+                                        function: () async {
+                                          FirebaseMethods.requestFollow(
+                                              FirebaseAuth
+                                                  .instance.currentUser!.uid,
+                                              widget.uid);
+                                          setState(() {
+                                            requestSent = true;
+                                          });
+                                        },
+                                      )
                       ],
                     ),
                   ),
@@ -278,22 +298,35 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                           child: CircularProgressIndicator(),
                         );
                       }
-                      return GridView.builder(
-                          shrinkWrap: true,
-                          itemCount: (snapshot.data! as dynamic).docs.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 5,
-                            mainAxisSpacing: 1.5,
-                            childAspectRatio: 1,
-                          ),
-                          itemBuilder: (context, index) {
-                            QueryDocumentSnapshot snap =
-                            (snapshot.data! as dynamic).docs[index];
-                            // TODO: Change this to the diary Cards instead
-                            return DiaryCard(doc: snap);
-                          });
+                      return (snapshot.data! as dynamic).docs.length == 0
+                          ? const Padding(
+                              padding: EdgeInsets.all(80.0),
+                              child: Center(
+                                child: Text(
+                                  'No Posts to Show',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : GridView.builder(
+                              shrinkWrap: true,
+                              itemCount:
+                                  (snapshot.data! as dynamic).docs.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 1.5,
+                                childAspectRatio: 1,
+                              ),
+                              itemBuilder: (context, index) {
+                                QueryDocumentSnapshot snap =
+                                    (snapshot.data! as dynamic).docs[index];
+                                // TODO: Change this to the diary Cards instead
+                                return DiaryCard(doc: snap);
+                              });
                     },
                   ),
                 ],

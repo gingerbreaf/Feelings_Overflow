@@ -1,6 +1,6 @@
 import 'package:feelings_overflow/design/diary_card.dart';
-import 'package:feelings_overflow/screens/tabs/MyDiariesTab/diary_reader.dart';
 import 'package:feelings_overflow/screens/tabs/MyDiariesTab/diary_editor.dart';
+import 'package:feelings_overflow/screens/tabs/MyDiariesTab/diary_creator.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -52,24 +52,32 @@ class _MyDiariesTabState extends State<MyDiariesTab> {
                         );
                       }
                       if (snapshot.hasData) {
-                        return GridView(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2),
-                          children: snapshot.data!.docs
-                              .map((diary) => DiaryCard(
-                                    doc: diary,
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => DiaryReaderScreen(
-                                                diary), // Create new instance of DiaryReaderScreen with respective diary data
-                                          ));
-                                    },
-                                  ))
-                              .toList(),
-                        );
+                        List<QueryDocumentSnapshot<Object?>> listOfDocs =
+                            snapshot.data!.docs;
+
+                        return listOfDocs.isEmpty
+                            ? const Center(
+                                child: Text(
+                                    "You have no diaries. Create a new one!"))
+                            : GridView(
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2),
+                                children: listOfDocs
+                                    .map((diary) => DiaryCard(
+                                          doc: diary,
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DiaryEditorScreen(
+                                                          diary), // Create new instance of DiaryReaderScreen with respective diary data
+                                                ));
+                                          },
+                                        ))
+                                    .toList(),
+                              );
                       }
                       return const Text(
                           "You have no diaries. Create a new one!");
@@ -86,7 +94,7 @@ class _MyDiariesTabState extends State<MyDiariesTab> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      const DiaryEditorScreen(), // Create new instance of DiaryEditorScreen
+                      const DiaryCreatorScreen(), // Create new instance of DiaryEditorScreen
                 ));
           },
           label: const Text('New Diary'),

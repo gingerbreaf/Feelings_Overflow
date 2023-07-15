@@ -177,7 +177,8 @@ class _ProfileTabState extends State<ProfileTab> {
                     height: 20.0,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 0.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 0.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -324,22 +325,35 @@ class _ProfileTabState extends State<ProfileTab> {
                           child: CircularProgressIndicator(),
                         );
                       }
-                      return GridView.builder(
-                          shrinkWrap: true,
-                          itemCount: (snapshot.data! as dynamic).docs.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 0,
-                            mainAxisSpacing: 1.5,
-                            childAspectRatio: 1,
-                          ),
-                          itemBuilder: (context, index) {
-                            QueryDocumentSnapshot snap =
-                                (snapshot.data! as dynamic).docs[index];
-                            // TODO: Change this to the diary Cards instead
-                            return DiaryCard(doc: snap);
-                          });
+                      return (snapshot.data! as dynamic).docs.length == 0
+                          ? const Padding(
+                              padding: EdgeInsets.all(80.0),
+                              child: Center(
+                                child: Text(
+                                  'No Posts to Show',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : GridView.builder(
+                              shrinkWrap: true,
+                              itemCount:
+                                  (snapshot.data! as dynamic).docs.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 0,
+                                mainAxisSpacing: 1.5,
+                                childAspectRatio: 1,
+                              ),
+                              itemBuilder: (context, index) {
+                                QueryDocumentSnapshot snap =
+                                    (snapshot.data! as dynamic).docs[index];
+                                // TODO: Change this to the diary Cards instead
+                                return DiaryCard(doc: snap);
+                              });
                     },
                   ),
                 ],

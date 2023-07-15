@@ -4,10 +4,12 @@ import 'package:flutter_quill/flutter_quill.dart';
 class RichTextDisplay extends StatelessWidget {
 
   final QuillController controller;
+  final bool interactive;
 
   const RichTextDisplay({
     super.key,
     required this.controller,
+    required this.interactive,
   });
 
   @override
@@ -22,6 +24,7 @@ class RichTextDisplay extends StatelessWidget {
         readOnly: true,
         expands: false,
         showCursor: false,
+      enableInteractiveSelection: interactive,
     );
   }
 }

@@ -98,6 +98,7 @@ class _PostReaderScreenState extends State<PostReaderScreen> {
                 height: 20,
               ),
               RichTextDisplay(
+                interactive: false,
                 controller: JsonCoding.getQuillControllerviaJSON(
                     widget.doc["diary_content"]),
               ),

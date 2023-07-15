@@ -97,97 +97,42 @@ class _FollowingScreenState extends State<FollowingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: TextFormField(
-          controller: searchController,
-          decoration: const InputDecoration(
-            labelText: 'Search for users to follow',
-          ),
-          onFieldSubmitted: (value) {
-            setState(() {
-              isShowUsers = true;
-            });
-          },
-        ),
-      ),
+      appBar: AppBar(),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
-          : isShowUsers
-              ? FutureBuilder(
-                  future: FirebaseFirestore.instance
-                      .collection('users')
-                      .where('username',
-                          isNotEqualTo: widget.currentUserUid,
-                          isGreaterThanOrEqualTo: searchController.text)
-                      .get(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-
-                    return ListView.builder(
-                        itemCount: (snapshot.data! as dynamic).docs.length,
-                        itemBuilder: (context, index) {
-                          NetworkImage image = NetworkImage(
-                              (snapshot.data! as dynamic).docs[index]
-                                  ['profilepic']);
-                          return ListTile(
-                            leading: CircleAvatar(backgroundImage: image),
-                            title: Text(
-                              (snapshot.data! as dynamic).docs[index]
-                                  ['username'],
-                            ),
-                            onTap: () {
-                              // Navigate to the profile page of the respective user
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => OtherUserProfile(
-                                          uid: (snapshot.data! as dynamic)
-                                              .docs[index]['uid'])));
-                              //FirebaseMethods.followUser(widget.uid, (snapshot.data! as dynamic).docs[index]['uid']);
-                            },
-                          );
-                        });
-                  },
-                )
-              : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Following',
-                        style: TextStyle(
-                          fontSize: 25,
-                        ),
-                      ),
-                      ListView(
-                        shrinkWrap: true,
-                        children: followingUid.map((uid) {
-                          String name =
-                              followingName[followingUid.indexOf(uid)];
-                          return ListTile(
-                              leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(followingPicUrl[
-                                      followingUid.indexOf(uid)])),
-                              title: Text(name),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            OtherUserProfile(uid: uid)));
-                              });
-                        }).toList(),
-                      ),
-                    ],
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Following',
+                    style: TextStyle(
+                      fontSize: 25,
+                    ),
                   ),
-                ),
+                  ListView(
+                    shrinkWrap: true,
+                    children: followingUid.map((uid) {
+                      String name = followingName[followingUid.indexOf(uid)];
+                      return ListTile(
+                          leading: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  followingPicUrl[followingUid.indexOf(uid)])),
+                          title: Text(name),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        OtherUserProfile(uid: uid)));
+                          });
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }

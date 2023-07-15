@@ -22,6 +22,7 @@ class FirebaseMethods {
       'bio': '',
       'followers': [],
       'following': [],
+      'requests': [],
       'profilepic':
           'https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg'
     });
@@ -121,6 +122,26 @@ class FirebaseMethods {
         configuration: const IconConfiguration(icon: Icons.close),
         maxWidth: 300,
       );
+    }
+  }
+
+  static Future<void> requestFollow(String uid, String targetUid) async {
+    try {
+      DocumentSnapshot snap =
+      await _firestore.collection('users').doc(targetUid).get();
+      List requests = (snap.data()! as dynamic)['requests'];
+
+      if (!requests.contains(uid)) {
+        await _firestore.collection('users').doc(targetUid).update({
+          'requests': FieldValue.arrayUnion([uid])
+        });
+      } else {
+        await _firestore.collection('users').doc(targetUid).update({
+          'requests': FieldValue.arrayRemove([uid])
+        });
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
 

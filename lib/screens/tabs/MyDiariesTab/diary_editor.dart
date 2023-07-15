@@ -1,17 +1,18 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:feelings_overflow/design/follow_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:feelings_overflow/design/rich_text_display.dart';
 import 'package:flutter/material.dart';
 import 'package:feelings_overflow/design/app_style.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'dart:math';
-import 'package:intl/intl.dart';
-import 'package:feelings_overflow/design/rich_text_toolbar.dart';
+import 'package:feelings_overflow/functionality/JsonCoding.dart';
 
 class DiaryEditorScreen extends StatefulWidget {
-  const DiaryEditorScreen({Key? key}) : super(key: key);
+  const DiaryEditorScreen(this.doc, {Key? key}) : super(key: key);
+
+  /// Carries information about the diary
+  final QueryDocumentSnapshot doc;
 
   @override
   State<DiaryEditorScreen> createState() => _DiaryEditorScreenState();
@@ -21,72 +22,61 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
 
-  /// The background color of the diary which is randomly generated
-  int colorID = Random().nextInt(AppStyle.cardsColor.length);
-
-  /// Current data and time which will be part of the diary's information
-  String date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now());
-
-
-  final TextEditingController _titleController = TextEditingController();
-
-  // Old Diary editing of content
-  //final TextEditingController _mainContentController = TextEditingController();
-
-  final QuillController _controller = QuillController.basic();
-
   @override
   Widget build(BuildContext context) {
+    final QuillController controller =
+        JsonCoding.getQuillControllerviaJSON(widget.doc["diary_content"]);
+    int colorID = widget.doc['color_id'];
     return Scaffold(
       backgroundColor: AppStyle.cardsColor[colorID],
       appBar: AppBar(
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              var json = jsonEncode(controller.document.toDelta().toJson());
+              _firestore
+                  .collection("users")
+                  .doc(_auth.currentUser!.uid)
+                  .collection("personal_diaries")
+                  .doc(widget.doc.id)
+                  .update({
+                "diary_content": json,
+              });
+              Navigator.pop(context);
+            }),
         backgroundColor: AppStyle.cardsColor[colorID],
         elevation: 0.0,
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-        title: const Text('Create a new Diary',
-            style: TextStyle(
-              color: Colors.black,
-            )),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              RichTextToolbar(controller: _controller),
-              TextField(
-                controller: _titleController,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Title',
+              Text(
+                widget.doc["diary_title"],
+                style: AppStyle.mainTitle.copyWith(
+                  fontSize: 28,
                 ),
-                style: AppStyle.mainTitle,
-              ),
-              const SizedBox(
-                height: 8,
               ),
               Text(
-                date,
-                style: AppStyle.dateTitle,
+                widget.doc["creation_date"],
+                style: AppStyle.dateTitle.copyWith(fontSize: 15),
               ),
               const SizedBox(
-                height: 30,
+                height: 20,
               ),
-              QuillEditor.basic(controller: _controller, readOnly: false,
+              QuillEditor.basic(
+                controller: controller,
+                readOnly: false,
               ),
-              /* Old Text Editor for Body
-              TextField(
-                controller: _mainContentController,
-                keyboardType: TextInputType.multiline,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Your Diary here',
-                ),
+
+              // OLD WAY of displaying text
+              /*
+              Text(
+                widget.doc["diary_content"],
                 style: AppStyle.mainContent,
-                maxLines: null,
-              ),
+              )
               */
             ],
           ),
@@ -94,26 +84,42 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
-        onPressed: () async {
-          var json = jsonEncode(_controller.document.toDelta().toJson());
-          _firestore
-              .collection("users")
-              .doc(_auth.currentUser!.uid)
-              .collection("personal_diaries")
-              .add({
-            "diary_title": _titleController.text,
-            "creation_date": date,
-            //"diary_content": _controller.document.toPlainText(),
-            "diary_content": json,
-            // Previous approach for TextEditingController
-            //"diary_content": _mainContentController.text,
-            "color_id": colorID,
-          }).then((value) {
-            Navigator.pop(context);
-          }).catchError((error) => print("error"));
-        },
-        child: const Icon(Icons.save),
+        child: const Icon(Icons.delete),
+        onPressed: () => showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Are you sure you want to delete this diary?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'Cancel'),
+                child: const Text('No!! Please Don\'t'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, 'OK');
+                  Navigator.pop(context);
+                  deleteData(widget.doc.id);
+                },
+                child: const Text('Yes Please'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
+  }
+
+  /// Deletes a document of ID id in personal_diaries collection on Firestore
+  Future deleteData(String id) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection("personal_diaries")
+          .doc(id)
+          .delete();
+    } catch (e) {
+      return false;
+    }
   }
 }

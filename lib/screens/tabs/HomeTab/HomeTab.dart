@@ -124,7 +124,7 @@ class _HomeTabState extends State<HomeTab> {
                                         .toList(),
                                   );
                           }
-                          return const Text("No Posts to show");
+                          return const Center(child: Text("No Posts to show"));
                         },
                       ),
                     )

@@ -47,6 +47,7 @@ class _DiaryPostingScreenState extends State<DiaryPostingScreen> {
                 height: 20,
               ),
               RichTextDisplay(
+                interactive: true,
                 controller: JsonCoding.getQuillControllerviaJSON(
                     widget.doc["diary_content"]),
               ),

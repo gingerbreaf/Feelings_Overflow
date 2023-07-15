@@ -1,4 +1,5 @@
 import 'package:feelings_overflow/screens/tabs/HomeTab/HomeTab.dart';
+import 'package:feelings_overflow/screens/tabs/SearchTab/SearchTab.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _DashBoardState extends State<DashBoard> {
   /// Array containing the tabs for navigation bar
   final tabs = [
     const HomeTab(),
+    SearchTab(),
     const MyDiariesTab(),
     ProfileTab(
       uid: FirebaseAuth.instance.currentUser!.uid,
@@ -31,6 +33,7 @@ class _DashBoardState extends State<DashBoard> {
     return Scaffold(
       body: tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -38,6 +41,12 @@ class _DashBoardState extends State<DashBoard> {
               Icons.home,
             ),
             label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+            ),
+            label: 'Search',
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -53,6 +62,8 @@ class _DashBoardState extends State<DashBoard> {
           ),
         ],
         selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey.shade700,
+        enableFeedback: false,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
