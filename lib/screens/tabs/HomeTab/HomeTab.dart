@@ -1,3 +1,4 @@
+import 'package:feelings_overflow/design/snip_UI_display_words_only.dart';
 import 'package:feelings_overflow/functionality/firebase_methods.dart';
 import 'package:feelings_overflow/screens/tabs/HomeTab/new_post_screen.dart';
 import 'package:flutter/material.dart';
@@ -109,7 +110,10 @@ class _HomeTabState extends State<HomeTab> {
                                         const SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 1),
                                     children: filteredList
-                                        .map((diary) => HomePageDiaryCard(
+                                        .map((diary) =>
+                                       diary['display_type'] == 'WORDONLYDISPLAY'
+                                        ? WordOnlyDisplay(doc: diary)
+                                        : HomePageDiaryCard(
                                               doc: diary,
                                               onTap: () {
                                                 Navigator.push(

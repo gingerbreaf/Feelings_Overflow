@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feelings_overflow/design/diary_card.dart';
+import 'package:feelings_overflow/design/snip_UI_display_words_only.dart';
+import 'package:feelings_overflow/functionality/firebase_methods.dart';
 import 'package:feelings_overflow/screens/tabs/ProfileTab/edit_profile_screen.dart';
 import 'package:feelings_overflow/screens/tabs/ProfileTab/following_screen.dart';
 import 'package:feelings_overflow/screens/tabs/ProfileTab/follower_screen.dart';
@@ -403,7 +405,10 @@ class _ProfileTabState extends State<ProfileTab> {
                                 QueryDocumentSnapshot snap =
                                     (snapshot.data! as dynamic).docs[index];
                                 // TODO: Change this to the diary Cards instead
-                                return DiaryCard(doc: snap);
+                                return snap['display_type'] == 'WORDONLYDISPLAY'
+                                    ? WordOnlyDisplay(doc: snap)
+                                    : DiaryCard(doc: snap);
+                                //return DiaryCard(doc: snap);
                               });
                     },
                   ),

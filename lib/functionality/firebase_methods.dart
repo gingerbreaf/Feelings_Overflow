@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:status_alert/status_alert.dart';
 import 'package:rxdart/rxdart.dart';
 
+
 class FirebaseMethods {
   static final _firestore = FirebaseFirestore.instance;
   static final _auth = FirebaseAuth.instance;
@@ -186,7 +187,7 @@ class FirebaseMethods {
   ///
   /// Goes through each follower in list of followers and adds the diary along
   /// with information about the poster into their homepage_feed collection
-  static void postDiary(QueryDocumentSnapshot diary, String uid) async {
+  static void postDiary(QueryDocumentSnapshot diary, String uid, String displayType) async {
     try {
       _firestore
           .collection("users")
@@ -200,6 +201,7 @@ class FirebaseMethods {
         "poster_uid": _auth.currentUser!.uid,
         "post_date": DateFormat('yyyy-MM-dd kk:mm:ss').format(DateTime.now()),
         "24hr_expiry": true,
+        "display_type": displayType,
       }).then((value) {
         print(value.id);
       }).catchError((error) => print("error"));

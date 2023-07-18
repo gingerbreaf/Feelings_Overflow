@@ -9,6 +9,8 @@ import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:feelings_overflow/design/rich_text_toolbar.dart';
+import 'package:feelings_overflow/functionality/JsonCoding.dart';
+import 'package:feelings_overflow/functionality/TextFormatting.dart';
 
 class DiaryCreatorScreen extends StatefulWidget {
   const DiaryCreatorScreen({Key? key}) : super(key: key);
@@ -96,6 +98,7 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
         backgroundColor: Colors.blue,
         onPressed: () async {
           var json = jsonEncode(_controller.document.toDelta().toJson());
+          print(json);
           _firestore
               .collection("users")
               .doc(_auth.currentUser!.uid)
