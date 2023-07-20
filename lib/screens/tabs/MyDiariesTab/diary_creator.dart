@@ -9,6 +9,9 @@ import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:feelings_overflow/design/rich_text_toolbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:feelings_overflow/functionality/JsonCoding.dart';
+import 'package:feelings_overflow/functionality/TextFormatting.dart';
 
 class DiaryCreatorScreen extends StatefulWidget {
   const DiaryCreatorScreen({Key? key}) : super(key: key);
@@ -26,6 +29,9 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
 
   /// Current data and time which will be part of the diary's information
   String date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now());
+
+  /// Storing Time and Data as a Timestamp format for Firebase
+  Timestamp currentTimestamp = Timestamp.now();
 
 
   final TextEditingController _titleController = TextEditingController();
@@ -96,6 +102,7 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
         backgroundColor: Colors.blue,
         onPressed: () async {
           var json = jsonEncode(_controller.document.toDelta().toJson());
+          print(json);
           _firestore
               .collection("users")
               .doc(_auth.currentUser!.uid)
@@ -103,11 +110,11 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
               .add({
             "diary_title": _titleController.text,
             "creation_date": date,
-            //"diary_content": _controller.document.toPlainText(),
             "diary_content": json,
-            // Previous approach for TextEditingController
-            //"diary_content": _mainContentController.text,
             "color_id": colorID,
+            "creation_timestamp":  currentTimestamp,
+            "last_updated_timestamp": currentTimestamp,
+
           }).then((value) {
             Navigator.pop(context);
           }).catchError((error) => print("error"));

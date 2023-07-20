@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:status_alert/status_alert.dart';
 import 'package:rxdart/rxdart.dart';
 
+
 class FirebaseMethods {
   static final _firestore = FirebaseFirestore.instance;
   static final _auth = FirebaseAuth.instance;
@@ -21,7 +22,7 @@ class FirebaseMethods {
       'email': email,
       'bio': '',
       'followers': [],
-      'following': [],
+      'following': [userUID],
       'requests': [],
       'profilepic':
           'https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg'
@@ -200,6 +201,8 @@ class FirebaseMethods {
         "poster_uid": _auth.currentUser!.uid,
         "post_date": DateFormat('yyyy-MM-dd kk:mm:ss').format(DateTime.now()),
         "24hr_expiry": true,
+        "display_type": 'DIARYCARD',
+        "creation_timestamp": Timestamp.now()
       }).then((value) {
         print(value.id);
       }).catchError((error) => print("error"));
@@ -230,6 +233,28 @@ class FirebaseMethods {
     }
   }
 
+  static void postCard(var JSONcontent, String backgroundImage) {
+    try {
+      _firestore
+          .collection("users")
+          .doc(_auth.currentUser!.uid)
+          .collection("posts")
+          .add({
+        "card_background": backgroundImage,
+        "diary_content": JSONcontent,
+        'display_type': 'WORDONLYDISPLAY',
+        "poster_uid": _auth.currentUser!.uid,
+        "post_date": DateFormat('yyyy-MM-dd kk:mm:ss').format(DateTime.now()),
+        "24hr_expiry": true,
+        "creation_timestamp": Timestamp.now()
+      }).then((value) {
+        print(value.id);
+      }).catchError((error) => print("error"));
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   static Future<
       CombineLatestStream<QuerySnapshot<Map<String, dynamic>>,
           List<QuerySnapshot<Map<String, dynamic>>>>> getPosts(
@@ -243,6 +268,7 @@ class FirebaseMethods {
                 .collection("users")
                 .doc(following)
                 .collection("posts")
+                .orderBy("creation_timestamp", descending: true)
                 .snapshots()
             ));
   }

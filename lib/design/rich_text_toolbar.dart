@@ -24,6 +24,8 @@ class RichTextToolbar extends StatelessWidget {
       showSubscript: false,
       showSuperscript: false,
       showIndent: false,
+      showCenterAlignment: true,
+      showAlignmentButtons: true,
 
     );
   }

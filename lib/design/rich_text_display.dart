@@ -24,7 +24,8 @@ class RichTextDisplay extends StatelessWidget {
         readOnly: true,
         expands: false,
         showCursor: false,
-      enableInteractiveSelection: interactive,
+        enableInteractiveSelection: interactive,
+
     );
   }
 }

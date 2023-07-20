@@ -24,3 +24,5 @@ class AppStyle {
   static TextStyle dateTitle =
       GoogleFonts.roboto(fontSize: 13, fontWeight: FontWeight.w500);
 }
+
+
