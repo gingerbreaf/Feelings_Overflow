@@ -12,6 +12,7 @@ class FontCard extends StatefulWidget {
   final QuillController quillController;
   final ValueNotifier<String> textNotifier;
   final ValueNotifier<int> selectedCardNotifier;
+  final ValueNotifier<Font?> selectedFontNotifier;
   final int cardIndex;
   final Font font;
 
@@ -21,6 +22,7 @@ class FontCard extends StatefulWidget {
     required this.selectedCardNotifier,
     required this.cardIndex,
     required this.font,
+    required this.selectedFontNotifier,
   });
 
 
@@ -63,15 +65,23 @@ class _FontCardState extends State<FontCard> {
   void _updateSelectedCard() {
     setState(() {
       _isSelected = (widget.selectedCardNotifier.value == widget.cardIndex);
+
+      if (_isSelected) {
+        widget.selectedFontNotifier.value = widget.font;
+      } else {
+        widget.selectedFontNotifier.value = null;
+      }
     });
   }
 
   void _onCardSelected() {
     setState(() {
       if (_isSelected) {
-        widget.selectedCardNotifier.value = -1; // Deselect if the same card is tapped again
+        widget.selectedCardNotifier.value = -1;// Deselect if the same card is tapped again
+        _updateSelectedCard();
       } else {
         widget.selectedCardNotifier.value = widget.cardIndex;
+        _updateSelectedCard();
       }
     });
   }
@@ -131,7 +141,7 @@ class _FontCardState extends State<FontCard> {
         child: Column(
           children: [
             Container(
-                height: MediaQuery.of(context).size.height / 6,
+                height: MediaQuery.of(context).size.height / 7,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.fill,
@@ -163,13 +173,15 @@ class _FontCardState extends State<FontCard> {
                 )
             ),
             SizedBox(height: 5.0,),
-            Text(
-              widget.font.getFontName(),
-              style: GoogleFonts.getFont(
-                widget.font.getFontFamily(),
-                fontSize: 30.0,
-                fontWeight: FontWeight.w500,
-                fontStyle: FontStyle.italic,
+            Flexible(
+              child: Text(
+                widget.font.getFontName(),
+                style: GoogleFonts.getFont(
+                  widget.font.getFontFamily(),
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.w500,
+                  fontStyle: FontStyle.italic,
+                ),
               ),
             ),
             Flexible(

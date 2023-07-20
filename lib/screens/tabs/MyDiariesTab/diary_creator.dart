@@ -106,10 +106,7 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
               .add({
             "diary_title": _titleController.text,
             "creation_date": date,
-            //"diary_content": _controller.document.toPlainText(),
             "diary_content": json,
-            // Previous approach for TextEditingController
-            //"diary_content": _mainContentController.text,
             "color_id": colorID,
           }).then((value) {
             Navigator.pop(context);

@@ -98,7 +98,7 @@ class _DiaryPostingScreenState extends State<DiaryPostingScreen> {
               child: const Icon(Icons.post_add),
               onPressed: () {
                 FirebaseMethods.postDiary(
-                    widget.doc, FirebaseAuth.instance.currentUser!.uid, 'DIARYCARD');
+                    widget.doc, FirebaseAuth.instance.currentUser!.uid,);
                 StatusAlert.show(
                   context,
                   duration: const Duration(seconds: 1),

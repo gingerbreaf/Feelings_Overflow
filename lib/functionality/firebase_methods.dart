@@ -187,7 +187,7 @@ class FirebaseMethods {
   ///
   /// Goes through each follower in list of followers and adds the diary along
   /// with information about the poster into their homepage_feed collection
-  static void postDiary(QueryDocumentSnapshot diary, String uid, String displayType) async {
+  static void postDiary(QueryDocumentSnapshot diary, String uid) async {
     try {
       _firestore
           .collection("users")
@@ -201,7 +201,7 @@ class FirebaseMethods {
         "poster_uid": _auth.currentUser!.uid,
         "post_date": DateFormat('yyyy-MM-dd kk:mm:ss').format(DateTime.now()),
         "24hr_expiry": true,
-        "display_type": displayType,
+        "display_type": 'DIARYCARD',
       }).then((value) {
         print(value.id);
       }).catchError((error) => print("error"));
@@ -227,6 +227,28 @@ class FirebaseMethods {
           print(value.id);
         }).catchError((error) => print("error"));
       } */
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static void postCard(var JSONcontent, String backgroundImage) {
+    try {
+      _firestore
+          .collection("users")
+          .doc(_auth.currentUser!.uid)
+          .collection("posts")
+          .add({
+        "card_background": backgroundImage,
+        "diary_content": JSONcontent,
+        'display_type': 'WORDONLYDISPLAY',
+        "poster_uid": _auth.currentUser!.uid,
+        "post_date": DateFormat('yyyy-MM-dd kk:mm:ss').format(DateTime.now()),
+        "24hr_expiry": true,
+
+      }).then((value) {
+        print(value.id);
+      }).catchError((error) => print("error"));
     } catch (e) {
       print(e.toString());
     }
