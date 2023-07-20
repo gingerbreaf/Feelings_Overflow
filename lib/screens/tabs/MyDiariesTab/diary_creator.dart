@@ -9,6 +9,7 @@ import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:feelings_overflow/design/rich_text_toolbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feelings_overflow/functionality/JsonCoding.dart';
 import 'package:feelings_overflow/functionality/TextFormatting.dart';
 
@@ -28,6 +29,9 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
 
   /// Current data and time which will be part of the diary's information
   String date = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now());
+
+  /// Storing Time and Data as a Timestamp format for Firebase
+  Timestamp currentTimestamp = Timestamp.now();
 
 
   final TextEditingController _titleController = TextEditingController();
@@ -108,6 +112,9 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
             "creation_date": date,
             "diary_content": json,
             "color_id": colorID,
+            "creation_timestamp":  currentTimestamp,
+            "last_updated_timestamp": currentTimestamp,
+
           }).then((value) {
             Navigator.pop(context);
           }).catchError((error) => print("error"));

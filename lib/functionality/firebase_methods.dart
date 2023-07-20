@@ -22,7 +22,7 @@ class FirebaseMethods {
       'email': email,
       'bio': '',
       'followers': [],
-      'following': [],
+      'following': [userUID],
       'requests': [],
       'profilepic':
           'https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg'
@@ -202,6 +202,7 @@ class FirebaseMethods {
         "post_date": DateFormat('yyyy-MM-dd kk:mm:ss').format(DateTime.now()),
         "24hr_expiry": true,
         "display_type": 'DIARYCARD',
+        "creation_timestamp": Timestamp.now()
       }).then((value) {
         print(value.id);
       }).catchError((error) => print("error"));
@@ -245,7 +246,7 @@ class FirebaseMethods {
         "poster_uid": _auth.currentUser!.uid,
         "post_date": DateFormat('yyyy-MM-dd kk:mm:ss').format(DateTime.now()),
         "24hr_expiry": true,
-
+        "creation_timestamp": Timestamp.now()
       }).then((value) {
         print(value.id);
       }).catchError((error) => print("error"));
@@ -267,6 +268,7 @@ class FirebaseMethods {
                 .collection("users")
                 .doc(following)
                 .collection("posts")
+                .orderBy("creation_timestamp", descending: true)
                 .snapshots()
             ));
   }

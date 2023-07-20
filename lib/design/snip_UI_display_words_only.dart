@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import '../functionality/JsonCoding.dart';
 import 'rich_text_for_posting.dart';
 
@@ -53,6 +54,7 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
       child: InkWell(
         onTap: widget.onTap,
         child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -102,6 +104,14 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
                       ),
                   ],
                 ),
+              ),
+              Text(
+                'Created on ${DateFormat('d MMMM y HH:mm').format(widget.doc['creation_timestamp'].toDate())}',
+                style: const TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                ),
+                textAlign: TextAlign.left,
               ),
             ],
           ),

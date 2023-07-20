@@ -268,6 +268,7 @@ class _SnipScreenState extends State<SnipScreen> {
                   ),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       'Preview',

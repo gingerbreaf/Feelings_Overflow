@@ -139,9 +139,11 @@ class _FontCardState extends State<FontCard> {
       child: Padding(
         padding: EdgeInsets.all(7.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-                height: MediaQuery.of(context).size.height / 7,
+                height: MediaQuery.of(context).size.height / 6.5,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.fill,

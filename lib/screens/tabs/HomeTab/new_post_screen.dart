@@ -43,6 +43,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                         .collection("users")
                         .doc(FirebaseAuth.instance.currentUser!.uid)
                         .collection("personal_diaries")
+                        .orderBy("creation_timestamp", descending: true)
                         .snapshots(),
                     builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {

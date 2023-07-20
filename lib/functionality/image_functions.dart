@@ -20,6 +20,7 @@ class ImageFunction {
     String fileName,
   ) async {
     try {
+      print("upload success");
       await FirebaseStorage.instance
           .ref()
           .child('user profile pictures/$fileName')

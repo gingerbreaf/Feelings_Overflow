@@ -41,6 +41,7 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
                   .doc(widget.doc.id)
                   .update({
                 "diary_content": json,
+                "last_updated_timestamp": Timestamp.now(),
               });
               Navigator.pop(context);
             }),
