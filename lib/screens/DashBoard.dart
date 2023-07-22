@@ -29,6 +29,11 @@ class _DashBoardState extends State<DashBoard> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: tabs[_currentIndex],

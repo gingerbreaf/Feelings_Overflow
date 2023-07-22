@@ -273,62 +273,6 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                       ],
                     ),
                   ),
-                  const SizedBox(
-                    height: 30.0,
-                  ),
-                  const Divider(
-                    color: Colors.black,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10.0),
-                    child: Text(
-                      'Post History',
-                      style: TextStyle(fontSize: 30),
-                    ),
-                  ),
-                  FutureBuilder(
-                    future: FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(widget.uid)
-                        .collection('posts')
-                        .get(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      return (snapshot.data! as dynamic).docs.length == 0
-                          ? const Padding(
-                              padding: EdgeInsets.all(80.0),
-                              child: Center(
-                                child: Text(
-                                  'No Posts to Show',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            )
-                          : GridView.builder(
-                              shrinkWrap: true,
-                              itemCount:
-                                  (snapshot.data! as dynamic).docs.length,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 5,
-                                mainAxisSpacing: 1.5,
-                                childAspectRatio: 1,
-                              ),
-                              itemBuilder: (context, index) {
-                                QueryDocumentSnapshot snap =
-                                    (snapshot.data! as dynamic).docs[index];
-                                // TODO: Change this to the diary Cards instead
-                                return DiaryCard(doc: snap);
-                              });
-                    },
-                  ),
                 ],
               ),
       ),

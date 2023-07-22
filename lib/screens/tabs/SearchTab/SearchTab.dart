@@ -1,17 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:feelings_overflow/design/diary_card.dart';
 import 'package:feelings_overflow/functionality/firebase_methods.dart';
-import 'package:feelings_overflow/screens/tabs/ProfileTab/edit_profile_screen.dart';
-import 'package:feelings_overflow/screens/tabs/ProfileTab/following_screen.dart';
-import 'package:feelings_overflow/screens/tabs/ProfileTab/follower_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'dart:typed_data';
-import 'package:feelings_overflow/functionality/image_functions.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:status_alert/status_alert.dart';
-
 import '../ProfileTab/other_user_profile.dart';
 
 class SearchTab extends StatefulWidget {
@@ -31,13 +22,13 @@ class _SearchTabState extends State<SearchTab> {
   /// Whether to show results of the search for other users
   bool isShowUsers = false;
 
-  /// List of strings of followings' UID
+  /// List of strings of requests' UID
   List<String> requestsUid = [];
 
-  /// List of strings of followings' usernames
+  /// List of strings of requests' usernames
   List<String> requestsName = [];
 
-  /// List of strings of followings' profile picture URL
+  /// List of strings of requests' profile picture URL
   List<String> requestsPicUrl = [];
 
   /// Whether to show a loading icon
@@ -57,7 +48,7 @@ class _SearchTabState extends State<SearchTab> {
     return userData['profilepic'];
   }
 
-  /// Gets relevant information about the following
+  /// Gets relevant information about the requests
   void getRequests() async {
     setState(() {
       isLoading = true;
@@ -81,7 +72,7 @@ class _SearchTabState extends State<SearchTab> {
       StatusAlert.show(
         context,
         duration: const Duration(seconds: 2),
-        subtitle: 'Could not get following, try again later',
+        subtitle: 'Could not get requests, try again later',
         configuration: const IconConfiguration(icon: Icons.warning),
         maxWidth: 260,
       );
@@ -175,15 +166,20 @@ class _SearchTabState extends State<SearchTab> {
                     style: TextStyle(fontSize: 20),
                   ),
                   requestsUid.isEmpty
-                      ? Padding(
-                          padding: const EdgeInsets.all(80.0),
-                          child: Center(
+                      ? Column(
+                        children: [
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          Center(
                               child: Text(
                             'Follow requests will appear here',
                             style: TextStyle(
                               color: Colors.grey.shade600,
                             ),
-                          )))
+                          )),
+                        ],
+                      )
                       : ListView(
                           shrinkWrap: true,
                           children: requestsUid.map((uid) {

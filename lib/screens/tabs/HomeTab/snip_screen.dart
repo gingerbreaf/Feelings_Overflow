@@ -1,7 +1,4 @@
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:feelings_overflow/design/font_cards.dart';
 import 'package:feelings_overflow/design/rich_text_for_posting.dart';
 import 'package:feelings_overflow/functionality/TextFormatting.dart';
@@ -10,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:feelings_overflow/functionality/selection_word.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:status_alert/status_alert.dart';
 
 import '../../../design/font.dart';
@@ -29,11 +25,11 @@ class SnipScreen extends StatefulWidget {
 class _SnipScreenState extends State<SnipScreen> {
   //TODO: optimise code by passing in 1 controller only
   String startText = '';
-  ValueNotifier<String> _textNotifier = ValueNotifier<String>('');
-  ValueNotifier<int> _selectedCardNotifier = ValueNotifier<int>(-1);
-  ValueNotifier<Font?> _selectedFontNotifier = ValueNotifier<Font?>(null);
-  ScrollController _scrollController1 = ScrollController();
-  ScrollController _scrollController2 = ScrollController();
+  final ValueNotifier<String> _textNotifier = ValueNotifier<String>('');
+  final ValueNotifier<int> _selectedCardNotifier = ValueNotifier<int>(-1);
+  final ValueNotifier<Font?> _selectedFontNotifier = ValueNotifier<Font?>(null);
+  final ScrollController _scrollController1 = ScrollController();
+  final ScrollController _scrollController2 = ScrollController();
   int _groupValue = 0;
   String _chosenBackground = 'backgroundPastel';
   String _selectedFont = 'Rochester';
@@ -62,7 +58,6 @@ class _SnipScreenState extends State<SnipScreen> {
     finalController =
         WordSelector.createSelectedTextController(widget.quillController);
 
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -71,6 +66,12 @@ class _SnipScreenState extends State<SnipScreen> {
       ),
       body: Column(
         children: [
+          const Text(
+            'Choose a font', style: TextStyle(fontSize: 20),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
           Flexible(
             child: SizedBox(
               height: MediaQuery.of(context).size.height / 4,
@@ -78,7 +79,7 @@ class _SnipScreenState extends State<SnipScreen> {
                 controller: _scrollController1,
                 thumbVisibility: true,
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 10.0),
+                  padding: const EdgeInsets.only(bottom: 10.0),
                   child: ListView(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
@@ -135,6 +136,15 @@ class _SnipScreenState extends State<SnipScreen> {
               ),
             ),
           ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text(
+            'Choose a background', style: TextStyle(fontSize: 20),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
           Flexible(
             child: SizedBox(
               height: MediaQuery.of(context).size.height / 4,
@@ -142,7 +152,7 @@ class _SnipScreenState extends State<SnipScreen> {
                 thumbVisibility: true,
                 controller: _scrollController2,
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: 10.0, top: 5.0),
+                  padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
                   child: ListView(
                     controller: _scrollController2,
                     shrinkWrap: true,
@@ -154,8 +164,8 @@ class _SnipScreenState extends State<SnipScreen> {
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                             fit: BoxFit.fill,
-                            image:
-                                AssetImage('assets/images/backgroundPastel.jpg'),
+                            image: AssetImage(
+                                'assets/images/backgroundPastel.jpg'),
                           ),
                           border: Border.all(
                             width: 4.0,
@@ -233,8 +243,8 @@ class _SnipScreenState extends State<SnipScreen> {
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                             fit: BoxFit.fill,
-                            image:
-                                AssetImage('assets/images/vibrantBackground.jpg'),
+                            image: AssetImage(
+                                'assets/images/vibrantBackground.jpg'),
                           ),
                           border: Border.all(
                             width: 4.0,
@@ -261,62 +271,67 @@ class _SnipScreenState extends State<SnipScreen> {
           ),
           Expanded(
             child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('assets/images/$_chosenBackground.jpg'),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: AssetImage('assets/images/$_chosenBackground.jpg'),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Preview',
-                      style: GoogleFonts.getFont(
-                        'Rochester',
-                        wordSpacing: 2.0,
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                      ),),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width / 6,
-                        right: MediaQuery.of(context).size.width / 6,
-                        top: MediaQuery.of(context).size.width / 20,
-                      ),
-                      child: RichTextDisplayPost(
-                        controller: finalController,
-                        interactive: false,
-                      ),
+                  Text(
+                    'Preview',
+                    style: GoogleFonts.getFont(
+                      'Rochester',
+                      wordSpacing: 2.0,
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(height: 10.0,),
-                    ValueListenableBuilder(
-                        valueListenable: _selectedFontNotifier,
-                        builder: (context, selectedFont, _) {
-                          final String fontFamily = selectedFont != null
-                              ? selectedFont.fontFamily
-                              :_selectedFont;
-                          return Flexible(
-                            child: OutlinedButton(
-                              onPressed: (){
-                                if (_selectedFontNotifier.value != null) {
-                                  _selectedFont = _selectedFontNotifier.value!.fontFamily;
-                                }
-                                TextFormatting.formatTextStyle(finalController, fontFamily);
-                                TextFormatting.formatSize(finalController, 'huge');
-                              },
-                              child: Text('Format Text',
-                                  style: GoogleFonts.leckerliOne(color: Colors.black)
-                              ),
-
-                            ),
-                          );
-                        }
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width / 6,
+                      right: MediaQuery.of(context).size.width / 6,
+                      top: MediaQuery.of(context).size.width / 20,
                     ),
-
-
-                  ],
-                ),
+                    child: RichTextDisplayPost(
+                      controller: finalController,
+                      interactive: false,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  ValueListenableBuilder(
+                      valueListenable: _selectedFontNotifier,
+                      builder: (context, selectedFont, _) {
+                        final String fontFamily = selectedFont != null
+                            ? selectedFont.fontFamily
+                            : _selectedFont;
+                        return Flexible(
+                          child: OutlinedButton(
+                            onPressed: () {
+                              if (_selectedFontNotifier.value != null) {
+                                _selectedFont =
+                                    _selectedFontNotifier.value!.fontFamily;
+                              }
+                              TextFormatting.formatTextStyle(
+                                  finalController, fontFamily);
+                              TextFormatting.formatSize(
+                                  finalController, 'huge');
+                            },
+                            child: Text('Format Text',
+                                style: GoogleFonts.leckerliOne(
+                                    color: Colors.black)),
+                          ),
+                        );
+                      }),
+                ],
+              ),
             ),
           ),
           Row(
@@ -326,15 +341,15 @@ class _SnipScreenState extends State<SnipScreen> {
                   backgroundColor: Colors.blue,
                   child: const Icon(Icons.post_add),
                   onPressed: () async {
-                    var json = jsonEncode(finalController.document.toDelta().toJson());
-                    var _firestore = FirebaseFirestore.instance;
-                    var _auth =FirebaseAuth.instance;
+                    var json =
+                        jsonEncode(finalController.document.toDelta().toJson());
 
                     FirebaseMethods.postCard(json, _chosenBackground);
                     StatusAlert.show(
                       context,
-                      duration: const Duration(seconds: 1),
+                      duration: const Duration(seconds: 2),
                       title: 'Diary posted',
+                      subtitle: 'Viewable for 24 hours',
                       configuration: const IconConfiguration(icon: Icons.done),
                       maxWidth: 260,
                     );
@@ -345,7 +360,6 @@ class _SnipScreenState extends State<SnipScreen> {
             ],
           ),
         ],
-
       ),
     );
   }

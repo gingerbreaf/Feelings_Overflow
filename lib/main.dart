@@ -9,11 +9,15 @@ import 'package:feelings_overflow/screens/DashBoard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
+import 'api/firebase_api.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
 // initializing the firebase app
   await Firebase.initializeApp();
+
+  await FirebaseApi().initNotifications();
 
 // calling of runApp
   runApp(const FeelingsOverflow());

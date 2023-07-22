@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:status_alert/status_alert.dart';
@@ -27,6 +28,12 @@ class FirebaseMethods {
       'profilepic':
           'https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg'
     });
+  }
+
+  static void saveDeviceToken(String uid) async {
+    final _firebaseMessaging = FirebaseMessaging.instance;
+    final fCMToken = await _firebaseMessaging.getToken();
+
   }
 
   /// Deals with the error code generated from registering using firebase

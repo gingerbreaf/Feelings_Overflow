@@ -101,8 +101,9 @@ class _DiaryPostingScreenState extends State<DiaryPostingScreen> {
                     widget.doc, FirebaseAuth.instance.currentUser!.uid,);
                 StatusAlert.show(
                   context,
-                  duration: const Duration(seconds: 1),
+                  duration: const Duration(seconds: 2),
                   title: 'Diary posted',
+                  subtitle: 'Viewable for 24 hours',
                   configuration: const IconConfiguration(icon: Icons.done),
                   maxWidth: 260,
                 );
