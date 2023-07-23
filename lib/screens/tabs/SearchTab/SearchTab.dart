@@ -113,7 +113,10 @@ class _SearchTabState extends State<SearchTab> {
         title: TextFormField(
           controller: searchController,
           decoration: const InputDecoration(
-            labelText: 'Search for users to follow',
+            labelText: 'Click here to search for users to follow',
+            icon: Icon(Icons.search),
+            filled: true,
+            fillColor: Color(0xFFD6D6D6),
           ),
           onFieldSubmitted: (value) {
             setState(() {
