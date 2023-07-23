@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feelings_overflow/functionality/firebase_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +20,9 @@ class _SearchTabState extends State<SearchTab> {
   final _firestore = FirebaseFirestore.instance;
   final TextEditingController searchController = TextEditingController();
 
+  /// Username of current user logged on
+  String _username = '';
+
   /// Whether to show results of the search for other users
   bool isShowUsers = false;
 
@@ -33,6 +37,7 @@ class _SearchTabState extends State<SearchTab> {
 
   /// Whether to show a loading icon
   bool isLoading = false;
+
 
   /// Given a UID, gets the username from Firestore
   Future<String> getUsername(String uid) async {
@@ -60,6 +65,10 @@ class _SearchTabState extends State<SearchTab> {
           .get();
 
       var userData = userSnap.data()!;
+      if (userData['requests'] == null) {
+        // Deal with empty request, null check
+        return;
+      }
       requestsUid =
           (userData['requests'] as List).map((e) => e as String).toList();
       for (String uid in requestsUid) {
@@ -68,6 +77,7 @@ class _SearchTabState extends State<SearchTab> {
         String picUrl = await getPicUrl(uid);
         requestsPicUrl.add(picUrl);
       }
+      _username = await getUsername(widget.currentUserUid);
     } catch (e) {
       StatusAlert.show(
         context,
@@ -117,7 +127,7 @@ class _SearchTabState extends State<SearchTab> {
               future: FirebaseFirestore.instance
                   .collection('users')
                   .where('username',
-                      isNotEqualTo: widget.currentUserUid,
+                      isNotEqualTo: _username,
                       isGreaterThanOrEqualTo: searchController.text)
                   .get(),
               builder: (context, snapshot) {

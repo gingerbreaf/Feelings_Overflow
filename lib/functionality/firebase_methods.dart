@@ -133,20 +133,53 @@ class FirebaseMethods {
     }
   }
 
+  /// Does the backend firebase work for a user to request a follow
+  ///
+  /// Adds to the array of request for the target user that is followed
   static Future<void> requestFollow(String uid, String targetUid) async {
     try {
-      DocumentSnapshot snap =
+      var snap =
       await _firestore.collection('users').doc(targetUid).get();
-      List requests = (snap.data()! as dynamic)['requests'];
-
-      if (!requests.contains(uid)) {
+      var data = snap.data()!;
+      if (data['requests'] == null) {
+        // Deal with empty request, null check
         await _firestore.collection('users').doc(targetUid).update({
-          'requests': FieldValue.arrayUnion([uid])
+          'request': [uid]
         });
+        return;
       } else {
-        await _firestore.collection('users').doc(targetUid).update({
-          'requests': FieldValue.arrayRemove([uid])
-        });
+      List requests = (snap.data()! as dynamic)['requests'];
+        if (!requests.contains(uid)) {
+          await _firestore.collection('users').doc(targetUid).update({
+            'requests': FieldValue.arrayUnion([uid])
+          });
+          return;
+        } else {
+          return;
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  /// Does the backend work of stopping a follow request
+  ///
+  /// Removes from the array of request for the target user
+  static Future<void> stopFollow(String uid, String targetUid) async {
+    try {
+      var snap =
+      await _firestore.collection('users').doc(targetUid).get();
+      var data = snap.data()!;
+      if (data['requests'] == null) {
+        return;
+      } else {
+        List requests = (snap.data()! as dynamic)['requests'];
+        if (requests.contains(uid)) {
+          await _firestore.collection('users').doc(targetUid).update({
+            'requests': FieldValue.arrayRemove([uid])});
+          return;
+        }
       }
     } catch (e) {
       print(e.toString());

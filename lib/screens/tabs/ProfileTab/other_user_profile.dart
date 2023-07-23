@@ -62,8 +62,23 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
       userData = userSnap.data()!;
       followers = userData['followers'].length;
       following = userData['following'].length;
-      isFollowing = userData['followers'].contains(_auth.currentUser!.uid);
-      requestSent = userData['requests'].contains(_auth.currentUser!.uid);
+      if (userData['followers'] == null && userData['requests'] == null) {
+        print('clause 1');
+        isFollowing = false;
+        requestSent = false;
+      } else if (userData['followers'] == null) {
+        print('clause 2');
+        isFollowing = false;
+        requestSent = userData['requests'].contains(_auth.currentUser!.uid);
+      } else if (userData['requests'] == null) {
+        print('clause 3');
+        isFollowing = userData['followers'].contains(_auth.currentUser!.uid);
+        requestSent = false;
+      } else {
+        print('clause 4');
+        isFollowing = userData['followers'].contains(_auth.currentUser!.uid);
+        requestSent = userData['requests'].contains(_auth.currentUser!.uid);
+      }
       setState(() {});
     } catch (e) {
       StatusAlert.show(
@@ -246,7 +261,7 @@ class _OtherUserProfileState extends State<OtherUserProfile> {
                                         text: 'Request Sent',
                                         textColor: Colors.black,
                                         function: () async {
-                                          FirebaseMethods.requestFollow(
+                                          FirebaseMethods.stopFollow(
                                               FirebaseAuth
                                                   .instance.currentUser!.uid,
                                               widget.uid);

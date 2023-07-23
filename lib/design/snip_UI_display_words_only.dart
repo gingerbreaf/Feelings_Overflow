@@ -21,6 +21,7 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
   String picUrl = '';
   String posterName = '';
 
+
   @override
   void initState() {
     getData();
@@ -37,6 +38,7 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
         .get();
     var userData = userSnap.data()!;
     picUrl = userData['profilepic'];
+    print(picUrl);
     posterName = userData['username'];
     setState(() {
       isLoading = false;
@@ -47,87 +49,81 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
-      child: InkWell(
-        onTap: widget.onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          image: DecorationImage(
+            fit: BoxFit.fill,
+            image: AssetImage('assets/images/${widget.doc["card_background"]}.jpg'),
+          ),
+        ),
         child: SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          child: isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : Container(
-                  padding: const EdgeInsets.all(15.0),
-                  margin: const EdgeInsets.all(0.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: AssetImage(
-                          'assets/images/${widget.doc["card_background"]}.jpg'),
+          physics: NeverScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch
+              ,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 20.0,
+                      backgroundImage:
+                      NetworkImage(picUrl),
                     ),
-                  ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      posterName,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height / 2.6,
+
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 20.0,
-                            backgroundImage: NetworkImage(picUrl),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            posterName,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      Container(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height / 2.3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: MediaQuery.of(context).size.width / 4,
-                                right: MediaQuery.of(context).size.width / 4,
-                              ),
-                              child: RichTextDisplayPost(
-                                controller:
-                                    JsonCoding.getQuillControllerviaJSON(
-                                        widget.doc["diary_content"]),
-                                interactive: false,
-                              ),
-                            ),
-                          ],
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width / 8,
+                          right: MediaQuery.of(context).size.width / 8,
                         ),
-                      ),
-                      Text(
-                        'Created on ${DateFormat('d MMMM y HH:mm').format(widget.doc['creation_timestamp'].toDate())}',
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        textAlign: TextAlign.left,
+                        child: RichTextDisplayPost(controller: JsonCoding.getQuillControllerviaJSON(
+                            widget.doc["diary_content"]), interactive: false,),
                       ),
                     ],
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Center(
+                    child: Text(
+                      'Created on ${DateFormat('d MMMM y HH:mm').format(widget.doc['creation_timestamp'].toDate())}',
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 }
-
-/*
-
-
- */

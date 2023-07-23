@@ -48,6 +48,7 @@ class _WordOnlyDisplayProfileState extends State<WordOnlyDisplayProfile> {
       child: InkWell(
         onTap: widget.onTap,
         child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[

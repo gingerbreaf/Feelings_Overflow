@@ -94,13 +94,13 @@ class _ProfileTabState extends State<ProfileTab> {
   void selectImage() async {
     Uint8List im = await ImageFunction.pickImage(ImageSource.gallery);
     setState(() {
-      isLoading = true;
-    });
-    ImageFunction.uploadFile(im, widget.uid);
+        isLoading = true;
+      });
+    await ImageFunction.uploadFile(im, widget.uid);
     String profilePicURL = await ImageFunction.getDownloadURL(widget.uid);
     print('Await successful $profilePicURL');
     FirebaseFirestore.instance.collection("users").doc(widget.uid).update({
-      'profilepic': profilePicURL,
+        'profilepic': profilePicURL,
     });
     setState(() {
       imageURL = profilePicURL;
