@@ -88,7 +88,7 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
                   height: 10.0,
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height / 2.6,
+                  height: MediaQuery.of(context).size.height / 3.5,
 
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,

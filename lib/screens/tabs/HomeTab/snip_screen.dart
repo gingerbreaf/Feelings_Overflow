@@ -301,7 +301,7 @@ class _SnipScreenState extends State<SnipScreen> {
                       padding: EdgeInsets.only(
                         left: MediaQuery.of(context).size.width / 3,
                         right: MediaQuery.of(context).size.width / 3,
-                        top: MediaQuery.of(context).size.height / 10,
+                        top: MediaQuery.of(context).size.height / 14,
                       ),
                       child: RichTextDisplayPost(
                         controller: finalController,

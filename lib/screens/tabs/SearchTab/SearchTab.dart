@@ -209,7 +209,7 @@ class _SearchTabState extends State<SearchTab> {
                                       onPressed: () {
                                         FirebaseMethods.followUser(
                                             uid, widget.currentUserUid);
-                                        FirebaseMethods.requestFollow(
+                                        FirebaseMethods.stopFollow(
                                             uid, widget.currentUserUid);
                                         setState(() {
                                           requestsUid.remove(uid);
@@ -228,7 +228,7 @@ class _SearchTabState extends State<SearchTab> {
                                     backgroundColor: Colors.grey.shade200,
                                     child: IconButton(
                                       onPressed: () {
-                                        FirebaseMethods.requestFollow(
+                                        FirebaseMethods.stopFollow(
                                             uid, widget.currentUserUid);
                                         setState(() {
                                           requestsUid.remove(uid);
