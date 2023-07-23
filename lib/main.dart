@@ -8,6 +8,9 @@ import 'package:feelings_overflow/screens/register_screen.dart';
 import 'package:feelings_overflow/screens/DashBoard.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'api/firebase_api.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,8 +18,13 @@ void main() async {
 // initializing the firebase app
   await Firebase.initializeApp();
 
+  await FirebaseApi().initNotifications();
+
 // calling of runApp
-  runApp(const FeelingsOverflow());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(const FeelingsOverflow());
+  });
 }
 
 class FeelingsOverflow extends StatefulWidget {

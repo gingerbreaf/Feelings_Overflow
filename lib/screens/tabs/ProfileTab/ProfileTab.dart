@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feelings_overflow/design/diary_card.dart';
-import 'package:feelings_overflow/design/snip_UI_display_words_only.dart';
-import 'package:feelings_overflow/functionality/firebase_methods.dart';
 import 'package:feelings_overflow/design/profile_display_card.dart';
 import 'package:feelings_overflow/screens/tabs/ProfileTab/edit_profile_screen.dart';
 import 'package:feelings_overflow/screens/tabs/ProfileTab/following_screen.dart';
@@ -9,7 +7,6 @@ import 'package:feelings_overflow/screens/tabs/ProfileTab/follower_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:typed_data';
 import 'package:feelings_overflow/functionality/image_functions.dart';
@@ -18,6 +15,8 @@ import 'package:status_alert/status_alert.dart';
 
 import '../../../design/follow_button.dart';
 import 'package:feelings_overflow/screens/login_screen.dart';
+
+import '../HomeTab/post_reader.dart';
 
 class ProfileTab extends StatefulWidget {
   final String uid;
@@ -31,7 +30,7 @@ class _ProfileTabState extends State<ProfileTab> {
   bool outlineSelected = false;
 
   /// One scroll controller to control the scrolling
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   final _auth = FirebaseAuth.instance;
 
@@ -109,7 +108,6 @@ class _ProfileTabState extends State<ProfileTab> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return isLoading
@@ -134,8 +132,7 @@ class _ProfileTabState extends State<ProfileTab> {
                           children: [
                             CircleAvatar(
                               radius: 64,
-                              backgroundImage:
-                                NetworkImage(imageURL),
+                              backgroundImage: NetworkImage(imageURL),
                             ),
                             Positioned(
                               bottom: -10,
@@ -198,7 +195,10 @@ class _ProfileTabState extends State<ProfileTab> {
                             child: Column(
                               children: <Widget>[
                                 StreamBuilder(
-                                    stream: FirebaseFirestore.instance.collection("users").doc(widget.uid).snapshots(),
+                                    stream: FirebaseFirestore.instance
+                                        .collection("users")
+                                        .doc(widget.uid)
+                                        .snapshots(),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         var data = snapshot.data!.data();
@@ -219,8 +219,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                           ),
                                         );
                                       }
-                                    }
-                                ),
+                                    }),
                                 Text(
                                   'Followers',
                                   style: GoogleFonts.openSans(
@@ -241,7 +240,10 @@ class _ProfileTabState extends State<ProfileTab> {
                             child: Column(
                               children: <Widget>[
                                 StreamBuilder(
-                                    stream: FirebaseFirestore.instance.collection("users").doc(widget.uid).snapshots(),
+                                    stream: FirebaseFirestore.instance
+                                        .collection("users")
+                                        .doc(widget.uid)
+                                        .snapshots(),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         var data = snapshot.data!.data();
@@ -262,8 +264,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                           ),
                                         );
                                       }
-                                    }
-                                ),
+                                    }),
                                 Text(
                                   'Following',
                                   style: GoogleFonts.openSans(
@@ -281,7 +282,11 @@ class _ProfileTabState extends State<ProfileTab> {
                             child: Column(
                               children: <Widget>[
                                 StreamBuilder(
-                                    stream: FirebaseFirestore.instance.collection("users").doc(widget.uid).collection('posts').snapshots(),
+                                    stream: FirebaseFirestore.instance
+                                        .collection("users")
+                                        .doc(widget.uid)
+                                        .collection('posts')
+                                        .snapshots(),
                                     builder: (context, snapshot) {
                                       if (snapshot.hasData) {
                                         var data = snapshot.data!.docs;
@@ -302,8 +307,7 @@ class _ProfileTabState extends State<ProfileTab> {
                                           ),
                                         );
                                       }
-                                    }
-                                ),
+                                    }),
                                 Text(
                                   'Posts',
                                   style: GoogleFonts.openSans(
@@ -381,7 +385,8 @@ class _ProfileTabState extends State<ProfileTab> {
                           .orderBy('creation_timestamp', descending: true)
                           .get(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return const Center(
                             child: CircularProgressIndicator(),
                           );
@@ -398,10 +403,9 @@ class _ProfileTabState extends State<ProfileTab> {
                                   ),
                                 ),
                               )
-
                             : GridView.builder(
                                 shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount:
                                     (snapshot.data! as dynamic).docs.length,
                                 gridDelegate:
@@ -415,13 +419,23 @@ class _ProfileTabState extends State<ProfileTab> {
                                   QueryDocumentSnapshot snap =
                                       (snapshot.data! as dynamic).docs[index];
                                   // TODO: Change this to the diary Cards instead
-                                  return snap['display_type'] == 'WORDONLYDISPLAY'
+                                  return snap['display_type'] ==
+                                          'WORDONLYDISPLAY'
                                       ? WordOnlyDisplayProfile(doc: snap)
-                                      : DiaryCard(doc: snap);
+                                      : DiaryCard(
+                                          doc: snap,
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PostReaderScreen(
+                                                          snap), // Create new instance of PostReaderScreen with respective diary data
+                                                ));
+                                          },
+                                        );
                                   //return DiaryCard(doc: snap);
                                 });
-
-
                       },
                     ),
                   ],

@@ -21,8 +21,6 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
   String picUrl = '';
   String posterName = '';
 
-
-
   @override
   void initState() {
     getData();
@@ -39,7 +37,6 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
         .get();
     var userData = userSnap.data()!;
     picUrl = userData['profilepic'];
-    print(picUrl);
     posterName = userData['username'];
     setState(() {
       isLoading = false;
@@ -48,73 +45,82 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
-      padding: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       child: InkWell(
         onTap: widget.onTap,
         child: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 20.0,
-                    backgroundImage:
-                      NetworkImage(picUrl),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    posterName,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
+          physics: const NeverScrollableScrollPhysics(),
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Container(
+                  padding: const EdgeInsets.all(15.0),
+                  margin: const EdgeInsets.all(0.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    image: DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage(
+                          'assets/images/${widget.doc["card_background"]}.jpg'),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height / 2.3,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('assets/images/${widget.doc["card_background"]}.jpg'),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 20.0,
+                            backgroundImage: NetworkImage(picUrl),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            posterName,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height / 2.3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: MediaQuery.of(context).size.width / 4,
+                                right: MediaQuery.of(context).size.width / 4,
+                              ),
+                              child: RichTextDisplayPost(
+                                controller:
+                                    JsonCoding.getQuillControllerviaJSON(
+                                        widget.doc["diary_content"]),
+                                interactive: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        'Created on ${DateFormat('d MMMM y HH:mm').format(widget.doc['creation_timestamp'].toDate())}',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width / 4,
-                    right: MediaQuery.of(context).size.width / 4,
-                      ),
-                      child: RichTextDisplayPost(controller: JsonCoding.getQuillControllerviaJSON(
-                          widget.doc["diary_content"]), interactive: false,),
-                      ),
-                  ],
-                ),
-              ),
-              Text(
-                'Created on ${DateFormat('d MMMM y HH:mm').format(widget.doc['creation_timestamp'].toDate())}',
-                style: const TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                ),
-                textAlign: TextAlign.left,
-              ),
-            ],
-          ),
         ),
       ),
     );

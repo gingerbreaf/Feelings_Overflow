@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.feelings_overflow.app-mergeDebugResources-27:/values-watch-v20/values-watch-v20.xml",
+            "outputFile": "com.example.feelings_overflow.app-mergeDebugResources-28:/values-watch-v20/values-watch-v20.xml",
             "map": [
                 {
                     "source": "C:\\Users\\gunda\\.gradle\\caches\\transforms-3\\2059921191d4acbb9f1b9ad3b6710ac6\\transformed\\jetified-play-services-auth-20.5.0\\res\\values-watch-v20\\values.xml",

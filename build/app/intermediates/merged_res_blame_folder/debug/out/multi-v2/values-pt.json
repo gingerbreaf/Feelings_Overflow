@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.feelings_overflow.app-mergeDebugResources-27:/values-pt/values-pt.xml",
+            "outputFile": "com.example.feelings_overflow.app-mergeDebugResources-28:/values-pt/values-pt.xml",
             "map": [
                 {
                     "source": "C:\\Users\\gunda\\.gradle\\caches\\transforms-3\\3df77d3f0e42ee5d73cdfadb8bcdc01c\\transformed\\browser-1.4.0\\res\\values-pt\\values-pt.xml",

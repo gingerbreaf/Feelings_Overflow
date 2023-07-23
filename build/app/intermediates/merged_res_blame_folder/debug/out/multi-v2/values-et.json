@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.feelings_overflow.app-mergeDebugResources-27:/values-et/values-et.xml",
+            "outputFile": "com.example.feelings_overflow.app-mergeDebugResources-28:/values-et/values-et.xml",
             "map": [
                 {
                     "source": "C:\\Users\\gunda\\.gradle\\caches\\transforms-3\\3df77d3f0e42ee5d73cdfadb8bcdc01c\\transformed\\browser-1.4.0\\res\\values-et\\values-et.xml",
@@ -55,7 +55,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\gunda\\.gradle\\caches\\transforms-3\\f253648b0be692c533908993735bbd2e\\transformed\\jetified-play-services-base-18.0.1\\res\\values-et\\values.xml",
+                    "source": "C:\\Users\\gunda\\.gradle\\caches\\transforms-3\\f4c0500116144bc04cff0b0b27625b15\\transformed\\jetified-play-services-base-18.1.0\\res\\values-et\\values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
                         "startColumns": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
