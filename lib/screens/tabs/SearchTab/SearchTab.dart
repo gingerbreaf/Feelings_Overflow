@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feelings_overflow/functionality/firebase_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,7 +36,6 @@ class _SearchTabState extends State<SearchTab> {
 
   /// Whether to show a loading icon
   bool isLoading = false;
-
 
   /// Given a UID, gets the username from Firestore
   Future<String> getUsername(String uid) async {
@@ -113,7 +111,7 @@ class _SearchTabState extends State<SearchTab> {
         title: TextFormField(
           controller: searchController,
           decoration: const InputDecoration(
-            labelText: 'Click here to search for users to follow',
+            labelText: 'Search for users to follow',
             icon: Icon(Icons.search),
             filled: true,
             fillColor: Color(0xFFD6D6D6),
@@ -180,72 +178,79 @@ class _SearchTabState extends State<SearchTab> {
                   ),
                   requestsUid.isEmpty
                       ? Column(
-                        children: [
-                          const SizedBox(
-                            height: 50,
-                          ),
-                          Center(
-                              child: Text(
-                            'Follow requests will appear here',
-                            style: TextStyle(
-                              color: Colors.grey.shade600,
+                          children: [
+                            const SizedBox(
+                              height: 50,
                             ),
-                          )),
-                        ],
-                      )
+                            Center(
+                                child: Text(
+                              'Follow requests will appear here',
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                              ),
+                            )),
+                          ],
+                        )
                       : ListView(
                           shrinkWrap: true,
                           children: requestsUid.map((uid) {
                             String name =
                                 requestsName[requestsUid.indexOf(uid)];
                             return ListTile(
-                              leading: CircleAvatar(
-                                  backgroundImage: NetworkImage(requestsPicUrl[
-                                      requestsUid.indexOf(uid)])),
-                              title: Text(name),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.grey.shade200,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        FirebaseMethods.followUser(
-                                            uid, widget.currentUserUid);
-                                        FirebaseMethods.stopFollow(
-                                            uid, widget.currentUserUid);
-                                        setState(() {
-                                          requestsUid.remove(uid);
-                                        });
-                                      },
-                                      icon: const Icon(
-                                        Icons.done,
-                                        color: Colors.green,
+                                leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        requestsPicUrl[
+                                            requestsUid.indexOf(uid)])),
+                                title: Text(name),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundColor: Colors.grey.shade200,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          FirebaseMethods.followUser(
+                                              uid, widget.currentUserUid);
+                                          FirebaseMethods.stopFollow(
+                                              uid, widget.currentUserUid);
+                                          setState(() {
+                                            requestsUid.remove(uid);
+                                          });
+                                        },
+                                        icon: const Icon(
+                                          Icons.done,
+                                          color: Colors.green,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  CircleAvatar(
-                                    backgroundColor: Colors.grey.shade200,
-                                    child: IconButton(
-                                      onPressed: () {
-                                        FirebaseMethods.stopFollow(
-                                            uid, widget.currentUserUid);
-                                        setState(() {
-                                          requestsUid.remove(uid);
-                                        });
-                                      },
-                                      icon: const Icon(
-                                        Icons.close,
-                                        color: Colors.red,
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    CircleAvatar(
+                                      backgroundColor: Colors.grey.shade200,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          FirebaseMethods.stopFollow(
+                                              uid, widget.currentUserUid);
+                                          setState(() {
+                                            requestsUid.remove(uid);
+                                          });
+                                        },
+                                        icon: const Icon(
+                                          Icons.close,
+                                          color: Colors.red,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
+                                  ],
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              OtherUserProfile(uid: uid)));
+                                });
                           }).toList(),
                         ),
                 ],
