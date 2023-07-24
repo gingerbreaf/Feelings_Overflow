@@ -68,7 +68,7 @@ class FirebaseMethods {
     } else if (e.code == 'weak-password') {
       StatusAlert.show(
         context,
-        duration: const Duration(seconds: 3),
+        duration: const Duration(seconds: 2),
         title: 'Weak Password',
         subtitle: 'Needs at least 6 characters',
         configuration: const IconConfiguration(icon: Icons.close),

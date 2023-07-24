@@ -19,13 +19,14 @@ class HomePageDiaryCard extends StatefulWidget {
 
 class _HomePageDiaryCardState extends State<HomePageDiaryCard> {
   bool isLoading = false;
-
-  String picUrl = '';
+  String picUrl = 'https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg';
   String posterName = '';
 
   @override
   void initState() {
     getData();
+    super.initState();
+    print(picUrl);
   }
 
   getData() async {
@@ -37,7 +38,7 @@ class _HomePageDiaryCardState extends State<HomePageDiaryCard> {
         .doc(widget.doc['poster_uid'])
         .get();
     var userData = userSnap.data()!;
-    picUrl = userData['profilepic'];
+    picUrl = await userData['profilepic'];
     posterName = userData['username'];
     setState(() {
       isLoading = false;

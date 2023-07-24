@@ -63,6 +63,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       //height: 200,
                       child: const FittedBox(
                         child: Image(
+                          key: Key('RegisterAppIconImage'),
                           image: AssetImage('assets/images/AppIcon.png'),
                         ),
                       ),
@@ -89,6 +90,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 30,
                   ),
                   LoginRegisterTextField(
+                    key: const Key('registerEmail'),
                     hintText: 'Email',
                     obscure: false,
                     onChanged: (value) {
@@ -101,6 +103,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 10.0,
                   ),
                   LoginRegisterTextField(
+                    key: const Key('registerPassword'),
                     hintText: 'Password',
                     obscure: true,
                     onChanged: (value) {
@@ -113,6 +116,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 10,
                   ),
                   LoginRegisterTextField(
+                    key: const Key('registerConfirmPassword'),
                     hintText: 'Confirm Password',
                     obscure: true,
                     onChanged: (value) {
@@ -125,6 +129,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     height: 10,
                   ),
                   LoginRegisterTextField(
+                    key: const Key('registerUsername'),
                     hintText: 'Username',
                     obscure: false,
                     onChanged: (value) {
@@ -138,6 +143,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: GestureDetector(
+                      key: const Key('registerGestureDetector'),
                       child: Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
@@ -152,6 +158,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
+                            key: const Key('registerButton'),
                           ),
                         ),
                       ),

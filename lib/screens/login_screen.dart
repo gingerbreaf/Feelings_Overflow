@@ -59,6 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       //height: 200,
                       child: const FittedBox(
                         child: Image(
+                          key: const Key('Logo'),
                           image: AssetImage('assets/images/AppIcon.png'),
                         ),
                       ),
@@ -114,6 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: GestureDetector(
+                      key: const Key('login_gesture_detector'),
                       onTap: () async {
                         if (notAllFieldsFilled()) {
                           StatusAlert.show(

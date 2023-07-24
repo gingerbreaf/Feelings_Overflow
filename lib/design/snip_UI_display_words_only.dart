@@ -18,7 +18,7 @@ class WordOnlyDisplay extends StatefulWidget {
 
 class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
   bool isLoading = false;
-  String picUrl = '';
+  String picUrl = 'https://www.personality-insights.com/wp-content/uploads/2017/12/default-profile-pic-e1513291410505.jpg';
   String posterName = '';
 
 
@@ -26,6 +26,7 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
   void initState() {
     getData();
     super.initState();
+    print(picUrl);
   }
 
   getData() async {
@@ -37,7 +38,7 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
         .doc(widget.doc['poster_uid'])
         .get();
     var userData = userSnap.data()!;
-    picUrl = userData['profilepic'];
+    picUrl = await userData['profilepic'];
     print(picUrl);
     posterName = userData['username'];
     setState(() {
