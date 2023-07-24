@@ -1,5 +1,9 @@
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:feelings_overflow/design/diary_card.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:feelings_overflow/main.dart' as app;
@@ -50,7 +54,41 @@ getData(String uidUsed) async {
 
 }
 
+verifyHomeDiary(String title, var JSONsubmitted) async {
+  try{
+    // post data
+    var documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(_auth.currentUser!.uid)
+        .collection('personal_diaries')
+        .get();
 
+    for (var docs in documentSnapshot.docs){
+      var diary_data = docs.data()!;
+      String diary_title = diary_data['diary_title'];
+      var json = diary_data['diary_content'];
+      expect(title, equals(diary_title));
+    }
+    //expect(json, equals(JSONsubmitted));
+
+  }catch (e) {
+    print(e);
+  }
+}
+
+verifyDeletion() async {
+  try {
+    var documentSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(_auth.currentUser!.uid)
+        .collection('personal_diaries')
+        .get();
+    expect(documentSnapshot.docs.isEmpty, isTrue);
+  } catch (e) {
+    print(e);
+  }
+
+}
 
 
 
@@ -74,7 +112,7 @@ void Login() {
       await tester.pumpAndSettle(const Duration(seconds: 5));
 
 
-      /// Widget Test for Login / Registration
+      /// Widget Test for Login
       // Finding the Image on screen
       expect(find.byKey(const Key('Logo')), findsOneWidget);
 
@@ -282,7 +320,7 @@ void Register() {
       // Do note that the account has to be deleted off firebase or
       // use another email in order to redo the test
       // TODO: change email before testing
-      const String emailUsed = 'test33@gmail.com';
+      const String emailUsed = 'test334@gmail.com';
       const String usernameUsed = 'Tammy';
 
 
@@ -315,7 +353,8 @@ void Register() {
       expect(find.text('Profile'), findsOneWidget);
 
       /// Unit Testing (ensuring details of user on firebase is correct)
-
+      ///
+      /// Same as UnitTestFreshAccount
       String currentUserUid = _auth.currentUser!.uid;
       await getData(currentUserUid);
       expect(email, equals(emailUsed));
@@ -369,6 +408,153 @@ void UnitTestFreshAccount() {
   });
 
 }
+
+void myDiariesFeature() {
+  group('App test', (){
+    final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized()
+    as IntegrationTestWidgetsFlutterBinding;
+
+    binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
+    testWidgets('Core Feature my Diaries', (tester) async {
+      app.main();
+      await tester.pumpAndSettle(Duration(seconds: 5));
+
+      final emailFormField = find.byType(TextField).first;
+      final passwordFormField = find.byType(TextField).last;
+      final loginButton = find.byKey(const Key('login_gesture_detector'));
+
+      await tester.enterText(emailFormField, 'test223@gmail.com');
+      await tester.enterText(passwordFormField, '12345678');
+      await tester.pumpAndSettle();
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle(Duration(seconds: 5));
+
+
+      // At home page / dashboard currently
+
+      final myDiariesButton = find.byKey(const Key('My Diaries'));
+      await tester.tap(myDiariesButton);
+      await tester.pumpAndSettle(Duration(seconds: 5));
+      await Future.delayed(const Duration(seconds: 1));
+
+
+      /// Widget Testing for My Diaries page
+      final createDiariesButton = find.byType(FloatingActionButton);
+      expect(createDiariesButton, findsOneWidget);
+      expect(find.text('My Diaries'), findsAtLeastNWidgets(2));
+      expect(find.text("You have no diaries. Create a new one!"), findsOneWidget);
+
+
+      // At diaries page
+      /// My Diaries Posting test, should be able to create, edit and delete diaries
+      await tester.tap(createDiariesButton);
+      await tester.pumpAndSettle(Duration(seconds: 5));
+
+
+      final titleField = find.byKey(const Key('diaries_title_text'));
+      final contentField = find.byKey(const Key('Quill_Editor'));
+      final boldButton = find.byKey(const Key('Bold button'));
+      final italicButton = find.byKey(const Key('Italic button'));
+      final underlineButton = find.byKey(const Key('underline'));
+      final createDiaryButton = find.byType(FloatingActionButton);
+
+
+      String titleInput = 'Fall of the ROMAN empire';
+      // Enter text into the title field
+      await tester.enterText(titleField, titleInput);
+      await tester.pumpAndSettle();
+
+
+
+      // Get the QuillEditor widget and its controller
+      final QuillEditor editorWidget = tester.widget(contentField) as QuillEditor;
+      final QuillController controller = editorWidget.controller;
+
+      // Compose the delta and set it to the QuillEditor controller
+      final delta = Delta()..insert('Do you feel the same about rain today :)?', Style().toJson()); // 'i': true represents italic style
+      controller.document.compose(delta, ChangeSource.LOCAL);
+
+      var JSONsubmitted = jsonEncode(controller.document.toDelta().toJson());
+
+
+      await tester.tap(contentField);
+      await tester.pumpAndSettle();
+
+      controller.updateSelection(TextSelection(baseOffset: 27, extentOffset: 43), ChangeSource.LOCAL);
+
+      // Tap italic words to apply formatting
+      await tester.tap(italicButton);
+      await tester.pumpAndSettle(Duration(seconds: 5));
+
+      controller.updateSelection(TextSelection(baseOffset: 27, extentOffset:31), ChangeSource.LOCAL);
+
+      // Applying bold words to another selection
+      await tester.tap(boldButton);
+      await tester.pumpAndSettle(Duration(seconds: 15));
+
+      // Diary creation
+      await tester.tap(createDiaryButton);
+      await tester.pumpAndSettle(Duration(seconds: 5));
+
+      /// Unit Testing for diary creation
+      await verifyHomeDiary(titleInput, JSONsubmitted);
+
+
+      // Back to My Diary Screen
+      /// Widget Testing after creation of the existence of diary card
+
+      expect(find.text('Fall of the ROMAN empire'), findsOneWidget);
+      expect(find.byType(DiaryCard), findsAtLeastNWidgets(1));
+
+
+      // Finding the right diary card
+      final respectiveDiary = find.text('Fall of the ROMAN empire');
+
+      // Diary reader screen
+      await tester.tap(respectiveDiary);
+      await tester.pumpAndSettle(Duration(seconds: 3));
+
+
+
+      final editContentField = find.byKey(const Key('Quill_Editor2'));
+      // Get the QuillEditor widget and its controller
+      final QuillEditor editorWidget2 = tester.widget(editContentField) as QuillEditor;
+      final QuillController controller2 = editorWidget2.controller;
+
+      //Editing the diary
+      final delta2 = Delta()..insert('Oh I love it ', Style().toJson()); // 'i': true represents italic style
+      controller2.document.compose(delta2, ChangeSource.LOCAL);
+
+     await tester.tap(editContentField);
+     await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      expect(find.byType(DiaryCard), findsAtLeastNWidgets(1));
+
+      await tester.tap(respectiveDiary);
+      await tester.pumpAndSettle(Duration(seconds: 3));
+
+
+      final deleteDiaryButton = find.byType(FloatingActionButton);
+      await tester.tap(deleteDiaryButton);
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+
+      final confirmDeleteButton = find.text('Yes Please');
+      await tester.tap(confirmDeleteButton);
+      await tester.pumpAndSettle();
+
+      await Future.delayed(const Duration(seconds: 2));
+
+      expect(find.text('Fall of the ROMAN empire'), findsNothing);
+      await verifyDeletion();
+
+
+    });
+  });
+
+}
 /*
 void template() {
   group('Unit Testing for Registration', (){
@@ -388,5 +574,5 @@ void template() {
 
 
 void main() {
-  UnitTestFreshAccount();
+  myDiariesFeature();
 }

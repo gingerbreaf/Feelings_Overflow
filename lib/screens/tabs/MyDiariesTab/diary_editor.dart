@@ -70,6 +70,7 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
               QuillEditor.basic(
                 controller: controller,
                 readOnly: false,
+                key1: const Key('Quill_Editor2'),
               ),
 
               // OLD WAY of displaying text

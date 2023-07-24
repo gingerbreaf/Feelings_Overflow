@@ -61,7 +61,7 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              RichTextToolbar(controller: _controller),
+              RichTextToolbar(controller: _controller, key: Key('Rich Text Toolbar'),),
               TextField(
                 controller: _titleController,
                 decoration: const InputDecoration(
@@ -69,6 +69,7 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
                   hintText: 'Title',
                 ),
                 style: AppStyle.mainTitle,
+                key: const Key('diaries_title_text'),
               ),
               const SizedBox(
                 height: 8,
@@ -80,7 +81,8 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
               const SizedBox(
                 height: 30,
               ),
-              QuillEditor.basic(controller: _controller, readOnly: false,
+              QuillEditor.basic(
+                controller: _controller, readOnly: false, key1: const Key('Quill_Editor'),
               ),
               /* Old Text Editor for Body
               TextField(
