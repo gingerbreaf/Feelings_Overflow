@@ -55,7 +55,8 @@ class _DiaryPostingScreenState extends State<DiaryPostingScreen> {
               ),
               RichTextDisplay(
                 interactive: true,
-                controller: quillController
+                controller: quillController,
+                key1: const Key('finalPostingScreenEditor'),
               ),
             ],
           ),
@@ -67,6 +68,7 @@ class _DiaryPostingScreenState extends State<DiaryPostingScreen> {
           FloatingActionButton(
               // Need to add heroTag for multiple Floating Action Button
               heroTag: null,
+              key: const Key('snip'),
               backgroundColor: Colors.white,
               child: const Icon(Icons.cut),
               onPressed: (){
@@ -93,6 +95,7 @@ class _DiaryPostingScreenState extends State<DiaryPostingScreen> {
               }),
           const SizedBox(width: 20.0,),
           FloatingActionButton(
+              key: const Key('postStraight'),
               heroTag: null,
               backgroundColor: Colors.blue,
               child: const Icon(Icons.post_add),

@@ -94,6 +94,7 @@ class _SnipScreenState extends State<SnipScreen> {
                         cardIndex: 0,
                         font: const Font(
                             fontName: 'Rochester', fontFamily: 'Rochester'),
+                        key: const Key('font_1'),
                       ),
                       FontCard(
                         quillController:
@@ -105,6 +106,7 @@ class _SnipScreenState extends State<SnipScreen> {
                         cardIndex: 1,
                         font: const Font(
                             fontName: 'Leckerli', fontFamily: 'Leckerli One'),
+                        key: const Key('font_2'),
                       ),
                       FontCard(
                         quillController:
@@ -117,6 +119,7 @@ class _SnipScreenState extends State<SnipScreen> {
                         font: const Font(
                             fontName: 'Fredericka',
                             fontFamily: 'Fredericka the Great'),
+                        key: const Key('font_3'),
                       ),
                       FontCard(
                         quillController:
@@ -128,6 +131,7 @@ class _SnipScreenState extends State<SnipScreen> {
                         cardIndex: 3,
                         font: const Font(
                             fontName: 'Stalemate', fontFamily: 'Stalemate'),
+                        key: const Key('font_4'),
                       ),
                     ],
                   ),
@@ -136,6 +140,7 @@ class _SnipScreenState extends State<SnipScreen> {
               Container(
                 height: MediaQuery.of(context).size.height / 4.2,
                 child: CupertinoScrollbar(
+                  key: const Key('background_scroll'),
                   thumbVisibility: true,
                   controller: _scrollController2,
                   child: ListView(
@@ -144,6 +149,7 @@ class _SnipScreenState extends State<SnipScreen> {
                     scrollDirection: Axis.horizontal,
                     children: [
                       InkWell(
+                        key: const Key('background_1'),
                         onTap: () {
                           setState(() {
                             _groupValue = 0;
@@ -177,6 +183,7 @@ class _SnipScreenState extends State<SnipScreen> {
                         ),
                       ),
                       InkWell(
+                        key: const Key('background_2'),
                         onTap: (){
                           setState(() {
                             _groupValue = 1;
@@ -211,6 +218,7 @@ class _SnipScreenState extends State<SnipScreen> {
                         ),
                       ),
                       InkWell(
+                        key: const Key('background_3'),
                         onTap: (){
                           setState(() {
                             _groupValue = 2;
@@ -243,6 +251,7 @@ class _SnipScreenState extends State<SnipScreen> {
                         ),
                       ),
                       InkWell(
+                        key: const Key('background_4'),
                         onTap: (){
                           setState(() {
                             _groupValue = 3;
@@ -317,6 +326,7 @@ class _SnipScreenState extends State<SnipScreen> {
                               :_selectedFont;
                           return Flexible(
                             child: OutlinedButton(
+                              key: const Key('format_font'),
                               onPressed: (){
                                 if (_selectedFontNotifier.value != null) {
                                   _selectedFont = _selectedFontNotifier.value!.fontFamily;

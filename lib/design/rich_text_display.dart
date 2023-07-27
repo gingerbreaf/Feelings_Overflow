@@ -5,11 +5,12 @@ class RichTextDisplay extends StatelessWidget {
 
   final QuillController controller;
   final bool interactive;
+  final Key? key1;
 
   const RichTextDisplay({
-    super.key,
     required this.controller,
     required this.interactive,
+    this.key1,
   });
 
   @override
@@ -25,6 +26,7 @@ class RichTextDisplay extends StatelessWidget {
         expands: false,
         showCursor: false,
         enableInteractiveSelection: interactive,
+        key: key1,
 
     );
   }

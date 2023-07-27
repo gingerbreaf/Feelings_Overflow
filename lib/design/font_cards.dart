@@ -12,14 +12,17 @@ class FontCard extends StatefulWidget {
   final ValueNotifier<Font?> selectedFontNotifier;
   final int cardIndex;
   final Font font;
+  final Key? key1;
 
-  const FontCard({
+  const FontCard({super.key,
     required this.quillController,
     required this.textNotifier,
     required this.selectedCardNotifier,
     required this.cardIndex,
     required this.font,
     required this.selectedFontNotifier,
+    this.key1,
+
   });
 
   @override

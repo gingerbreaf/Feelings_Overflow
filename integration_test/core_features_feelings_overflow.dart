@@ -2,6 +2,10 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:feelings_overflow/design/diary_card.dart';
+import 'package:feelings_overflow/design/follow_button.dart';
+import 'package:feelings_overflow/design/font_cards.dart';
+import 'package:feelings_overflow/design/homepage_feed_diary_card.dart';
+import 'package:feelings_overflow/design/snip_UI_display_words_only.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:integration_test/integration_test.dart';
@@ -24,6 +28,13 @@ String picUrl = 'https://www.personality-insights.com/wp-content/uploads/2017/12
 List<dynamic> requests = [];
 String uid = '';
 String username = '';
+
+/// List that contain variables for your following
+///
+/// Used for profile testing
+List<String> followingUid = [];
+List<String> followingName = [];
+List<String> followingPicUrl = [];
 
 /// Get the data for the collection 'users' from firebase
 getData(String uidUsed) async {
@@ -90,10 +101,91 @@ verifyDeletion() async {
 
 }
 
+Future<String> getUsername(String uid) async {
+  var userSnap = await _firestore.collection('users').doc(uid).get();
+  var userData = userSnap.data()!;
+  return userData['username'];
+}
+
+Future<String> getPicUrl(String uid) async {
+  var userSnap = await _firestore.collection('users').doc(uid).get();
+  var userData = userSnap.data()!;
+  return userData['profilepic'];
+}
+
+Future<String> getFollowersCount(String uid) async {
+  var userSnap = await _firestore.collection('users').doc(uid).get();
+  var userData = userSnap.data()!;
+  return userData['followers'].length.toString();
+}
 
 
+Future<String> getFollowingCount(String uid) async {
+  var userSnap = await _firestore.collection('users').doc(uid).get();
+  var userData = userSnap.data()!;
+  return userData['following'].length.toString();
+}
+
+Future<int> getPostCount(String uid) async {
+  var userSnap = await _firestore.collection('users').doc(uid).collection('posts').get();
+  int userData = userSnap.size;
+  return userData;
+}
 
 
+void getFollowing() async {
+  try {
+    var userSnap = await _firestore
+        .collection('users')
+        .doc(_auth.currentUser!.uid)
+        .get();
+
+    var userData = userSnap.data()!;
+    followingUid =
+        (userData['following'] as List).map((e) => e as String).toList();
+    for (String uid in followingUid) {
+      String name = await getUsername(uid);
+      followingName.add(name);
+      String picUrl = await getPicUrl(uid);
+      followingPicUrl.add(picUrl);
+    }
+  } catch (e) {
+    print(e);
+  }
+}
+
+verifyRequest() async {
+  try {
+    var userSnap = await _firestore.collection('users').doc(_auth.currentUser!.uid).get();
+    var userData = userSnap.data()!;
+    int requestLength = (userData['requests'] as List).length;
+    expect(requestLength - requests.length == 1, isTrue);
+  } catch (e) {
+    print(e);
+  }
+}
+
+verifyDerequest() async {
+  try {
+    var userSnap = await _firestore.collection('users').doc(_auth.currentUser!.uid).get();
+    var userData = userSnap.data()!;
+    int requestLength = (userData['requests'] as List).length;
+    expect(requestLength == requests.length, isTrue);
+  } catch (e) {
+    print(e);
+  }
+}
+
+verifyMyDiariesCount(int expectedCount) async {
+  try{
+    var userSnap = await _firestore.collection('users').doc(uid).collection('personal_diaries').get();
+    int userData = userSnap.size;
+    // There should only exist 1 diary
+    expect(userData == expectedCount, isTrue);
+  }catch (e) {
+    print(e);
+  }
+}
 
 
 
@@ -555,6 +647,340 @@ void myDiariesFeature() {
   });
 
 }
+
+void followFeature() {
+  group('Follow & Unfollow Core Feature', (){
+    final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized()
+    as IntegrationTestWidgetsFlutterBinding;
+
+    binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
+    testWidgets('Testing the search, request and follow feature', (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      final emailFormField = find.byType(TextField).first;
+      final passwordFormField = find.byType(TextField).last;
+      final loginButton = find.byKey(const Key('login_gesture_detector'));
+
+
+      await tester.enterText(emailFormField, 'test223@gmail.com');
+      await tester.enterText(passwordFormField, '12345678');
+      await tester.pumpAndSettle();
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle(Duration(seconds: 5));
+      await getData(_auth.currentUser!.uid);
+
+      final searchButton = find.byKey(const Key('Search'));
+      await tester.tap(searchButton);
+      await tester.pumpAndSettle(Duration(seconds: 5));
+
+
+
+      /// Widget testing for search page
+      expect(find.text('Follow Requests'), findsOneWidget);
+      expect(find.text('Follow requests will appear here'), findsOneWidget);
+
+      final searchBar = find.byType(TextFormField);
+      expect(searchBar, findsOneWidget);
+
+      // Searching a known username
+      await tester.enterText(searchBar, 'sk2001');
+      await tester.pumpAndSettle();
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+
+      /// Widget Test for search bar
+      final searchTile = find.byType(ListTile);
+      expect(searchTile, findsAtLeastNWidgets(1));
+      final searchName = find.text('sk2001').first;
+      expect(searchName, findsAtLeastNWidgets(1));
+
+      // heading into the profile
+      await tester.tap(searchName);
+      await tester.pumpAndSettle(Duration(seconds: 3));
+
+      final followButton = find.byType(FollowButton);
+      final followButtonText = find.text('Follow');
+
+      const uidUser = 'zNIejO3ZhjcK5Vujn9hDvQf1i7M2';
+
+      /// Widget testing for other people's profile page
+      ///
+      /// Unit testing at the same time for the right data
+      final expectedFollowerCount = await getFollowersCount(uidUser);
+      final expectedFollowingCount = await getFollowingCount(uidUser);
+      // Should have right number of followers and following
+      expect(find.text(expectedFollowerCount), findsAtLeastNWidgets(1));
+      expect(find.text(expectedFollowingCount), findsAtLeastNWidgets(1));
+
+      // Follow user
+      await tester.tap(followButton);
+      await tester.pumpAndSettle(Duration(seconds: 1));
+
+      /// Widget testing for follow button / request button
+      // Button should change to request sent
+      final followButtonTextAfter = find.text('Request Sent');
+      expect(followButtonTextAfter, findsAtLeastNWidgets(1));
+      /// Unit testing for requesting a follow
+      await verifyRequest();
+
+      await tester.tap(followButtonTextAfter);
+      await tester.pumpAndSettle(Duration(seconds: 1));
+      // Button should change back to follow
+      expect(followButtonText, findsOneWidget);
+      /// Unit testing for stopping a request
+      await verifyDerequest();
+
+
+
+    });
+  });
+
+}
+
+void postingFeature() {
+  group('App Test', (){
+    final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized()
+    as IntegrationTestWidgetsFlutterBinding;
+
+    binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
+    testWidgets('Posting Feature Integration Test', (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Logging in
+      final emailFormField = find.byType(TextField).first;
+      final passwordFormField = find.byType(TextField).last;
+      final loginButton = find.byKey(const Key('login_gesture_detector'));
+
+
+      // Email we will be using will not be test223@gmail.com
+      // Will be another account in order to prevent failure in my diaries
+      // integration test. This account should come with a ready made post
+      await tester.enterText(emailFormField, 'test311@gmail.com');
+      await tester.enterText(passwordFormField, '12345678');
+      await tester.pumpAndSettle();
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle(Duration(seconds: 5));
+
+      /// Unit Test for checking post entry
+      int beforePostCount = await getPostCount(_auth.currentUser!.uid);
+
+
+      // We will skip widget testing of home screen as its already done
+      // in Login and Registration Integration Test
+      final addPostButton = find.byType(IconButton);
+      await tester.tap(addPostButton);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+
+      /// Widget Test for new Post Screen
+      
+      expect(find.text('Select a diary to post'), findsOneWidget);
+
+      // The title should be a constant
+      final Diary = find.text('The night when it dies');
+      expect(Diary, findsOneWidget);
+      
+      /// Unit Testing & Widget Test, verifying the number of diaries we have
+      ///
+      /// Should only have 1 count since its a pre-set account with 1 diary
+      verifyMyDiariesCount(1);
+      // We should find one diary card in existence to post
+      expect(find.byType(DiaryCard), findsOneWidget);
+
+      await tester.tap(Diary);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      // In the diary_posting screen
+      /// Widget test for diary_posting screen
+
+      final richTextDisplay = find.byKey(const Key('finalPostingScreenEditor'));
+      final snip = find.byKey(const Key('snip'));
+      final post = find.byKey(const Key('postStraight'));
+
+      expect(richTextDisplay, findsOneWidget);
+      expect(snip, findsOneWidget);
+      expect(post, findsOneWidget);
+
+      // We going to do post first
+      await tester.tap(post);
+      await tester.pumpAndSettle(Duration(seconds: 1));
+      expect(find.text('Diary posted'), findsOneWidget);
+
+      // Back at home page
+      /// Widget Testing for home page after post
+
+      final homepageDiaryCard = find.byType(HomePageDiaryCard);
+      expect(homepageDiaryCard, findsAtLeastNWidgets(1));
+
+      /// Unit Test for checking post entry
+      int afterPostCount = await getPostCount(_auth.currentUser!.uid);
+      // the post count should go up by one
+      expect(afterPostCount - beforePostCount == 1, isTrue);
+
+      // Tap into profile screen
+      final profile = find.text('Profile');
+      await tester.tap(profile);
+      await tester.pumpAndSettle();
+
+      /// Widget Testing for profile page display
+      // We should have 1 additional post in our display + post count going up
+      final profilePostCard = find.byType(DiaryCard);
+      expect(profilePostCard, findsAtLeastNWidgets(1));
+
+      expect(find.text(afterPostCount.toString()), findsAtLeastNWidgets(1));
+
+
+    });
+  });
+
+}
+
+void snippetFeature() {
+  group('Snipping Feature Test', (){
+    final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized()
+    as IntegrationTestWidgetsFlutterBinding;
+
+    binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
+    testWidgets('Snipping Feature Integration Test', (WidgetTester tester) async {
+      app.main();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // Logging in
+      final emailFormField = find.byType(TextField).first;
+      final passwordFormField = find.byType(TextField).last;
+      final loginButton = find.byKey(const Key('login_gesture_detector'));
+
+
+      // Email we will be using will not be test223@gmail.com
+      // Will be another account in order to prevent failure in my diaries
+      // integration test. This account should come with a ready made post
+      await tester.enterText(emailFormField, 'test311@gmail.com');
+      await tester.enterText(passwordFormField, '12345678');
+      await tester.pumpAndSettle();
+      await tester.tap(loginButton);
+      await tester.pumpAndSettle(Duration(seconds: 5));
+
+
+      /// Unit Test for checking post entry
+      int beforePostCount = await getPostCount(_auth.currentUser!.uid);
+
+      print(beforePostCount);
+
+
+      final Diary = find.text('The night when it dies');
+
+      // Going to do snippets
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle(Duration(seconds: 1));
+      await tester.tap(Diary);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      final richTextDisplay = find.byKey(const Key('finalPostingScreenEditor'));
+      final snip = find.byKey(const Key('snip'));
+      final post = find.byKey(const Key('postStraight'));
+
+      // Selecting words
+      // Get the QuillEditor widget and its controller
+      final QuillEditor editorWidget = tester.widget(richTextDisplay) as QuillEditor;
+      final QuillController controller = editorWidget.controller;
+      controller.updateSelection(TextSelection(baseOffset: 0, extentOffset: 42), ChangeSource.LOCAL);
+
+      await tester.tap(snip);
+      await tester.pumpAndSettle(Duration(seconds: 3));
+
+      /// Widget test for snippet screen
+
+      // Find at least 4 font cards
+      expect(find.byType(FontCard), findsAtLeastNWidgets(4));
+      final fontCard1 = find.byKey(const Key('font_1'));
+      final fontCard2 = find.byKey(const Key('font_2'));
+      final fontCard3 = find.byKey(const Key('font_3'));
+      final fontCard4 = find.byKey(const Key('font_4'));
+
+      final background1 = find.byKey(const Key('background_1'));
+      final background2 = find.byKey(const Key('background_2'));
+      final background3 = find.byKey(const Key('background_3'));
+      final background4 = find.byKey(const Key('background_4'));
+
+      final formatText = find.byKey(const Key('format_font'));
+
+      final postButton = find.byType(FloatingActionButton);
+
+
+      await tester.tap(fontCard1);
+      await tester.tap(background1);
+      await tester.pumpAndSettle(Duration(seconds: 1));
+      await tester.tap(formatText);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      await tester.tap(fontCard2);
+      await tester.pumpAndSettle(Duration(seconds: 1));
+      await tester.tap(formatText);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      await tester.tap(fontCard3);
+      await tester.pumpAndSettle(Duration(seconds: 1));
+      await tester.tap(formatText);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      await tester.tap(fontCard4);
+      await tester.pumpAndSettle(Duration(seconds: 1));
+      await tester.tap(formatText);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      await tester.tap(background2);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+      await tester.tap(background3);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+      await tester.dragUntilVisible(background4, find.byKey(const Key('background_scroll')), const Offset(-200, 100));
+      await tester.tap(background4);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      await tester.tap(fontCard3);
+      await tester.pumpAndSettle(Duration(seconds: 1));
+      await tester.tap(formatText);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      await tester.tap(postButton);
+      await tester.pumpAndSettle(Duration(seconds: 2));
+
+      /// Widget testing for home page after posting
+      final card = find.byType(WordOnlyDisplay);
+      expect(card, findsAtLeastNWidgets(1));
+
+      /// Unit Test for checking post entry
+      int afterPostCount = await getPostCount(_auth.currentUser!.uid);
+      print(afterPostCount);
+      // the post count should go up by one
+      expect(afterPostCount - beforePostCount == 1, isTrue);
+
+      // Tap into profile screen
+      final profile = find.text('Profile');
+      await tester.tap(profile);
+      await tester.pumpAndSettle();
+
+      /// Widget Testing for profile page display
+      // We should have 1 additional post in our display + post count going up
+      final profilePostCard = find.byType(DiaryCard);
+      expect(profilePostCard, findsAtLeastNWidgets(1));
+
+      expect(find.text(afterPostCount.toString()), findsAtLeastNWidgets(1));
+
+
+
+
+
+
+    });
+  });
+
+}
+
+
+
+
 /*
 void template() {
   group('Unit Testing for Registration', (){
@@ -574,5 +1000,5 @@ void template() {
 
 
 void main() {
-  myDiariesFeature();
+  postingFeature();
 }
