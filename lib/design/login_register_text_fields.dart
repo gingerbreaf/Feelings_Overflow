@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Text Field Design for Registration and Login pages
 class LoginRegisterTextField extends StatelessWidget {
   const LoginRegisterTextField(
       {required this.hintText,

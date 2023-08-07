@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
+/// This is the UI for My Diaries Tab which displays all the diaries you created.
 class MyDiariesTab extends StatefulWidget {
   const MyDiariesTab({Key? key}) : super(key: key);
 

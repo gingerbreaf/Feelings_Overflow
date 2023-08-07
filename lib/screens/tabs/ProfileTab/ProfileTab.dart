@@ -18,6 +18,7 @@ import 'package:feelings_overflow/screens/login_screen.dart';
 
 import '../HomeTab/post_reader.dart';
 
+/// This is the UI for the profile page for the current user
 class ProfileTab extends StatefulWidget {
   final String uid;
   const ProfileTab({required this.uid, Key? key}) : super(key: key);

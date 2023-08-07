@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 
 import 'api/firebase_api.dart';
 
+/// This is the main function that starts the application
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

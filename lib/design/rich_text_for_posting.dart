@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
+/// Display for the Rich Text for posting
 class RichTextDisplayPost extends StatelessWidget {
 
   final QuillController controller;

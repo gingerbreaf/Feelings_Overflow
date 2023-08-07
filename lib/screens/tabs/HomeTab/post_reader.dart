@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:feelings_overflow/design/rich_text_display.dart';
 import 'package:feelings_overflow/functionality/JsonCoding.dart';
 
+
+/// This is the screen that allow other users to click into a diary posted
 class PostReaderScreen extends StatefulWidget {
   const PostReaderScreen(this.doc, {Key? key}) : super(key: key);
 
@@ -102,12 +104,6 @@ class _PostReaderScreenState extends State<PostReaderScreen> {
                 controller: JsonCoding.getQuillControllerviaJSON(
                     widget.doc["diary_content"]),
               ),
-              /* Old way of text display
-              Text(
-                widget.doc["diary_content"],
-                style: AppStyle.mainContent,
-              )
-             */
             ],
           ),
         ),

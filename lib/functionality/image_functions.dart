@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+/// ImageFunction class is used to handle functionality regarding images
 class ImageFunction {
   /// Allows users to select an image from their photo gallery
   static pickImage(ImageSource source) async {

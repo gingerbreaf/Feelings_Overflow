@@ -1,13 +1,13 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:feelings_overflow/design/rich_text_display.dart';
 import 'package:flutter/material.dart';
 import 'package:feelings_overflow/design/app_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:feelings_overflow/functionality/JsonCoding.dart';
 
+
+/// This is the UI for the Diary Editing where you click to edit a diary.
 class DiaryEditorScreen extends StatefulWidget {
   const DiaryEditorScreen(this.doc, {Key? key}) : super(key: key);
 
@@ -70,6 +70,7 @@ class _DiaryEditorScreenState extends State<DiaryEditorScreen> {
               QuillEditor.basic(
                 controller: controller,
                 readOnly: false,
+                key1: const Key('secondKey'),
               ),
 
               // OLD WAY of displaying text

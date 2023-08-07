@@ -6,9 +6,11 @@ import 'package:intl/intl.dart';
 import '../functionality/JsonCoding.dart';
 import 'rich_text_for_posting.dart';
 
+/// Display Snippet Cards that is seen in the profile page
 class WordOnlyDisplayProfile extends StatefulWidget {
+  /// On Tap function
   final Function()? onTap;
-
+  /// The document containing the snippet information
   final QueryDocumentSnapshot doc;
   const WordOnlyDisplayProfile({super.key, required this.doc, this.onTap});
 

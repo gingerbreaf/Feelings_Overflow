@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:feelings_overflow/design/follow_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:feelings_overflow/design/app_style.dart';
@@ -9,10 +7,10 @@ import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:feelings_overflow/design/rich_text_toolbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:feelings_overflow/functionality/JsonCoding.dart';
-import 'package:feelings_overflow/functionality/TextFormatting.dart';
 
+
+
+/// This is the diary creator screen, used when you create a diary
 class DiaryCreatorScreen extends StatefulWidget {
   const DiaryCreatorScreen({Key? key}) : super(key: key);
 
@@ -80,20 +78,8 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
               const SizedBox(
                 height: 30,
               ),
-              QuillEditor.basic(controller: _controller, readOnly: false,
+              QuillEditor.basic(controller: _controller, readOnly: false, key1: const Key('first key'),
               ),
-              /* Old Text Editor for Body
-              TextField(
-                controller: _mainContentController,
-                keyboardType: TextInputType.multiline,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Your Diary here',
-                ),
-                style: AppStyle.mainContent,
-                maxLines: null,
-              ),
-              */
             ],
           ),
         ),

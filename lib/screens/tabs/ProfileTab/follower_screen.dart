@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:status_alert/status_alert.dart';
 
+/// This is the UI for viewing your followers
 class FollowerScreen extends StatefulWidget {
   static const String id = 'follower_screen';
   const FollowerScreen({Key? key}) : super(key: key);

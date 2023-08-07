@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:status_alert/status_alert.dart';
 import 'package:feelings_overflow/design/login_register_text_fields.dart';
 
+/// This is the UI for the Registration Screen
 class RegistrationScreen extends StatefulWidget {
   static const String id = 'registration_screen';
 

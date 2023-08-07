@@ -8,6 +8,7 @@ import 'package:feelings_overflow/screens/DashBoard.dart';
 import 'package:status_alert/status_alert.dart';
 import 'package:feelings_overflow/functionality/firebase_methods.dart';
 
+/// This is the UI for the Login Screen
 class LoginScreen extends StatefulWidget {
   static const String id = 'login_screen';
 
