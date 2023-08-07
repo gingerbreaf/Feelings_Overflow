@@ -7,6 +7,7 @@ import 'package:status_alert/status_alert.dart';
 import '../../../../design/follow_button.dart';
 import '../../../design/diary_card.dart';
 
+/// This is the UI for viewing the profile of other users
 class OtherUserProfile extends StatefulWidget {
   /// UID of user to be displayed
   final String uid;

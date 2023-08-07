@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'tabs/MyDiariesTab/MyDiariesTab.dart';
 import 'tabs/ProfileTab/ProfileTab.dart';
 
+/// This is the UI for Dashboard so we can navigate between tabs
 class DashBoard extends StatefulWidget {
   const DashBoard({Key? key}) : super(key: key);
   static const id = 'dashboard_screen';

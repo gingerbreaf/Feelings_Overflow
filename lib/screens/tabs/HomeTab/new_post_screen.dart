@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
+/// This is the UI Screen for choosing which diary to post
+/// After + button on home_screen to be more exact
 class NewPostScreen extends StatefulWidget {
   static const String id = 'new_post_screen';
   const NewPostScreen({Key? key}) : super(key: key);

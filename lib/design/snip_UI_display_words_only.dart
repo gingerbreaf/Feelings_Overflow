@@ -4,9 +4,11 @@ import 'package:intl/intl.dart';
 import '../functionality/JsonCoding.dart';
 import 'rich_text_for_posting.dart';
 
+/// Snippet Cards that are displayed in the home screen
 class WordOnlyDisplay extends StatefulWidget {
+  /// On Tap function
   final Function()? onTap;
-
+  /// Information of the card
   final QueryDocumentSnapshot doc;
   const WordOnlyDisplay({super.key, required this.doc, this.onTap});
 

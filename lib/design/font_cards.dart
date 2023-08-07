@@ -5,12 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:google_fonts/google_fonts.dart';
 
+/// Font Card are the cards that are displayed on the snip function screen
 class FontCard extends StatefulWidget {
+
+  /// The controller that displays the rich text
   final QuillController quillController;
+  /// Text Notifier that notifies the snippet screen to display
   final ValueNotifier<String> textNotifier;
+  /// Selected Card Notifier that notifies snippet screen which card is selected
   final ValueNotifier<int> selectedCardNotifier;
+  /// Selected Font Notifier that notifies snippet screen which font is selected
   final ValueNotifier<Font?> selectedFontNotifier;
+  /// Index of the card to identify the card
   final int cardIndex;
+  /// Font used by the card
   final Font font;
 
   const FontCard({
@@ -54,12 +62,14 @@ class _FontCardState extends State<FontCard> {
     super.dispose();
   }
 
+  /// State management to update the text displayed from what was previously selected
   void _updateText() {
     setState(() {
       _text = widget.textNotifier.value;
     });
   }
 
+  /// Updating the screen on whichever card is selected
   void _updateSelectedCard() {
     setState(() {
       _isSelected = (widget.selectedCardNotifier.value == widget.cardIndex);
@@ -72,6 +82,7 @@ class _FontCardState extends State<FontCard> {
     });
   }
 
+  ///  Changes the selection of the card and update the values accordingly
   void _onCardSelected() {
     setState(() {
       if (_isSelected) {
@@ -85,6 +96,8 @@ class _FontCardState extends State<FontCard> {
     });
   }
 
+
+  /// Change the display size of the words to prevent overflow
   QuillController changeSizeAccordingly(QuillController quillController) {
     int len = quillController.document.length;
     if (0 < len && len < 20) {
@@ -96,6 +109,7 @@ class _FontCardState extends State<FontCard> {
     }
   }
 
+  /// Initalize the words and fonts
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();

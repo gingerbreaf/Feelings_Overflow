@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:status_alert/status_alert.dart';
 import '../ProfileTab/other_user_profile.dart';
 
+/// This is the UI for the search tab which enables us to find users
 class SearchTab extends StatefulWidget {
   SearchTab({Key? key}) : super(key: key);
 

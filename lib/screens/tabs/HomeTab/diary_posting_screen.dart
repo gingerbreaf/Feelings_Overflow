@@ -9,6 +9,9 @@ import 'package:status_alert/status_alert.dart';
 import 'package:feelings_overflow/design/rich_text_display.dart';
 import 'package:feelings_overflow/functionality/JsonCoding.dart';
 
+
+/// This is the UI after choosing a diary
+/// Contains both the post and snippet function
 class DiaryPostingScreen extends StatefulWidget {
   const DiaryPostingScreen(this.doc, {Key? key}) : super(key: key);
 

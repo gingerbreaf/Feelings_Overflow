@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
-
+/// This are the decorations used for Text Fields
 const kTextFieldDecoration = InputDecoration(
   hintText: 'Enter a value',
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),

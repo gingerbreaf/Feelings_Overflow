@@ -53,7 +53,7 @@ class WordSelector {
   }
 
 
-
+  /// Gets the selection style of the inputted controller
   static Style getSelectionStyle(QuillController controller) {
     final style = controller.getSelectionStyle();
     return style;

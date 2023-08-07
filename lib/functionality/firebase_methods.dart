@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:status_alert/status_alert.dart';
 import 'package:rxdart/rxdart.dart';
 
-
+/// Class that handles interaction with backend firebase
 class FirebaseMethods {
   static final _firestore = FirebaseFirestore.instance;
   static final _auth = FirebaseAuth.instance;
@@ -30,6 +30,7 @@ class FirebaseMethods {
     });
   }
 
+  /// Used for built-in Notifications
   static void saveDeviceToken(String uid) async {
     final _firebaseMessaging = FirebaseMessaging.instance;
     final fCMToken = await _firebaseMessaging.getToken();
@@ -246,33 +247,13 @@ class FirebaseMethods {
       }).then((value) {
         print(value.id);
       }).catchError((error) => print("error"));
-      /*
-      var userSnap =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
-      var userData = userSnap.data()!;
-      List followers = (userData as dynamic)['followers'];
-      for (String follower in followers) {
-        _firestore
-            .collection("users")
-            .doc(follower)
-            .collection("homepage_feed")
-            .add({
-          "poster_profile_pic": userData['profilepic'],
-          "poster_uid": uid,
-          "poster_name": userData['username'],
-          "diary_title": diary['diary_title'],
-          "creation_date": diary['creation_date'],
-          "diary_content": diary['diary_content'],
-          "color_id": diary['color_id'],
-        }).then((value) {
-          print(value.id);
-        }).catchError((error) => print("error"));
-      } */
     } catch (e) {
       print(e.toString());
     }
   }
-
+  /// Post the snippet card by remembering its rich text content and background
+  ///
+  /// Goes to the post collection and adds the relevant information
   static void postCard(var JSONcontent, String backgroundImage) {
     try {
       _firestore
@@ -295,6 +276,9 @@ class FirebaseMethods {
     }
   }
 
+  /// Get a Stream of Post specifically ordered by their creation_timestamp
+  ///
+  /// returns a CombineLatestStream in order to be used for 24 Hour timer
   static Future<
       CombineLatestStream<QuerySnapshot<Map<String, dynamic>>,
           List<QuerySnapshot<Map<String, dynamic>>>>> getPosts(

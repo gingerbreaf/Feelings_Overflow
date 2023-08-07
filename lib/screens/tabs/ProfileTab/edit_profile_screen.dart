@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feelings_overflow/design/login_register_text_fields.dart';
 import 'package:status_alert/status_alert.dart';
 
+/// This is the UI screen for editing a profile's detail
 class EditProfile extends StatefulWidget {
   const EditProfile({Key? key}) : super(key: key);
 

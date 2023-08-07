@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:status_alert/status_alert.dart';
 
+/// This is the UI for viewing your following
 class FollowingScreen extends StatefulWidget {
   static const String id = 'following_screen';
   final String currentUserUid = FirebaseAuth.instance.currentUser!.uid;

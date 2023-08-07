@@ -15,6 +15,9 @@ import 'package:status_alert/status_alert.dart';
 import '../../../design/font.dart';
 import '../../../functionality/firebase_methods.dart';
 
+
+/// This is the screen for the snippet function
+/// It contains the font cards, backgrounds and formatting
 class SnipScreen extends StatefulWidget {
   final QuillController quillController;
   const SnipScreen({
