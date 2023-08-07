@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../functionality/JsonCoding.dart';
 import 'rich_text_for_posting.dart';
@@ -21,7 +19,6 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
   String picUrl = '';
   String posterName = '';
 
-
   @override
   void initState() {
     getData();
@@ -38,7 +35,6 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
         .get();
     var userData = userSnap.data()!;
     picUrl = userData['profilepic'];
-    print(picUrl);
     posterName = userData['username'];
     setState(() {
       isLoading = false;
@@ -54,7 +50,8 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
           borderRadius: BorderRadius.circular(12),
           image: DecorationImage(
             fit: BoxFit.fill,
-            image: AssetImage('assets/images/${widget.doc["card_background"]}.jpg'),
+            image: AssetImage(
+                'assets/images/${widget.doc["card_background"]}.jpg'),
           ),
         ),
         child: SingleChildScrollView(
@@ -62,34 +59,35 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
           child: Padding(
             padding: const EdgeInsets.all(5.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch
-              ,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 20.0,
-                      backgroundImage:
-                      NetworkImage(picUrl),
+                isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 20.0,
+                              backgroundImage: NetworkImage(picUrl),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              posterName,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      posterName,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Container(
+                SizedBox(
                   height: MediaQuery.of(context).size.height / 3.5,
-
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -99,8 +97,11 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
                           left: MediaQuery.of(context).size.width / 8,
                           right: MediaQuery.of(context).size.width / 8,
                         ),
-                        child: RichTextDisplayPost(controller: JsonCoding.getQuillControllerviaJSON(
-                            widget.doc["diary_content"]), interactive: false,),
+                        child: RichTextDisplayPost(
+                          controller: JsonCoding.getQuillControllerviaJSON(
+                              widget.doc["diary_content"]),
+                          interactive: false,
+                        ),
                       ),
                     ],
                   ),
@@ -118,7 +119,6 @@ class _WordOnlyDisplayState extends State<WordOnlyDisplay> {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
