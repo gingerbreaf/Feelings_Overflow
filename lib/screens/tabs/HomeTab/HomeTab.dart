@@ -8,7 +8,6 @@ import 'package:feelings_overflow/design/homepage_feed_diary_card.dart';
 import 'package:feelings_overflow/screens/tabs/HomeTab/post_reader.dart';
 import 'package:rxdart/rxdart.dart';
 
-
 /// This is the UI display for the Home Tab / Home page
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -32,6 +31,7 @@ class _HomeTabState extends State<HomeTab> {
     getData();
   }
 
+  /// Fetches relevant data for the screen
   getData() async {
     setState(() {
       isLoading = true;

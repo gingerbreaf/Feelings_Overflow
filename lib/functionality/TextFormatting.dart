@@ -1,8 +1,4 @@
-import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter/material.dart';
 
 /// Text Formatting Handles the formatting of text especially their size or font
 class TextFormatting {

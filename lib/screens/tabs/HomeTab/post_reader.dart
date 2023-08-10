@@ -18,16 +18,23 @@ class PostReaderScreen extends StatefulWidget {
 }
 
 class _PostReaderScreenState extends State<PostReaderScreen> {
+
+  /// Whether to display a loading icon
   bool isLoading = false;
 
+  /// The url of the poster's profile pic
   String picUrl = '';
+
+  /// The username of the poster
   String posterName = '';
 
   @override
   void initState() {
+    super.initState();
     getData();
   }
 
+  /// Fetches relevant data for the screen
   getData() async {
     setState(() {
       isLoading = true;

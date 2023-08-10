@@ -1,8 +1,5 @@
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:feelings_overflow/design/font_cards.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:feelings_overflow/design/rich_text_for_posting.dart';
 import 'package:feelings_overflow/functionality/TextFormatting.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,11 +28,11 @@ class SnipScreen extends StatefulWidget {
 class _SnipScreenState extends State<SnipScreen> {
   //TODO: optimise code by passing in 1 controller only
   String startText = '';
-  ValueNotifier<String> _textNotifier = ValueNotifier<String>('');
-  ValueNotifier<int> _selectedCardNotifier = ValueNotifier<int>(-1);
-  ValueNotifier<Font?> _selectedFontNotifier = ValueNotifier<Font?>(null);
-  ScrollController _scrollController1 = ScrollController();
-  ScrollController _scrollController2 = ScrollController();
+  final ValueNotifier<String> _textNotifier = ValueNotifier<String>('');
+  final ValueNotifier<int> _selectedCardNotifier = ValueNotifier<int>(-1);
+  final ValueNotifier<Font?> _selectedFontNotifier = ValueNotifier<Font?>(null);
+  final ScrollController _scrollController1 = ScrollController();
+  final ScrollController _scrollController2 = ScrollController();
   int _groupValue = 0;
   String _chosenBackground = 'backgroundPastel';
   String _selectedFont = 'Rochester';

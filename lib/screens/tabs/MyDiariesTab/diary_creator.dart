@@ -8,8 +8,6 @@ import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:feelings_overflow/design/rich_text_toolbar.dart';
 
-
-
 /// This is the diary creator screen, used when you create a diary
 class DiaryCreatorScreen extends StatefulWidget {
   const DiaryCreatorScreen({Key? key}) : super(key: key);
@@ -31,12 +29,7 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
   /// Storing Time and Data as a Timestamp format for Firebase
   Timestamp currentTimestamp = Timestamp.now();
 
-
   final TextEditingController _titleController = TextEditingController();
-
-  // Old Diary editing of content
-  //final TextEditingController _mainContentController = TextEditingController();
-
   final QuillController _controller = QuillController.basic();
 
   @override
@@ -78,7 +71,7 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
               const SizedBox(
                 height: 30,
               ),
-              QuillEditor.basic(controller: _controller, readOnly: false, key1: const Key('first key'),
+              QuillEditor.basic(controller: _controller, readOnly: false,
               ),
             ],
           ),
@@ -88,7 +81,6 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
         backgroundColor: Colors.blue,
         onPressed: () async {
           var json = jsonEncode(_controller.document.toDelta().toJson());
-          print(json);
           _firestore
               .collection("users")
               .doc(_auth.currentUser!.uid)
@@ -100,10 +92,9 @@ class _DiaryCreatorScreenState extends State<DiaryCreatorScreen> {
             "color_id": colorID,
             "creation_timestamp":  currentTimestamp,
             "last_updated_timestamp": currentTimestamp,
-
           }).then((value) {
             Navigator.pop(context);
-          }).catchError((error) => print("error"));
+          });
         },
         child: const Icon(Icons.save),
       ),
