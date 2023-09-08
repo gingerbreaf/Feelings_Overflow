@@ -1,16 +1,9 @@
-# feelings_overflow
+# Feelings_Overflow
 
-Spill everyt out
+This is a project done by Sean and Bowei for Orbital. 
+This is a diary sharing app that integrates the use of Firebase as backend along with Flutter for the front-end.
 
-## Getting Started
+[Official README](https://docs.google.com/document/d/1n5fkCjltYOEzzs8WqSeeqaKFsmegyzADYjs7vbSIy_U/edit?usp=sharing)  for the project (Done in google docs)
+[Official Poster](https://drive.google.com/file/d/11UYOqN1wbOjO-EbyU94ttq5RD8cNkFBa/view)
+[Video Walkthrough](https://drive.google.com/file/d/1zcV2AAnNtExx1zgQKjiLbqKfTAH2kE2K/view)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
